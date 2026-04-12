@@ -25,4 +25,3 @@ class Fenwick {
                 return res;
         }
 };
-

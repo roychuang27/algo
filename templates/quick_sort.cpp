@@ -19,7 +19,7 @@ void quicksort(int *a, int start, int end) {
             
             if (i >= j) {
                 break;
-            }else {
+            } else {
                 temp = a[i];
                 a[i] = a[j];
                 a[j] = temp;
