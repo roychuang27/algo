@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14241785
- * Problem: Minimal Grid Path
- * Link: https://cses.fi/problemset/task/3359
- */
-
 #pragma GCC optimize("Ofast")
 #include <algorithm>
 #include <iostream>

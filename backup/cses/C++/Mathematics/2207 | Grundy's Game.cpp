@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14732238
- * Problem: Grundy's Game
- * Link: https://cses.fi/problemset/task/2207
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <map>
@@ -35,9 +29,9 @@ istream& operator >> (istream& o, pair<A, B> &a) {
     return o >> a.first >> a.second;
 }
 
-vector<lli> G(1000006, -1);
+vector<lli> G(3001, -1);
 
-constexpr int INF = 1e9 + 7;
+// constexpr int INF = 1e9 + 7;
 
 int get_mex(vector<int> &nums) {
     map<int, bool> mp;
@@ -48,7 +42,7 @@ int get_mex(vector<int> &nums) {
 }
 
 int get_G(int x) {
-    if (x >= 3000) return INF;
+    if (x >= 3000) return 1;
     if (G[x] != -1) return G[x];
     vector<int> nums;
     for (int i = 1; i < (x+1) / 2; i++) {

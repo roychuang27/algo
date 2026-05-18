@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14673835
- * Problem: Grid Coloring I
- * Link: https://cses.fi/problemset/task/3311
- */
-
 #pragma GCC optimize("Ofast")
 #include <array>
 #include <iostream>

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14628414
- * Problem: Flight Routes Check
- * Link: https://cses.fi/problemset/task/1682
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <queue>

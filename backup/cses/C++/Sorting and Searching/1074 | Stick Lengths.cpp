@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11872593
- * Problem: Stick Lengths
- * Link: https://cses.fi/problemset/task/1074
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

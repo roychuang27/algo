@@ -1,27 +1,18 @@
-/*
- * Submission ID: 14711941
- * Problem: Weird Algorithm
- * Link: https://cses.fi/problemset/task/1068
- */
-
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
-int main() {
+int main ()
+{
+    ios_base::sync_with_stdio(false); cin.tie(0);
     long long n; cin >> n;
-    if (n == 1) {
-    	cout << 1 << '\n';
-    } else {
-        while (n != 1) {
-        	cout << n << ' ';
-            if (n % 2 == 1) {
-                n = 3 * n + 1;
-            } else {
-                n = n / 2;
-            }
+    while (1) {
+        cout << n << " ";
+        if (n % 2 == 0) {
+            n = n / 2;
+        } else {
+            if (n == 1) break;
+            n = n * 3 + 1;
         }
-        cout << 1 << '\n';
     }
-
     return 0;
 }

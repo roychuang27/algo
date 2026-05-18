@@ -1,9 +1,3 @@
-/*
- * Submission ID: 13206072
- * Problem: Sliding Window Xor
- * Link: https://cses.fi/problemset/task/3426
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <deque>

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11154936
- * Problem: Subarray Sums I
- * Link: https://cses.fi/problemset/task/1660
- */
-
 #include <iostream>
 #include <vector>
 using namespace std;

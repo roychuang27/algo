@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12717300
- * Problem: Tree Distances II
- * Link: https://cses.fi/problemset/task/1133
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <vector>

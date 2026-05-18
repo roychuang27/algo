@@ -1,9 +1,3 @@
-/*
- * Submission ID: 15077186
- * Problem: Counting Coprime Pairs
- * Link: https://cses.fi/problemset/task/2417
- */
-
 #include <iostream>
 #include <vector>
 #define fastio cin.tie(0)->sync_with_stdio(false)

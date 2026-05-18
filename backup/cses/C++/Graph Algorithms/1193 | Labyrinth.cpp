@@ -1,91 +1,88 @@
-/*
- * Submission ID: 15688671
- * Problem: Labyrinth
- * Link: https://cses.fi/problemset/task/1193
- */
-
-#include <algorithm>
+#pragma GCC optimize("Ofast")
 #include <iostream>
-#include <queue>
-#include <string>
 #include <utility>
 #include <vector>
-#define test(x) cerr << "Line(" << __LINE__ << ") " #x << ' ' << x << endl
+#include <queue>
+#include <algorithm>
+#define AC ios_base::sync_with_stdio(false); std::cin.tie(nullptr); std::cout.tie(nullptr);
+#define pb emplace_back
+#define ALL(x) begin(x),end(x)
+#define ff first
+#define ss second
 
 using namespace std;
-using ll = long long;
+typedef long long ll;
 typedef pair<int, int> pii;
 
-const int di[4] = {-1, 1, 0, 0};
-const int dj[4] = {0, 0, -1, 1};
+const int dy[4] = {-1, 1, 0, 0};
+const int dx[4] = {0, 0, -1, 1};
 const string directions = "UDLR";
 
-const int inf = 1e9;
-
-void solve() {
-        int N, M;
-        cin >> N >> M;
-        vector<vector<bool>> visited(N + 2, vector<bool>(M + 2, 1));
-        vector<vector<int>> distance(N + 2, vector<int> (M + 2, inf));
-        vector<vector<int>> direction(N + 2, vector<int> (M + 2));
-        int ai, aj, bi, bj;
-        for (int i = 1; i <= N; i++) {
-                for (int j = 1; j <= M; j++) {
-                        char c;
-                        cin >> c;
-                        if (c == '.') {
-                                visited[i][j] = 0;
-                        }
-                        if (c == 'A') {
-                                ai = i;
-                                aj = j;
-                                visited[i][j] = 0;
-                        }
-                        if (c == 'B') {
-                                bi = i;
-                                bj = j;
-                                visited[i][j] = 0;
-                        }
-                }
-        }
-        queue<pair<int, int>> qu;
-        qu.push({ai, aj});
-        distance[ai][aj] = 0;
-        visited[ai][aj] = 1;
-        while (!qu.empty()) {
-                const auto [i, j] = qu.front();
-                qu.pop();
-                if (i == bi and j == bj) {
-                        cout << "YES\n";
-                        cout << distance[i][j] << '\n';
-                        
-                        string path = "";
-                        int cur_i = i, cur_j = j;
-                        while (cur_i != ai or cur_j != aj) {
-                                int dir = direction[cur_i][cur_j];
-                                path += directions[dir];
-                                cur_i -= di[dir];
-                                cur_j -= dj[dir];
-                        }
-                        reverse(path.begin(), path.end());
-                        cout << path << '\n';
-                        return;
-                }
-                for (int k = 0; k < 4; k++) {
-                        int ni = i + di[k], nj = j + dj[k];
-                        if (!visited[ni][nj]) {
-                                distance[ni][nj] = distance[i][j] + 1;
-                                visited[ni][nj] = 1;
-                                direction[ni][nj] = k;
-                                qu.push({ni, nj});
-                        }
-                }
-        }
-        cout << "NO\n";
+int evaluate (int x, int y, int bx, int by) {
+    return abs(bx - x) + abs(by - y);
 }
 
-int main() {
-        cin.tie(nullptr)->sync_with_stdio(false);
-        solve();
-        return 0;
+int main () {
+    AC
+    int n, m;
+    cin >> n >> m;
+    vector<vector<bool>> visited(n+2, vector<bool> (m+2, 1));
+    vector<vector<pii>> rec(n+2, vector<pii> (m+2));
+    int ax, ay, bx, by;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            char c;
+            cin >> c;
+            if (c == '.') {
+                visited[i][j] = 0;
+            }
+            if (c == 'A') {
+                ay = i;
+                ax = j;
+                visited[i][j] = 0;
+            }
+            if (c == 'B') {
+                by = i;
+                bx = j;
+                visited[i][j] = 0;
+            }
+        }
+    }
+    rec[ay][ax].ff = 0;
+    queue<pii> nxts;
+    nxts.push(make_pair(ay, ax));
+    while (!nxts.empty()) {
+        auto pos = nxts.front();
+        nxts.pop();
+        if (visited[pos.ff][pos.ss]) continue;
+        visited[pos.ff][pos.ss] = 1;
+        if (pos.ff == by && pos.ss == bx) {
+            cout << "YES\n";
+            cout << rec[by][bx].ff << '\n';
+            vector<char> rev;
+            int cury = by;
+            int curx = bx;
+            int cnt = 0;
+            while (cury != ay || curx != ax) {
+                int d = rec[cury][curx].ss;
+                rev.pb(directions[d]);
+                cury -= dy[d];
+                curx -= dx[d];
+            }
+            reverse(rev.begin(), rev.end());
+            for (auto it : rev) cout << it;
+            cout << '\n';
+            return 0;
+        }
+        for (int i = 0; i < 4; i++) {
+            int ny = pos.ff + dy[i];
+            int nx = pos.ss + dx[i];
+            if (!visited[ny][nx]) {
+                rec[ny][nx] = make_pair(rec[pos.ff][pos.ss].ff+1, i);
+                nxts.push(make_pair(ny, nx));
+            }
+        }
+    }
+    cout << "NO\n";
+    return 0;
 }

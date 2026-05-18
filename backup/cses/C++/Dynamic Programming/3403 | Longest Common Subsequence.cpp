@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12909889
- * Problem: Longest Common Subsequence
- * Link: https://cses.fi/problemset/task/3403
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <vector>

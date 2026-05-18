@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14470044
- * Problem: Counting Tilings
- * Link: https://cses.fi/problemset/task/2181
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14567806
- * Problem: Book Shop II
- * Link: https://cses.fi/problemset/task/1159
- */
-
 #pragma GCC optimize("Ofast")
 #include <bits/stdc++.h>
 #define fastio cin.tie(0)->sync_with_stdio(false)

@@ -7,6 +7,7 @@
 #define test(...) 0
 #define testv(...) 0
 #endif
+#define SZ(x) ((int) x.size())
 #define SQ(x) ((x) * (x))
 #define CORDCOMP(x, fx) std::sort(ALL(x)); x.erase(std::unique(ALL(x)), std::end(x)); const auto fx = [&](int val) -> int { return std::lower_bound(ALL(x), val) - std::begin(x); }
 #define fst first

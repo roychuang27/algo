@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11586823
- * Problem: Towers
- * Link: https://cses.fi/problemset/task/1073
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

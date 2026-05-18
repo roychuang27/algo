@@ -1,9 +1,3 @@
-/*
- * Submission ID: 17171901
- * Problem: Hamiltonian Flights
- * Link: https://cses.fi/problemset/task/1690
- */
-
 #include <functional>
 #include <iostream>
 #include <vector>

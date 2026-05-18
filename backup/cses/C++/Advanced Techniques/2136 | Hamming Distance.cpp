@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12425785
- * Problem: Hamming Distance
- * Link: https://cses.fi/problemset/task/2136
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <algorithm>

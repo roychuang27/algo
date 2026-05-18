@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12716855
- * Problem: Tree Diameter
- * Link: https://cses.fi/problemset/task/1131
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <vector>

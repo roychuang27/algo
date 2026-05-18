@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12063162
- * Problem: Palindrome Reorder
- * Link: https://cses.fi/problemset/task/1755
- */
-
 #include <bits/stdc++.h>
 
 #define int long long

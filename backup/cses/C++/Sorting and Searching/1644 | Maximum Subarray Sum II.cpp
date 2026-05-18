@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14518202
- * Problem: Maximum Subarray Sum II
- * Link: https://cses.fi/problemset/task/1644
- */
-
 #include <bits/stdc++.h>
 #define SZ(x) ((int) x.size())
 using namespace std;

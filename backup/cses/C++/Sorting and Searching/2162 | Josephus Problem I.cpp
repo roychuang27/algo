@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12093010
- * Problem: Josephus Problem I
- * Link: https://cses.fi/problemset/task/2162
- */
-
 #include <bits/stdc++.h>
 
 #define AC ios_base::sync_with_stdio(false); std::cin.tie(nullptr); std::cout.tie(nullptr);

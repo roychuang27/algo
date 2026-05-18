@@ -1,9 +1,3 @@
-/*
- * Submission ID: 17068584
- * Problem: Range Queries and Copies
- * Link: https://cses.fi/problemset/task/1737
- */
-
 #include <cassert>
 #include <cstdint>
 #include <functional>

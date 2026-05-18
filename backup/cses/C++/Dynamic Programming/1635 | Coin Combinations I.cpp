@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11404311
- * Problem: Coin Combinations I
- * Link: https://cses.fi/problemset/task/1635
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

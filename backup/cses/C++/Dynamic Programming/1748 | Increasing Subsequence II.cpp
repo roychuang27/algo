@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14420331
- * Problem: Increasing Subsequence II
- * Link: https://cses.fi/problemset/task/1748
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <vector>

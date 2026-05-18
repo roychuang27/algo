@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14470493
- * Problem: String Reorder
- * Link: https://cses.fi/problemset/task/1743
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12203631
- * Problem: Collecting Numbers
- * Link: https://cses.fi/problemset/task/2216
- */
-
 #pragma GCC optimize("Ofast")
 
 #include <bits/stdc++.h>

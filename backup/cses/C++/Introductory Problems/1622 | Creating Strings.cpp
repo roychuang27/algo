@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12402270
- * Problem: Creating Strings
- * Link: https://cses.fi/problemset/task/1622
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <utility>

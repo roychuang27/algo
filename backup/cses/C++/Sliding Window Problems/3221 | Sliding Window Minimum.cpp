@@ -1,9 +1,3 @@
-/*
- * Submission ID: 13205818
- * Problem: Sliding Window Minimum
- * Link: https://cses.fi/problemset/task/3221
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <deque>

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11740219
- * Problem: Distinct Numbers
- * Link: https://cses.fi/problemset/task/1621
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11404100
- * Problem: Minimizing Coins
- * Link: https://cses.fi/problemset/task/1634
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

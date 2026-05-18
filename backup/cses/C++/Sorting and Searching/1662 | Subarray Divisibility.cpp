@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12770597
- * Problem: Subarray Divisibility
- * Link: https://cses.fi/problemset/task/1662
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #define AC cin.tie(0)->sync_with_stdio(false);

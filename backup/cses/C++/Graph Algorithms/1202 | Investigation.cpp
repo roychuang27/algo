@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14802906
- * Problem: Investigation
- * Link: https://cses.fi/problemset/task/1202
- */
-
 #include <algorithm>
 #include <iostream>
 #include <queue>

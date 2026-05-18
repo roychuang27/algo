@@ -1,9 +1,3 @@
-/*
- * Submission ID: 13205183
- * Problem: Sliding Window Median
- * Link: https://cses.fi/problemset/task/1076
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <set>

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 16787525
- * Problem: Minimal Rotation
- * Link: https://cses.fi/problemset/task/1110
- */
-
 #include <algorithm>
 #include <functional>
 #include <iostream>

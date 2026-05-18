@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14518329
- * Problem: Maximum Subarray Sum II
- * Link: https://cses.fi/problemset/task/1644
- */
-
 #pragma GCC optimize("Ofast")
 #pragma GCC target("sse,sse2,sse3,ssse3,abm,avx")
 #include <unistd.h>

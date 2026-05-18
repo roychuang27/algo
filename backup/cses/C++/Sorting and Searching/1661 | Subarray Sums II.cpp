@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12289500
- * Problem: Subarray Sums II
- * Link: https://cses.fi/problemset/task/1661
- */
-
 // Problem: Subarray Sums II
 // Contest: CSES - CSES Problem Set
 // URL: https://cses.fi/problemset/task/1661

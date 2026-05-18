@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11586503
- * Problem: Forest Queries
- * Link: https://cses.fi/problemset/task/1652
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

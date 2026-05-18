@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12716713
- * Problem: Subordinates
- * Link: https://cses.fi/problemset/task/1674
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <vector>

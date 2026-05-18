@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12422830
- * Problem: Meet in the Middle
- * Link: https://cses.fi/problemset/task/1628
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <utility>

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11411820
- * Problem: Edit Distance
- * Link: https://cses.fi/problemset/task/1639
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11556589
- * Problem: Message Route
- * Link: https://cses.fi/problemset/task/1667
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

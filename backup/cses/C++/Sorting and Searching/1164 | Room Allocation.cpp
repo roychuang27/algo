@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12775203
- * Problem: Room Allocation
- * Link: https://cses.fi/problemset/task/1164
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <utility>

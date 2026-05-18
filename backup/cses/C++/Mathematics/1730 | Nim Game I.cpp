@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11458945
- * Problem: Nim Game I
- * Link: https://cses.fi/problemset/task/1730
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11900566
- * Problem: Tower of Hanoi
- * Link: https://cses.fi/problemset/task/2165
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

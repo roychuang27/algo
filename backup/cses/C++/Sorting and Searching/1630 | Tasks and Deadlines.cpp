@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11880682
- * Problem: Tasks and Deadlines
- * Link: https://cses.fi/problemset/task/1630
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

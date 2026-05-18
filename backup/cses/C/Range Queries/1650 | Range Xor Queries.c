@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12312989
- * Problem: Range Xor Queries
- * Link: https://cses.fi/problemset/task/1650
- */
-
 #pragma GCC optimize("Ofast")
 #pragma GCC target("sse,sse2,sse3,ssse3,abm,avx")
 #include <unistd.h>

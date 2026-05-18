@@ -1,9 +1,3 @@
-/*
- * Submission ID: 16716272
- * Problem: Dynamic Range Minimum Queries
- * Link: https://cses.fi/problemset/task/1649
- */
-
 #include <algorithm>
 #include <functional>
 #include <iostream>
@@ -110,17 +104,21 @@ struct segtree {
         }
 };
 
+using S = int;
+
+S e() {
+        return 0x3f3f3f3f;
+}
+
+S op(S a, S b) {
+        return min(a, b);
+}
+
 void solution() {
         int N, Q; cin >> N >> Q;
-        vector<int> X(N);
+        vector<S> X(N);
         for (int i = 0; i < N; i++) cin >> X[i];
-        const auto op = [](int a, int b) -> int {
-                return min(a, b);
-        };
-        const auto e = []() -> int {
-                return 0x3f3f3f3f;
-        };
-        segtree<int, op, e> st(X);
+        segtree<S, op, e> st(X);
         while (Q-->0) {
                 int t; cin >> t;
                 if (t == 1) {

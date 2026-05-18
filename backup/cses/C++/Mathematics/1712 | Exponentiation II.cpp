@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12166357
- * Problem: Exponentiation II
- * Link: https://cses.fi/problemset/task/1712
- */
-
 #pragma GCC optimize("Ofast")
 
 #include <bits/stdc++.h>

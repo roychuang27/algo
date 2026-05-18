@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11907000
- * Problem: Number Spiral
- * Link: https://cses.fi/problemset/task/1071
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long

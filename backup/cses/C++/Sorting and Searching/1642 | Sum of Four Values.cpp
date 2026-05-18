@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12601213
- * Problem: Sum of Four Values
- * Link: https://cses.fi/problemset/task/1642
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <algorithm>
@@ -33,6 +27,9 @@ void solve () {
  			while (ll < rr) {
  			    long long sum = nums[ll].first + nums[rr].first;
  			    if (sum == target) {
+ 			        // cout << target << ' ' << sum << endl;
+ 			        // cout << nums[l].first << ' ' << nums[ll].first << ' '
+ 			                // << nums[rr].first << ' ' << nums[r].first << endl;
  			        cout << nums[l].second << ' ' << nums[ll].second << ' '
  			                << nums[rr].second << ' ' << nums[r].second;
  			        return;

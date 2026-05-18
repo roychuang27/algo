@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14841213
- * Problem: Planets Cycles
- * Link: https://cses.fi/problemset/task/1751
- */
-
 #include <algorithm>
 #include <iostream>
 #include <vector>

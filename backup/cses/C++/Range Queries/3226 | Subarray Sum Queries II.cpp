@@ -1,21 +1,15 @@
-/*
- * Submission ID: 13357592
- * Problem: Subarray Sum Queries II
- * Link: https://cses.fi/problemset/task/3226
- */
-
 #pragma GCC optimize("Ofast")
+#include <algorithm>
 
 #include <unistd.h>
 
-#define BUF_SIZE 1000000
+#define BUF_SIZE 20000000
 #define num_length 20
-#define max(a, b) ((a < b)? b : a)
 
 #define fast_get_char (ptr_buf_start == ptr_buf_end && (ptr_buf_end = (ptr_buf_start = buf) + read(0, buf, BUF_SIZE), ptr_buf_start == ptr_buf_end) ? -1 : *ptr_buf_start++)
 #define fast_put_char(x) (vi[ptr_buf_out++] = (x))
 
-static char buf[BUF_SIZE], vi[BUF_SIZE<<1], *ptr_buf_start = buf, *ptr_buf_end = buf;
+static char buf[BUF_SIZE], vi[BUF_SIZE], *ptr_buf_start = buf, *ptr_buf_end = buf;
 static int ptr_buf_out;
 
 int readInt() {
@@ -65,7 +59,7 @@ void outInt(long long x) {
 using namespace std;
 typedef long long lli;
 
-#define inf 1e18
+const lli inf = 1e18;
 
 struct Node {
     lli M, L, R, S;
@@ -86,7 +80,7 @@ struct Node {
     
     Node operator+ (Node r) {
         Node ret;
-        ret.M = max(max(M, r.M), R + r.L);
+        ret.M = max({M, r.M, R + r.L});
         ret.L = max(L, S + r.L);
         ret.R = max(R + r.S, r.R);
         ret.S = S + r.S;
@@ -94,7 +88,8 @@ struct Node {
     }
 };
 
-int arr[200005];
+const int maxN = 2e5;
+int arr[maxN + 5];
 
 struct ZKW {
     Node tree[400005];
@@ -108,18 +103,18 @@ struct ZKW {
         for (int i = 0; i < N; i++) {
             tree[N + i].set_value_for_single_node(arr[i]);
         }
-        for (int i = N - 1; i > 0; --i) {
-            tree[i] = tree[i<<1] + tree[(i<<1)|1];
+        for (int i = N - 1; i > 0; i--) {
+            tree[i] = tree[2 * i] + tree[2 * i + 1];
         }
     }
     
     void modify(int idx, int val) {
         idx += N;
         tree[idx].set_value_for_single_node(val);
-        idx >>= 1;
-        while (idx) {
-            tree[idx] = tree[idx<<1] + tree[(idx<<1)|1];
-            idx >>= 1;
+        idx /= 2;
+        while (idx >= 1) {
+            tree[idx] = tree[2 * idx] + tree[2 * idx + 1];
+            idx /= 2;
         }
     }
     
@@ -130,16 +125,16 @@ struct ZKW {
         resL.set_void_node();
         resR.set_void_node();
         while (l <= r) {
-            if (l & 1) {
+            if (l % 2 == 1) {
                 resL = resL + tree[l];
-                ++l;
+                l++;
             }
-            if (~r & 1) {
+            if (r % 2 == 0) {
                 resR = tree[r] + resR;
-                --r;
+                r--;
             }
-            l >>= 1;
-            r >>= 1;
+            l /= 2;
+            r /= 2;
         }
         return (resL + resR).M;
     }
@@ -148,11 +143,12 @@ struct ZKW {
 void solve () {
     int n = readUInt(), q = readUInt();
     zkw.init(n);
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; i++) {
         arr[i] = readInt();
     }
     zkw.build();
     while (q--) {
+        // zkw.printdbg();
         int a = readUInt(), b = readUInt();
         outInt(zkw.query(a-1, b-1));
     }

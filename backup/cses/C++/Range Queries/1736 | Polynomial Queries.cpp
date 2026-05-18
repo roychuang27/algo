@@ -1,9 +1,3 @@
-/*
- * Submission ID: 16670864
- * Problem: Polynomial Queries
- * Link: https://cses.fi/problemset/task/1736
- */
-
 #include <iostream>
 #include <vector>
 using namespace std;

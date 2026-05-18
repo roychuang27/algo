@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14726914
- * Problem: Cycle Finding
- * Link: https://cses.fi/problemset/task/1197
- */
-
 #pragma GCC optimize("Ofast")
 #include <bits/stdc++.h>
 #define fastio cin.tie(0)->sync_with_stdio(false)

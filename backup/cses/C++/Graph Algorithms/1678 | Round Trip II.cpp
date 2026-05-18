@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14730548
- * Problem: Round Trip II
- * Link: https://cses.fi/problemset/task/1678
- */
-
 #pragma GCC optimize("Ofast")
 #include <algorithm>
 #include <iostream>

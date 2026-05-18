@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11405001
- * Problem: Money Sums
- * Link: https://cses.fi/problemset/task/1745
- */
-
 #include <bits/stdc++.h>
 #define int long long
 using namespace std;

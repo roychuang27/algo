@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11784238
- * Problem: Increasing Array
- * Link: https://cses.fi/problemset/task/1094
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 13128290
- * Problem: Hidden Permutation
- * Link: https://cses.fi/problemset/task/3139
- */
-
 #pragma GCC optimize("Ofast")
 #define fastio cin.tie(0)->sync_with_stdio(0)
 #include <bits/stdc++.h>

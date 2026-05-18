@@ -1,9 +1,4 @@
-/*
- * Submission ID: 15700314
- * Problem: Road Reparation
- * Link: https://cses.fi/problemset/task/1675
- */
-
+#include <algorithm>
 #include <iostream>
 #include <queue>
 #include <vector>
@@ -70,44 +65,35 @@ class GRAPH {
         public:
         int N, M;
         int components;
-        DSU *dsu;
-        vector<vector<pair<int, lli>>> adj;
-        vector<bool> visited;
+        DSU dsu;
+        vector<tuple<int, int, lli>> edge_list;
  
-        GRAPH(int n, int m): N(n), M(m) {
-                components = N;
-                dsu = new DSU(N);
-                adj = vector<vector<pair<int, lli>>> (N + 1);
-                visited = vector<bool> (N + 1, 0);
-        }
+        GRAPH(int n, int m):
+                N(n),
+                M(m),
+                components(N),
+                dsu(N),
+                edge_list()
+        {}
  
-        void add_edge(int &u, int &v, lli &w) {
-                adj[u].eb(v, w);
-                adj[v].eb(u, w);
+        void add_edge(int u, int v, lli w) {
+                edge_list.eb(u, v, w);
+                edge_list.eb(v, v, w);
         }
  
         void find_minimum_spanning_tree() {
                 lli cost = 0;
-                priority_queue<tuple<lli, int, int>> pq;
-                pq.push({0, 1, 0});
+                sort(ALL(edge_list), [](auto a, auto b) {
+                        return get<2>(a) < get<2>(b);
+                });
  
-                while (!pq.empty()) {
-                        const auto [w, cur, parent] = pq.top();
-                        pq.pop();
-                        if (visited[cur])
-                                continue;
-                        visited[cur] = 1;
-                        
-                        if (dsu->same_component(cur, parent))
+                for (const auto &[u, v, w] : edge_list) {
+                        if (dsu.same_component(u, v))
                                 continue;
  
-                        dsu->unite(cur, parent);
-                        cost -= w;
+                        dsu.unite(u, v);
+                        cost += w;
                         components--;
-                        
-                        for (const auto &[nxt, nw] : adj[cur]) if (!visited[nxt]) {
-                                pq.push({-nw, nxt, cur});
-                        }
                 }
  
                 if (components > 1) {

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11872174
- * Problem: Restaurant Customers
- * Link: https://cses.fi/problemset/task/1619
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

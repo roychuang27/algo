@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11169069
- * Problem: Chessboard and Queens
- * Link: https://cses.fi/problemset/task/1624
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 const int n = 8;

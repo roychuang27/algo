@@ -1,9 +1,3 @@
-/*
- * Submission ID: 15067306
- * Problem: De Bruijn Sequence
- * Link: https://cses.fi/problemset/task/1692
- */
-
 #include <iostream>
 #include <set>
 #include <vector>

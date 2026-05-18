@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11784174
- * Problem: Repetitions
- * Link: https://cses.fi/problemset/task/1069
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11543465
- * Problem: Elevator Rides
- * Link: https://cses.fi/problemset/task/1653
- */
-
 #include <bits/stdc++.h>
 // #define int unsigned long long
 using namespace std;

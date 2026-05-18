@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12279383
- * Problem: Range Xor Queries
- * Link: https://cses.fi/problemset/task/1650
- */
-
 #pragma GCC optimize("Ofast")
 
 #include <bits/stdc++.h>

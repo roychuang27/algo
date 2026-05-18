@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14801074
- * Problem: Longest Flight Route
- * Link: https://cses.fi/problemset/task/1680
- */
-
 #include <algorithm>
 #include <iostream>
 #include <vector>

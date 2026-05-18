@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12943932
- * Problem: Network Breakdown
- * Link: https://cses.fi/problemset/task/1677
- */
-
 #include <iostream>
 #include <set>
 #include <utility>

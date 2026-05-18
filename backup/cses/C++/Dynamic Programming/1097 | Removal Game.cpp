@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12227018
- * Problem: Removal Game
- * Link: https://cses.fi/problemset/task/1097
- */
-
 #pragma GCC optimize("Ofast")
 
 #include <bits/stdc++.h>

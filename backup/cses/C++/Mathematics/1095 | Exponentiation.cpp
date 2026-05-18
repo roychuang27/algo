@@ -1,13 +1,8 @@
-/*
- * Submission ID: 11598885
- * Problem: Exponentiation
- * Link: https://cses.fi/problemset/task/1095
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 
 const int mod = 1e9 + 7;
+#define int long long
 
 // a ^ b
 long long expo (long long a, long long b) {

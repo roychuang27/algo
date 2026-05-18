@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12402453
- * Problem: Gray Code
- * Link: https://cses.fi/problemset/task/2205
- */
-
 #pragma GCC optimize("Ofast")
 #include <bits/stdc++.h>
 #define AC ios_base::sync_with_stdio(false); std::cin.tie(nullptr); std::cout.tie(nullptr);

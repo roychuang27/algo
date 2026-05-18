@@ -1,21 +1,14 @@
-/*
- * Submission ID: 12693879
- * Problem: Reading Books
- * Link: https://cses.fi/problemset/task/1631
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <utility>
 #include <vector>
 #include <algorithm>
-#define AC cin.tie(0)->sync_with_stdio(false);
+#define AC ios_base::sync_with_stdio(false); std::cin.tie(nullptr); std::cout.tie(nullptr);
 #define pb emplace_back
 #define ALL(x) begin(x),end(x)
 #define MP(x, y) make_pair((x), (y))
 #define SQ(x) ((x)*(x))
 #define SZ(x) ((int) x.size())
-
 
 using namespace std;
 typedef long long ll;

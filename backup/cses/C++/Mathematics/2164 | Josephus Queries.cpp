@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12178091
- * Problem: Josephus Queries
- * Link: https://cses.fi/problemset/task/2164
- */
-
 #pragma GCC optimize("Ofast")
 
 #include <bits/stdc++.h>

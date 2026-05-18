@@ -1,89 +1,62 @@
-/*
- * Submission ID: 12776958
- * Problem: Point Location Test
- * Link: https://cses.fi/problemset/task/2189
- */
-
-#pragma GCC optimize("Ofast")
-#include <iostream>
-#include <utility>
 #include <cmath>
-#define AC cin.tie(0)->sync_with_stdio(false);
-#define pb emplace_back
-#define ALL(x) begin(x),end(x)
-#define MP(x, y) make_pair((x), (y))
-#define SQ(x) ((x)*(x))
+#include <iostream>
+#include <vector>
+#ifdef LOCAL
+#define test(...) do { std::cerr << "Line(" << __LINE__ << ") [" #__VA_ARGS__ "] =>"; ([](auto&&... args){ ((std::cerr << ' ' << args), ...); }(__VA_ARGS__)); std::cerr << std::endl; } while(0)
+#define testv(x) do { std::cerr << "Line(" << __LINE__ << ") " #x " => ["; int _i=0; for (auto& _e : (x)) std::cerr << (_i++ ? ", " : "") << _e; std::cerr << "]" << std::endl; } while(0)
+#else
+#define test(...) 0
+#define testv(...) 0
+#endif
 #define SZ(x) ((int) x.size())
-#define err(x) cerr << #x << ": " << x << endl;
-#define eps 1e-12
+#define SQ(x) ((x) * (x))
+#define CORDCOMP(x, fx) std::sort(ALL(x)); x.erase(std::unique(ALL(x)), std::end(x)); const auto fx = [&](int val) -> int { return std::lower_bound(ALL(x), val) - std::begin(x); }
+#define fst first
+#define sec second
 
+using lli = long long int;
 using namespace std;
-typedef long long ll;
-typedef long long pt_type;
 
-struct pt{
-    pt_type x, y;
+using ld = long double;
 
-    pt(pt_type a, pt_type b) : x(a), y(b) { ;}
+constexpr ld EPS = 1e-7;
 
-    pt operator+ (pt pt1){
-        return pt(x + pt1.x, y + pt1.y);
-    }
-
-    pt operator- (pt pt1){
-        return pt(x - pt1.x, y - pt1.y);
-    }
-
-    pt_type dot (pt pt1){
-        return x * pt1.x + y * pt1.y;
-    }
-
-    pt_type cross (pt pt1){
-        return x * pt1.y - y * pt1.x;
-    }
-
-    pt operator* (pt_type db){
-        return pt(x * db, y * db);
-    }
-
-    bool operator== (pt pt1){
-        return (x == pt1.x) && (y == pt1.y);
-    }
-
-    pt_type abs_square(){
-        return x * x + y * y;
-    }
-
-    double abs(){
-        return sqrt(x * x + y * y);
-    }
+struct Point {
+        ld x, y;
+        Point(ld _x = 0, ld _y = 0) : x(_x), y(_y) {};
+        friend ostream& operator << (ostream &s, const Point &p) { return s << '(' << p.x << ", " << p.y << ')'; }
 };
 
-int sign(pt_type a) {
-    return a == 0? 0 : a > 0 ? 1 : -1;
+Point operator + (const Point &lhs, const Point &rhs) { return Point(lhs.x + rhs.x, lhs.y + rhs.y); }
+Point operator - (const Point &lhs, const Point &rhs) { return Point(lhs.x - rhs.x, lhs.y - rhs.y); }
+Point operator * (const ld &lhs, const Point &rhs) { return Point(lhs * rhs.x, lhs * rhs.y); }
+Point operator * (const Point &lhs, const ld &rhs) { return Point(lhs.x * rhs, lhs.y * rhs); }
+Point operator / (const Point &lhs, const ld &rhs) { return Point(lhs.x / rhs, lhs.y / rhs); }
+Point complex_mul(const Point &lhs, const Point &rhs) { return Point(lhs.x * rhs.x - lhs.y * rhs.y, lhs.x * rhs.y + lhs.y * rhs.x); }
+ld dot(const Point &lhs, const Point &rhs) { return lhs.x * rhs.x + lhs.y * rhs.y; }
+ld det(const Point &lhs, const Point &rhs) { return lhs.x * rhs.y - lhs.y * rhs.x; }
+ld abs(const Point &p) { return sqrt(SQ(p.x) + SQ(p.y)); }
+bool eq(const Point &p, const Point &q) { return abs(p - q) < EPS; }
+
+void solution() {
+        Point p1, p2, p3;
+        cin >> p1.x >> p1.y >> p2.x >> p2.y >> p3.x >> p3.y;
+        ld ori = det(p2 - p1, p3 - p1);
+        if (-EPS < ori and ori < EPS) {
+                cout << "TOUCH\n";
+        } else if (ori > 0) {
+                cout << "LEFT\n";
+        } else {
+                cout << "RIGHT\n";
+        }
 }
 
-int ori(pt a, pt b, pt c) {
-    return sign((b - a).cross(c - a));
-}
-
-void solve () {
-    pt p1(0, 0), p2(0, 0), p3(0, 0);
-    cin >> p1.x >> p1.y >> p2.x >> p2.y >> p3.x >> p3.y;
-    int o = ori(p1, p2, p3);
-    if (o > 0) {
-        cout << "LEFT\n";
-    } else if (o < 0) {
-        cout << "RIGHT\n";
-    } else {
-        cout << "TOUCH\n";
-    }
-}
-
-int main () {
-    AC
-    int T; cin >> T;
-    while (T--)
-        solve();
-    return 0;
+int main() {
+        std::ios_base::sync_with_stdio(false);
+        std::cin.tie(nullptr);
+        int T;
+        cin >> T;
+        while(T--)
+                solution();
+        return 0;
 }

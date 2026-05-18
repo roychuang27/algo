@@ -1,7 +1,3 @@
-# Submission ID: 16997253
-# Problem: Multiplication Table
-# Link: https://cses.fi/problemset/task/2422
-
 import sys
 
 

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 13206166
- * Problem: Sliding Window Distinct Values
- * Link: https://cses.fi/problemset/task/3222
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <map>

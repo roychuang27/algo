@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12289963
- * Problem: Movie Festival II
- * Link: https://cses.fi/problemset/task/1632
- */
-
 // Problem: Movie Festival II
 // Contest: CSES - CSES Problem Set
 // URL: https://cses.fi/problemset/task/1632

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 16736175
- * Problem: Static Range Sum Queries
- * Link: https://cses.fi/problemset/task/1646
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -53,9 +47,9 @@ int main() {
         int l = qr.l, r = qr.r;
 
         while (R < r) add(++R);
-        while (L > l) add(--L);
         while (R > r) remove(R--);
         while (L < l) remove(L++);
+        while (L > l) add(--L);
 
         ans[qr.id] = cur;
     }

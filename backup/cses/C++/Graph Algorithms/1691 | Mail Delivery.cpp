@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14757224
- * Problem: Mail Delivery
- * Link: https://cses.fi/problemset/task/1691
- */
-
 #include <algorithm>
 #include <iostream>
 #include <utility>

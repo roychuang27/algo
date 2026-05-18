@@ -1,12 +1,6 @@
-/*
- * Submission ID: 16716019
- * Problem: Range Updates and Sums
- * Link: https://cses.fi/problemset/task/1735
- */
-
+#include <cinttypes>
 #include <functional>
 #include <iostream>
-#include <utility>
 #include <vector>
 #define test(x) cerr << "Line(" << __LINE__ << ") " #x << ' ' << x << endl
 #define printv(x)                          \
@@ -17,210 +11,100 @@
 #define SQ(x) ((x) * (x))
 #define SZ(x) ((int)x.size())
 #define eb emplace_back
-#define ALL(x) begin(x), end(x)
-#define rALL(x) rbegin(x), rend(x)
+#define ALL(x) x.begin(), x.end()
+#define rALL(x) x.begin(), x.end()
 
 using namespace std;
 using lli = long long int;
 
-template <class Monoid,
-          Monoid (*op)(Monoid, Monoid),
-          Monoid (*e)(),
-          class Tag,
-          Monoid (*mapping)(Tag, Monoid),
-          Tag (*composition)(Tag, Tag),
-          Tag (*id)()>
-struct lazy_segtree {
-        int n, size, log;
-        std::vector<Monoid> d;
-        std::vector<Tag> lz;
-
-        lazy_segtree(int _n = 0) : n(_n) {
-                size = 1, log = 0;
-                while (size < n) size <<= 1, log++;
-                d.assign(2 * size, e());
-                lz.assign(size, id());
-        }
-
-        lazy_segtree(const std::vector<Monoid>& v) : lazy_segtree((int)v.size()) {
-                for (int i = 0; i < n; i++) d[size + i] = v[i];
-                for (int i = size - 1; i; i--)
-                        d[i] = op(d[i<<1], d[i<<1|1]);
-        }
-
-        void apply_node(int k, Tag f) {
-                d[k] = mapping(f, d[k]);
-                if (k < size) lz[k] = composition(f, lz[k]);
-        }
-
-        void push(int k) {
-                apply_node(k<<1, lz[k]);
-                apply_node(k<<1|1, lz[k]);
-                lz[k] = id();
-        }
-
-        void set(int p, Monoid x) {
-                p += size;
-                for (int i = log; i; i--) push(p >> i);
-                d[p] = x;
-                for (p >>= 1; p; p >>= 1)
-                        d[p] = op(d[p<<1], d[p<<1|1]);
-        }
-
-        Monoid get(int p) {
-                p += size;
-                for (int i = log; i; i--) push(p >> i);
-                return d[p];
-        }
-
-        // [l, r)
-        Monoid prod(int l, int r) {
-                if (l == r) return e();
-                l += size; r += size;
-                for (int i = log; i; i--) {
-                        if ((l >> i) << i != l) push(l >> i);
-                        if ((r >> i) << i != r) push((r - 1) >> i);
-                }
-                Monoid L = e(), R = e();
-                for (; l < r; l >>= 1, r >>= 1) {
-                        if (l & 1) L = op(L, d[l++]);
-                        if (r & 1) R = op(d[--r], R);
-                }
-                return op(L, R);
-        }
-
-        Monoid all_prod() { return d[1]; }
-
-        void apply(int p, Tag f) {
-                p += size;
-                for (int i = log; i; i--) push(p >> i);
-                d[p] = mapping(f, d[p]);
-                for (p >>= 1; p; p >>= 1)
-                        d[p] = op(d[p<<1], d[p<<1|1]);
-        }
-
-        void apply(int l, int r, Tag f) {
-                if (l == r) return;
-                l += size; r += size;
-                for (int i = log; i; i--) {
-                        if ((l >> i) << i != l) push(l >> i);
-                        if ((r >> i) << i != r) push((r - 1) >> i);
-                }
-                int l0 = l, r0 = r;
-                for (; l < r; l >>= 1, r >>= 1) {
-                        if (l & 1) apply_node(l++, f);
-                        if (r & 1) apply_node(--r, f);
-                }
-                l = l0; r = r0;
-                for (int i = 1; i <= log; i++) {
-                        if ((l >> i) << i != l) d[l>>i] = op(d[(l>>i)<<1], d[(l>>i)<<1|1]);
-                        if ((r >> i) << i != r) d[(r-1)>>i] = op(d[((r-1)>>i)<<1], d[((r-1)>>i)<<1|1]);
-                }
-        }
-
-        template <class Predicate>
-        int max_right(int l, Predicate g) {
-                if (l == n) return n;
-                l += size;
-                for (int i = log; i; i--) push(l >> i);
-                Monoid sm = e();
-                do {
-                        while (!(l & 1)) l >>= 1;
-                        if (!g(op(sm, d[l]))) {
-                                while (l < size) {
-                                        push(l);
-                                        l <<= 1;
-                                        if (g(op(sm, d[l])))
-                                                sm = op(sm, d[l++]);
-                                }
-                                return l - size;
-                        }
-                        sm = op(sm, d[l++]);
-                } while ((l & -l) != l);
-                return n;
-        }
-
-        template <class Predicate>
-        int min_left(int r, Predicate g) {
-                if (!r) return 0;
-                r += size;
-                for (int i = log; i; i--) push((r - 1) >> i);
-                Monoid sm = e();
-                do {
-                        --r;
-                        while (r > 1 && (r & 1)) r >>= 1;
-                        if (!g(op(d[r], sm))) {
-                                while (r < size) {
-                                        push(r);
-                                        r = r<<1 | 1;
-                                        if (g(op(d[r], sm)))
-                                                sm = op(d[r--], sm);
-                                }
-                                return r + 1 - size;
-                        }
-                        sm = op(d[r], sm);
-                } while ((r & -r) != r);
-                return 0;
-        }
-};
-
 enum TagType { ADD, SET, NONE };
 
 struct Tag {
-        TagType type;
-        lli val;
+        TagType type = NONE;
+        lli val = 0;
 };
-Tag id() { return {NONE, 0}; }
 
-struct S {
-        lli sum;
-        int len;
-};
-S e() { return {0, 0}; }
+struct LazySegTree {
+        const int N;
+        vector<lli> t;
+        vector<Tag> tag;
 
-S op(S a, S b) {
-        return {a.sum + b.sum, a.len + b.len};
-}
-
-S mapping(Tag f, S x) {
-        if (f.type == ADD)
-                return {x.sum + f.val * x.len, x.len};
-        if (f.type == SET)
-                return {f.val * x.len, x.len};
-        return x;
-}
-
-Tag composition(Tag f, Tag g) {
-        if (f.type == SET)
-                return f;
-        if (f.type == ADD) {
-                if (g.type == SET)
-                        return Tag{SET, g.val + f.val};
-                if (g.type == ADD)
-                        return Tag{ADD, g.val + f.val};
-                return f;
+        void build(int id, int l, int r, const vector<lli> &vec) {
+                if (l == r) {
+                        t[id] = vec[l];
+                } else {
+                        int m = (l + r) / 2;
+                        build(2*id, l, m, vec);
+                        build(2*id+1, m+1, r, vec);
+                        t[id] = t[2*id] + t[2*id+1];
+                }
         }
-        return g;
-}
+
+        void apply(int id, int len, const Tag &x) {
+                if (x.type == ADD) {
+                        if (tag[id].type != SET) {
+                                tag[id] = Tag{ADD, tag[id].val + x.val};
+                        } else {
+                                tag[id] = Tag{SET, tag[id].val + x.val};
+                        }
+                        t[id] += x.val * len;
+                } else if (x.type == SET) {
+                        t[id] = x.val * len;
+                        tag[id] = x;
+                }
+        }
+
+        void push_down(int id, int l, int r) {
+                int m = (l + r) / 2;
+                apply(2*id, m-l+1, tag[id]);
+                apply(2*id+1, r-m, tag[id]);
+                tag[id] = Tag();
+        }
+
+        void range_update(int id, int l, int r, int ql, int qr, const Tag &x) {
+                if (qr < l or ql > r) return;
+                if (ql <= l and r <= qr) {
+                        apply(id, r-l+1, x);
+                } else {
+                        push_down(id, l, r);
+                        int m = (l + r) / 2;
+                        range_update(2*id, l, m, ql, qr, x);
+                        range_update(2*id+1, m+1, r, ql, qr, x);
+                        t[id] = t[2*id] + t[2*id+1];
+                }
+        }
+
+        lli query_range_sum(int id, int l, int r, int ql, int qr) {
+                if (qr < l or ql > r) return 0;
+                if (l >= ql and r <= qr) return t[id];
+                push_down(id, l, r);
+                int m = (l + r) / 2;
+                return query_range_sum(2*id, l, m, ql, qr) + query_range_sum(2*id+1, m+1, r, ql, qr);
+        }
+
+        LazySegTree(const vector<lli> &vec) : N(SZ(vec)), t(4*N), tag(4*N) {
+                build(1, 0, N-1, vec);
+        }
+};
 
 void solution() {
         int N, Q; cin >> N >> Q;
-        vector<S> A(N, {0, 1});
-        for (int i = 0; i < N; i++) cin >> A[i].sum;
-        lazy_segtree<S, op, e, Tag, mapping, composition, id> st(A);
+        vector<lli> A(N);
+        for (lli &x : A) cin >> x;
+        LazySegTree st(A);
         while (Q-->0) {
-                int p, a, b; cin >> p >> a >> b;
-                a--;
-                if (p == 1) {
+                int op, a, b; cin >> op >> a >> b;
+                a--; b--;
+                if (op == 1) {
                         int x; cin >> x;
-                        st.apply(a, b, Tag{ADD, x});
+                        st.range_update(1, 0, N-1, a, b, Tag{ADD, x});
                 }
-                if (p == 2) {
+                if (op == 2) {
                         int x; cin >> x;
-                        st.apply(a, b, Tag{SET, x});
+                        st.range_update(1, 0, N-1, a, b, Tag{SET, x});
                 }
-                if (p == 3) {
-                        cout << st.prod(a, b).sum << '\n';
+                if (op == 3) {
+                        cout << st.query_range_sum(1, 0, N-1, a, b) << '\n';
                 }
         }
 }

@@ -1,9 +1,3 @@
-#include <bits/stdc++.h>
-#define SZ(x) ((int) x.size())
-#define uwu return 0
-using namespace std;
-using lli = long long int;
-
 constexpr lli INF = 1e18;
 
 struct flow_edge{

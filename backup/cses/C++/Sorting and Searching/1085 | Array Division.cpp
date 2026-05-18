@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12770246
- * Problem: Array Division
- * Link: https://cses.fi/problemset/task/1085
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <vector>

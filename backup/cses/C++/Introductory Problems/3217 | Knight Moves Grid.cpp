@@ -1,9 +1,3 @@
-/*
- * Submission ID: 13242080
- * Problem: Knight Moves Grid
- * Link: https://cses.fi/problemset/task/3217
- */
-
 #pragma GCC optimize("Ofast")
 #include <bits/stdc++.h>
 

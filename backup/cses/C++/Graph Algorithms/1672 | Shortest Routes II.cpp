@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14673749
- * Problem: Shortest Routes II
- * Link: https://cses.fi/problemset/task/1672
- */
-
 #pragma GCC optimize("Ofast")
 #include <algorithm>
 #include <iostream>

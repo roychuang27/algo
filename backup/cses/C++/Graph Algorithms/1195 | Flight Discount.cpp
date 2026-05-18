@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14725809
- * Problem: Flight Discount
- * Link: https://cses.fi/problemset/task/1195
- */
-
 #pragma GCC optimize("Ofast")
 #include <algorithm>
 #include <iostream>

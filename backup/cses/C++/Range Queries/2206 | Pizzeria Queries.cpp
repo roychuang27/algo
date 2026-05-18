@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14498901
- * Problem: Pizzeria Queries
- * Link: https://cses.fi/problemset/task/2206
- */
-
 #pragma GCC optimize("Ofast")
 #include <algorithm>
 #include <iostream>

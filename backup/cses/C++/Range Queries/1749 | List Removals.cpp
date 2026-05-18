@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14420832
- * Problem: List Removals
- * Link: https://cses.fi/problemset/task/1749
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <vector>

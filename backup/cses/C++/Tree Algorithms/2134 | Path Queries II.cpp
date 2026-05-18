@@ -1,9 +1,3 @@
-/*
- * Submission ID: 13192486
- * Problem: Path Queries II
- * Link: https://cses.fi/problemset/task/2134
- */
-
 #pragma GCC optimize("Ofast")
 #include <algorithm>
 #include <iostream>

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 13205898
- * Problem: Sliding Window Sum
- * Link: https://cses.fi/problemset/task/3220
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <deque>

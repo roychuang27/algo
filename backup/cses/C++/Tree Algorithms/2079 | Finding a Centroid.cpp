@@ -1,9 +1,3 @@
-/*
- * Submission ID: 16135571
- * Problem: Finding a Centroid
- * Link: https://cses.fi/problemset/task/2079
- */
-
 #pragma GCC optimize("Ofast")
 #include <bits/stdc++.h>
 #define AC ios_base::sync_with_stdio(false); std::cin.tie(nullptr); std::cout.tie(nullptr);

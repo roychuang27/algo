@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12228388
- * Problem: Counting Towers
- * Link: https://cses.fi/problemset/task/2413
- */
-
 #pragma GCC optimize("Ofast")
 
 #include <bits/stdc++.h>

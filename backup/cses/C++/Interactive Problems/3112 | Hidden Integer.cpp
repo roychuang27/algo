@@ -1,9 +1,3 @@
-/*
- * Submission ID: 13128359
- * Problem: Hidden Integer
- * Link: https://cses.fi/problemset/task/3112
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #define fastio cin.tie(0)->sync_with_stdio(false)

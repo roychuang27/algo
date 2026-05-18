@@ -1,9 +1,3 @@
-/*
- * Submission ID: 15247771
- * Problem: Mountain Range
- * Link: https://cses.fi/problemset/task/3314
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <utility>

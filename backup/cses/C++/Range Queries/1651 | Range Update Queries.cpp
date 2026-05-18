@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12269698
- * Problem: Range Update Queries
- * Link: https://cses.fi/problemset/task/1651
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

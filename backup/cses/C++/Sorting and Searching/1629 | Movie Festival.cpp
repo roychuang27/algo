@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11871807
- * Problem: Movie Festival
- * Link: https://cses.fi/problemset/task/1629
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12330067
- * Problem: Coding Company
- * Link: https://cses.fi/problemset/task/1665
- */
-
 #pragma GCC optimize("Ofast")
 #include <bits/stdc++.h>
 #define AC ios_base::sync_with_stdio(false); std::cin.tie(nullptr); std::cout.tie(nullptr);

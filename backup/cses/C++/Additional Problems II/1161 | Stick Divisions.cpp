@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12483351
- * Problem: Stick Divisions
- * Link: https://cses.fi/problemset/task/1161
- */
-
 #include <iostream>
 #include <vector>
 #include <queue>

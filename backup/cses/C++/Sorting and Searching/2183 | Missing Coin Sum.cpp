@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12046798
- * Problem: Missing Coin Sum
- * Link: https://cses.fi/problemset/task/2183
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

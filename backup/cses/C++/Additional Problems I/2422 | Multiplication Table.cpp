@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12773564
- * Problem: Multiplication Table
- * Link: https://cses.fi/problemset/task/2422
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <algorithm>

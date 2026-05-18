@@ -1,9 +1,3 @@
-/*
- * Submission ID: 15943789
- * Problem: Police Chase
- * Link: https://cses.fi/problemset/task/1695
- */
-
 #include <bits/stdc++.h>
 #define SZ(x) ((int) x.size())
 #define uwu return 0

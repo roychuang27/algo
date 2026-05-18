@@ -1,9 +1,3 @@
-/*
- * Submission ID: 16401628
- * Problem: Increasing Array Queries
- * Link: https://cses.fi/problemset/task/2416
- */
-
 #include <iostream>
 #include <functional>
 #include <stack>

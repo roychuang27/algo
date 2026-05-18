@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12303841
- * Problem: Common Divisors
- * Link: https://cses.fi/problemset/task/1081
- */
-
 #pragma GCC optimize("Ofast")
 #include <bits/stdc++.h>
 

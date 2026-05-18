@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14756948
- * Problem: Teleporters Path
- * Link: https://cses.fi/problemset/task/1693
- */
-
 #include <algorithm>
 #include <iostream>
 #include <vector>

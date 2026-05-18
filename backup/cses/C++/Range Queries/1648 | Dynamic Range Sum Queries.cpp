@@ -1,9 +1,3 @@
-/*
- * Submission ID: 16734252
- * Problem: Dynamic Range Sum Queries
- * Link: https://cses.fi/problemset/task/1648
- */
-
 #include <algorithm>
 #include <functional>
 #include <iostream>

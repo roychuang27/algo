@@ -1,9 +1,3 @@
-/*
- * Submission ID: 16539058
- * Problem: Movie Festival Queries
- * Link: https://cses.fi/problemset/task/1664
- */
-
 #include <algorithm>
 #include <array>
 #include <iostream>

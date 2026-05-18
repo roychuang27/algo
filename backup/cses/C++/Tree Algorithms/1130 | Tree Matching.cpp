@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12717679
- * Problem: Tree Matching
- * Link: https://cses.fi/problemset/task/1130
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <vector>

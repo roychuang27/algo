@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14801343
- * Problem: Game Routes
- * Link: https://cses.fi/problemset/task/1681
- */
-
 #include <algorithm>
 #include <iostream>
 #include <vector>

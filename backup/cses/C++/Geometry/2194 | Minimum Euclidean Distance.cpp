@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12777231
- * Problem: Minimum Euclidean Distance
- * Link: https://cses.fi/problemset/task/2194
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <vector>

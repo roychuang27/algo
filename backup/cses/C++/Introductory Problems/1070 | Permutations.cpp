@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12055528
- * Problem: Permutations
- * Link: https://cses.fi/problemset/task/1070
- */
-
 #include <bits/stdc++.h>
 
 #define int long long

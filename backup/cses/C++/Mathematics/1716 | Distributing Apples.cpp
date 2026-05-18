@@ -1,9 +1,3 @@
-/*
- * Submission ID: 15080020
- * Problem: Distributing Apples
- * Link: https://cses.fi/problemset/task/1716
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <vector>

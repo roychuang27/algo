@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12274172
- * Problem: Counting Divisors
- * Link: https://cses.fi/problemset/task/1713
- */
-
 #pragma GCC optimize("Ofast")
 
 #include <bits/stdc++.h>

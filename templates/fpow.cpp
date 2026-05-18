@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 int fpow(unsigned long long a, int b, int p) {
     unsigned long long res = 1;
     while (b) {
@@ -9,9 +6,4 @@ int fpow(unsigned long long a, int b, int p) {
         a = a * a % p;
     }
     return res;
-}
-
-int main () {
-    cout << fpow(10, 100, 1e9+7) << endl;
-    return 0;
 }

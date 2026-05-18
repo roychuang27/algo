@@ -1,9 +1,3 @@
-/*
- * Submission ID: 15982493
- * Problem: Distance Queries
- * Link: https://cses.fi/problemset/task/1135
- */
-
 #include <iostream>
 #include <functional>
 #include <vector>

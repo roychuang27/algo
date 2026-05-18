@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14525226
- * Problem: Nested Ranges Count
- * Link: https://cses.fi/problemset/task/2169
- */
-
 #pragma GCC optimize("Ofast")
 #include <algorithm>
 #include <iostream>

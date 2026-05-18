@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12055587
- * Problem: Coin Piles
- * Link: https://cses.fi/problemset/task/1754
- */
-
 #include <bits/stdc++.h>
 
 #define int long long

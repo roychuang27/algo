@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12491704
- * Problem: Digit Queries
- * Link: https://cses.fi/problemset/task/2431
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <utility>

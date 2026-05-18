@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11907673
- * Problem: Trailing Zeros
- * Link: https://cses.fi/problemset/task/1618
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

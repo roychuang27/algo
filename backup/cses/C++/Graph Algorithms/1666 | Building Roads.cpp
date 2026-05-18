@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12467781
- * Problem: Building Roads
- * Link: https://cses.fi/problemset/task/1666
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <utility>

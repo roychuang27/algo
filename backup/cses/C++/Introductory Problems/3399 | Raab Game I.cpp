@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14419668
- * Problem: Raab Game I
- * Link: https://cses.fi/problemset/task/3399
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <vector>

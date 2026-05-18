@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12202909
- * Problem: Nearest Smaller Values
- * Link: https://cses.fi/problemset/task/1645
- */
-
 #pragma GCC optimize("Ofast")
 
 #include <bits/stdc++.h>

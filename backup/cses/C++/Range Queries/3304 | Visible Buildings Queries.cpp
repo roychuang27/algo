@@ -1,9 +1,3 @@
-/*
- * Submission ID: 15977684
- * Problem: Visible Buildings Queries
- * Link: https://cses.fi/problemset/task/3304
- */
-
 #include <iostream>
 #include <functional>
 #include <stack>

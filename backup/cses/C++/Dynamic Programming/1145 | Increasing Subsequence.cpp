@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11586884
- * Problem: Increasing Subsequence
- * Link: https://cses.fi/problemset/task/1145
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 long long arr[200000];

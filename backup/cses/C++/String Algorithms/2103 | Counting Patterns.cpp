@@ -1,9 +1,3 @@
-/*
- * Submission ID: 16823408
- * Problem: Counting Patterns
- * Link: https://cses.fi/problemset/task/2103
- */
-
 #include <algorithm>
 #include <array>
 #include <functional>
@@ -27,16 +21,16 @@
 #define rALL(x) rbegin(x), rend(x)
 #define fst first
 #define sec second
- 
+
 using namespace std;
 using lli = long long int;
- 
+
 constexpr int MAXN = 5e5 + 10;
- 
+
 void solution() {
         // Aho Corasick
         vector<vector<int>> ac(MAXN, vector<int> (26, -1));
-        vector<int> fail(MAXN, 0);
+        vector<int> fail(MAXN);
         vector<bool> is_end(MAXN, 0);
         vector<int> str_to_id(MAXN);
         int it = 0; // point to the end of the trie
@@ -106,7 +100,7 @@ void solution() {
                 cout << dp[str_to_id[i]] << '\n';
         }
 }
- 
+
 int main() {
         cin.tie(nullptr)->sync_with_stdio(false);
         solution();

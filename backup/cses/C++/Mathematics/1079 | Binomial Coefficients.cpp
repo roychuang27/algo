@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14719517
- * Problem: Binomial Coefficients
- * Link: https://cses.fi/problemset/task/1079
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <vector>

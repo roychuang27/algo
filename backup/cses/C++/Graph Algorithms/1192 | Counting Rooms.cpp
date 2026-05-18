@@ -1,62 +1,37 @@
-/*
- * Submission ID: 15624609
- * Problem: Counting Rooms
- * Link: https://cses.fi/problemset/task/1192
- */
-
-#include <iostream>
-#include <queue>
-
-#define test(x) cerr << x << endl;
-
+#include <bits/stdc++.h>
 using namespace std;
 
-bool can_go[1005][1005];
-int N, M;
+vector<vector<bool>> rec(1002, vector<bool> (1002, 1));
 
-const int dx[4] = {-1, 1, 0, 0};
-const int dy[4] = {0, 0, -1, 1};
-
-void bfs(int i, int j) {
-        queue<pair<int, int>> qu;
-        qu.push({i, j});
-        can_go[i][j] = false;           // Mark visited / Cannot go to
-        while (qu.empty() == false) {
-                auto [cur_i, cur_j] = qu.front();
-                qu.pop();
-                
-                for (int k = 0; k < 4; k++) {
-                        int new_i = cur_i + dy[k], new_j = cur_j + dx[k] ;
-                        if (new_i < 0 or new_i >= N or new_j < 0 or new_j >= M)
-                                continue;
-                        if (can_go[new_i][new_j] == false)
-                                continue;
-
-                        can_go[new_i][new_j] = false;
-                        qu.push({new_i, new_j});
-                }
-        }
+void dfs (int x, int y) {
+    if (rec[x][y]) return;
+    rec[x][y] = 1;
+    dfs(x-1, y);
+    dfs(x, y-1);
+    dfs(x+1, y);
+    dfs(x, y+1);
 }
 
-int main() {
-        cin.tie(nullptr)->sync_with_stdio(false);
-        cin >> N >> M;
-        for (int i = 0; i < N; i++) {
-                for (int j = 0; j < M; j++) {
-                        char c; cin >> c;
-                        if (c == '.')
-                                can_go[i][j] = true;
-                }
-        }        
-        int cnt = 0;
-        for (int i = 0; i < N; i++) {
-                for (int j = 0; j < M; j++) {
-                        if (can_go[i][j]) {      // Empty Room
-                                cnt++;           // Counter + 1
-                                bfs(i, j);       // How far i can reach
-                        }
-                }
+int main () {
+    ios_base::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
+    int n, m;
+    cin >> n >> m;
+    int cnt = 0;
+    char c;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            cin >> c;
+            if (c == '.') {
+                rec[i][j] = 0;
+            }
         }
-        cout << cnt << '\n';
-        return 0;
+    }
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            if (rec[i][j] == 0) cnt++;
+            dfs(i, j);
+        }
+    }
+    cout << cnt << '\n';
+    return 0;
 }

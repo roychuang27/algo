@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11790879
- * Problem: Concert Tickets
- * Link: https://cses.fi/problemset/task/1091
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

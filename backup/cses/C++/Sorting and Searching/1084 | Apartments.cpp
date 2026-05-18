@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11740323
- * Problem: Apartments
- * Link: https://cses.fi/problemset/task/1084
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

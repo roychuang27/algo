@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14662531
- * Problem: Planets Queries I
- * Link: https://cses.fi/problemset/task/1750
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

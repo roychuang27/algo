@@ -1,9 +1,3 @@
-/*
- * Submission ID: 13082990
- * Problem: Prefix Sum Queries
- * Link: https://cses.fi/problemset/task/2166
- */
-
 #pragma GCC optimize("Ofast")
 #include <algorithm>
 #include <iostream>

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12241383
- * Problem: Projects
- * Link: https://cses.fi/problemset/task/1140
- */
-
 #pragma GCC optimize("Ofast")
 
 #include <bits/stdc++.h>

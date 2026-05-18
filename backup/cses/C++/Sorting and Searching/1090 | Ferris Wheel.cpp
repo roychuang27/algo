@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11880616
- * Problem: Ferris Wheel
- * Link: https://cses.fi/problemset/task/1090
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

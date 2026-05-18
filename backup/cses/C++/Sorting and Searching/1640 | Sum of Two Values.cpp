@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11586287
- * Problem: Sum of Two Values
- * Link: https://cses.fi/problemset/task/1640
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

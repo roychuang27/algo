@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14750154
- * Problem: Acyclic Graph Edges
- * Link: https://cses.fi/problemset/task/1756
- */
-
 #include <algorithm>
 #include <iostream>
 #include <utility>

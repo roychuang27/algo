@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12694199
- * Problem: Sum of Divisors
- * Link: https://cses.fi/problemset/task/1082
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <utility>

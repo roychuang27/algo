@@ -1,9 +1,3 @@
-/*
- * Submission ID: 15953936
- * Problem: Distinct Routes
- * Link: https://cses.fi/problemset/task/1711
- */
-
 #include <bits/stdc++.h>
 #define SZ(x) ((int) x.size())
 #define uwu return 0

@@ -1,94 +1,96 @@
-/*
- * Submission ID: 16793712
- * Problem: Word Combinations
- * Link: https://cses.fi/problemset/task/1731
- */
-
-#include <algorithm>
-#include <cstring>
-#include <functional>
+#pragma GCC optimize("Ofast")
 #include <iostream>
 #include <string>
-#include <utility>
+#include <cstring>
 #include <vector>
-#ifndef ONLINE_JUDGE
-#define test(...) do { cerr << "Line(" << __LINE__ << ") [" #__VA_ARGS__ "] =>"; ([](auto&&... args){ ((cerr << ' ' << args), ...); }(__VA_ARGS__)); cerr << endl; } while(0)
-#define testv(x) do { cerr << "Line(" << __LINE__ << ") " #x " => ["; int _i=0; for (auto& _e : (x)) cerr << (_i++ ? ", " : "") << _e; cerr << "]" << endl; } while(0)
-#else
-#define test(...) 0
-#define testv(...) 0
-#endif
-#define printv(x) { for (auto i : (x)) cout << i << ' '; cout << endl; }
-#define SQ(x) ((x) * (x))
-#define SZ(x) ((int)x.size())
-#define eb emplace_back
-#define ALL(x) begin(x), end(x)
-#define rALL(x) rbegin(x), rend(x)
-#define fst first
-#define sec second
- 
+#define fastio cin.tie(0)->sync_with_stdio(false)
+#define SZ(x) ((int) x.size())
+
 using namespace std;
-using lli = long long int;
- 
-const int MOD = 1e9 + 7;
- 
-void solution() {
-        // TRIE
-        struct TRIE_NODE {
-                int idx_of_nxt[26];
-                bool is_end;
-                TRIE_NODE() {
-                        memset(idx_of_nxt, -1, sizeof(idx_of_nxt));
-                        is_end = 0;
-                }
-                int& operator[] (int c) {
-                        return idx_of_nxt[c];
-                }
-        };
-        vector<TRIE_NODE> trie;
-        int it = 0; // inclusive
-        trie.eb(TRIE_NODE());
-        const function<void(string&)> insert = [&](string &t) -> void {
-                int cur = 0;
-                for (const char c : t) {
-                        int j = c - 'a';
-                        if (trie[cur][j] == -1) {
-                                trie[cur][j] = ++it;
-                                trie.eb(TRIE_NODE());
-                        }
-                        cur = trie[cur][j];
-                }
-                trie[cur].is_end = 1;
-        };
-        // Input
-        string S; cin >> S;
-        int K; cin >> K;
-        while (K-->0) {
-                string t; cin >> t;
-                insert(t);
+typedef long long int lli;
+
+lli dp[1000006] = {0};
+
+const int mod = 1e9 + 7;
+
+struct TRIE {
+    int graph[1000006][26];
+    bool is_end[1000006];
+    int nodes;
+
+    void init() {
+        memset(graph, -1, sizeof(graph));
+        memset(is_end, 0, sizeof(is_end));
+        nodes = 1;
+    }
+    
+    bool existnxt(int id, int c) {
+        return graph[id][c] != -1;
+    }
+
+    int getnxt(int id, int c) {
+        if (existnxt(id, c)) return graph[id][c];
+        nodes++;
+        graph[id][c] = nodes - 1;
+        return graph[id][c];
+    }
+
+    void insert(string s) {
+        int id = 0;
+        for (char c : s) {
+            c -= 'a';
+            id = getnxt(id, c);
         }
-        int N = SZ(S);
-        vector<lli> dp(N+1, 0);
-        dp[0] = 1;
-        // origin is 0-based
-        // origin + depth convert it to 1-based
-        const function<void(int, int, int)> dfs = [&](int origin, int depth, int cur) {
-                if (cur == -1) {
-                        return;
-                }
-                if (trie[cur].is_end) {
-                        dp[origin + depth] = (dp[origin] + dp[origin + depth]) % MOD;
-                }
-                if (origin + depth < N) {
-                        dfs(origin, depth+1, trie[cur][ S[origin+depth]-'a' ]);
-                }
-        };
-        for (int i = 0; i < N; i++) dfs(i, 0, 0);
-        cout << dp[N] << '\n'; // 1-based
+        is_end[id] = 1;
+    }
+
+    void traversal(string s, int origin) {
+        int idx = origin;
+        int id = 0;
+        for (int i = origin; i < SZ(s); i++) {
+            char c = s[i];
+            c -= 'a';
+            if (is_end[id]) {
+                dp[idx] += dp[origin];
+                if (dp[idx] >= mod) dp[idx] %= mod;
+            }
+            if (existnxt(id, c)){
+                id = getnxt(id, c);
+                idx++;
+            } else {
+                return;
+            }
+        }
+        if (is_end[id]) {
+            dp[idx] += dp[origin];
+            if (dp[idx] >= mod) dp[idx] %= mod;
+        }
+    }
+} trie;
+
+void solve() {
+    trie.init();
+    string s;
+    cin >> s;
+    int K; cin >> K;
+    for (int i = 0; i < K; i++) {
+        string ss; cin >> ss;
+        trie.insert(ss);
+    }
+    int N = SZ(s);
+    dp[0] = 1;
+
+    for (int i = 0; i < N; i++) {
+        trie.traversal(s, i);
+    }
+    
+    // for (int i = 0; i <= N; i++) cout << dp[i] << ' ';
+
+    cout << dp[N] << '\n';
 }
- 
-int main() {
-        cin.tie(nullptr)->sync_with_stdio(false);
-        solution();
-        return 0;
+
+int main () {
+    fastio;
+    solve();
+    return 0;
 }

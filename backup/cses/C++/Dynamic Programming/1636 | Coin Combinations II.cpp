@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12089677
- * Problem: Coin Combinations II
- * Link: https://cses.fi/problemset/task/1636
- */
-
 #include <bits/stdc++.h>
 
 #define AC ios_base::sync_with_stdio(false); std::cin.tie(nullptr); std::cout.tie(nullptr);

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14518019
- * Problem: Distinct Values Subarrays
- * Link: https://cses.fi/problemset/task/3420
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long lli;

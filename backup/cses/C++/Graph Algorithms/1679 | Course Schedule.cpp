@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14743050
- * Problem: Course Schedule
- * Link: https://cses.fi/problemset/task/1679
- */
-
 #pragma GCC optimize("Ofast")
 #include <algorithm>
 #include <iostream>

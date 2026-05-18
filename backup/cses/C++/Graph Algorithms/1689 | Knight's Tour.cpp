@@ -1,9 +1,3 @@
-/*
- * Submission ID: 15951506
- * Problem: Knight's Tour
- * Link: https://cses.fi/problemset/task/1689
- */
-
 #include <algorithm>
 #include <iostream>
 #include <vector>

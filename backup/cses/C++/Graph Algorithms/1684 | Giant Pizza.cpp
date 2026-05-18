@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14821069
- * Problem: Giant Pizza
- * Link: https://cses.fi/problemset/task/1684
- */
-
 #include <algorithm>
 #include <iostream>
 #include <vector>

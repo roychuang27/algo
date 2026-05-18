@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11586194
- * Problem: Book Shop
- * Link: https://cses.fi/problemset/task/1158
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

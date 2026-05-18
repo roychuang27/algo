@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12401016
- * Problem: Divisor Analysis
- * Link: https://cses.fi/problemset/task/2182
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <utility>

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 15079691
- * Problem: Next Prime
- * Link: https://cses.fi/problemset/task/3396
- */
-
 #include <iostream>
 #include <cmath>
 using namespace std;

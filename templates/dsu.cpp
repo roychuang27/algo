@@ -3,9 +3,8 @@ class DSU {
         int N;
         vector<int> root;
  
-        DSU(int n): N(n) {
-                root.resize(N+1);
-                for (int i = 1; i <= N; i++) {
+        DSU(int n): N(n), root(N) {
+                for (int i = 0; i < N; i++) {
                         root[i] = i;
                 }
         }

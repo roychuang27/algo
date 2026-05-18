@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12283616
- * Problem: Traffic Lights
- * Link: https://cses.fi/problemset/task/1163
- */
-
 #pragma GCC optimize("Ofast")
 
 #include <bits/stdc++.h>

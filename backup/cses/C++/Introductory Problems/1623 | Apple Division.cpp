@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12402443
- * Problem: Apple Division
- * Link: https://cses.fi/problemset/task/1623
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <utility>

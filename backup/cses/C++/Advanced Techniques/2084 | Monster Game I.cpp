@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12656719
- * Problem: Monster Game I
- * Link: https://cses.fi/problemset/task/2084
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <utility>
@@ -17,7 +11,6 @@
 
 using namespace std;
 typedef long long ll;
-
 struct line {
     long long a, b;
 };

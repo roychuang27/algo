@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14774055
- * Problem: Colored Chairs
- * Link: https://cses.fi/problemset/task/3273
- */
-
 #include <iostream>
 #include <vector>
 using namespace std;

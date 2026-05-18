@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14510714
- * Problem: Distinct Values Subsequences
- * Link: https://cses.fi/problemset/task/3421
- */
-
 #pragma GCC optimize("Ofast")
 #include <iostream>
 #include <vector>

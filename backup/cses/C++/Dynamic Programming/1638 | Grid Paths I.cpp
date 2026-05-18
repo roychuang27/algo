@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11411761
- * Problem: Grid Paths I
- * Link: https://cses.fi/problemset/task/1638
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14673950
- * Problem: Mex Grid Construction
- * Link: https://cses.fi/problemset/task/3419
- */
-
 #pragma GCC optimize("Ofast")
 #include <algorithm>
 #include <iostream>

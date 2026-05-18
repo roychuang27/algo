@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14820167
- * Problem: Planets and Kingdoms
- * Link: https://cses.fi/problemset/task/1683
- */
-
 #include <algorithm>
 #include <iostream>
 #include <vector>

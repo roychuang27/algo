@@ -1,9 +1,3 @@
-/*
- * Submission ID: 12482448
- * Problem: Two Knights
- * Link: https://cses.fi/problemset/task/1072
- */
-
 #include <iostream>
 #define SQ(x) ((x)*(x))
 using namespace std;

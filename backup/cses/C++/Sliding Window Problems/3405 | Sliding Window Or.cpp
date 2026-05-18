@@ -1,9 +1,3 @@
-/*
- * Submission ID: 14782271
- * Problem: Sliding Window Or
- * Link: https://cses.fi/problemset/task/3405
- */
-
 #include <algorithm>
 #include <iostream>
 #include <vector>

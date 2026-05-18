@@ -1,9 +1,3 @@
-/*
- * Submission ID: 15951172
- * Problem: School Dance
- * Link: https://cses.fi/problemset/task/1696
- */
-
 #include <bits/stdc++.h>
 #define SZ(x) ((int) x.size())
 #define uwu return 0

@@ -1,9 +1,3 @@
-/*
- * Submission ID: 15977483
- * Problem: Company Queries I
- * Link: https://cses.fi/problemset/task/1687
- */
-
 #include <iostream>
 #include <vector>
 #define test(x) cerr << "Line(" << __LINE__ << ") " #x << ' ' << x << endl

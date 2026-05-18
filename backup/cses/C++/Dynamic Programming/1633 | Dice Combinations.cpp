@@ -1,9 +1,3 @@
-/*
- * Submission ID: 11404361
- * Problem: Dice Combinations
- * Link: https://cses.fi/problemset/task/1633
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 

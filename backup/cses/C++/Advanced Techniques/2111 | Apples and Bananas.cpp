@@ -1,9 +1,3 @@
-/*
- * Submission ID: 16590233
- * Problem: Apples and Bananas
- * Link: https://cses.fi/problemset/task/2111
- */
-
 #include <array>
 #include <cmath>
 #include <iostream>
