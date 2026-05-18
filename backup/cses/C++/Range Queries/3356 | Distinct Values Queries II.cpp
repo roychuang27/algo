@@ -19,7 +19,7 @@ const int INF = 0x3f3f3f3f;
 const int nodes_cnt_max = 2e5 + 10;
 vector<int> l(nodes_cnt_max, -1);
 vector<int> r(nodes_cnt_max, -1);
-map<int, set<int>> mp;
+set<pair<int, int>> st;
 
 struct ZKW {
         vector<lli> t = vector<lli>(nodes_cnt_max * 2);
@@ -79,19 +79,19 @@ struct ZKW {
 } zkw;
 
 int getl(int x, int i) {
-        auto &st = mp[x];
         if (SZ(st) == 0) return -1;
-        auto it = st.lower_bound(i);
+        auto it = st.lower_bound({x, i});
         if (it == st.begin()) return -1;
         --it;
-        return *it;
+        if (it->first != x) return -1;
+        return it->second;
 }
 
 int getr(int x, int i) {
-        auto &st = mp[x];
-        auto it = st.upper_bound(i);
+        auto it = st.upper_bound({x, i});
         if (it == st.end()) return -1;
-        return *it;
+        if (it->first != x) return -1;
+        return it->second;
 }
 
 void solution() {
@@ -99,18 +99,18 @@ void solution() {
         cin >> N >> Q;
         vector<int> xs(N);
         zkw.init(N);
-        map<int, int> mp2;
+        map<int, int> last_idx;
         for (int i = 0; i < N; i++) {
                 int x; cin >> x;
                 xs[i] = x;
-                if (mp2.find(x) == mp2.end()) {
+                if (last_idx.find(x) == last_idx.end()) {
                         l[i] = -1;
                 } else {
-                        l[i] = mp2[x];
+                        l[i] = last_idx[x];
                         r[l[i]] = i;
                 }
-                mp2[x] = i;
-                mp[x].insert(i);
+                last_idx[x] = i;
+                st.insert({x, i});
         }
         zkw.build();
         
@@ -121,7 +121,7 @@ void solution() {
                         cin >> k >> u;
                         k--;
                         int x = xs[k];
-                        mp[x].erase(k);
+                        st.erase({x, k});
                         if (l[k] != -1) {
                                 r[l[k]] = r[k];
                         }
@@ -129,7 +129,7 @@ void solution() {
                                 zkw.modify(r[k], l[k]);
                         }
                         xs[k] = u;
-                        mp[u].insert(k);
+                        st.insert({u, k});
                         int gl = getl(u, k), gr = getr(u, k);
                         if (gl != -1) {
                                 r[gl] = k;

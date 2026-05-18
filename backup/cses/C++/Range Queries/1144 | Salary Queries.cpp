@@ -1,102 +1,102 @@
-#pragma GCC optimize("Ofast")
-#include <bits/stdc++.h>
-#define fastio cin.tie(0)->sync_with_stdio(false)
+#include <algorithm>
+#include <functional>
+#include <iostream>
+#include <tuple>
+#include <utility>
+#include <vector>
+#ifdef LOCAL
+#define test(...) do { cerr << "Line(" << __LINE__ << ") [" #__VA_ARGS__ "] =>"; ([](auto&&... args){ ((cerr << ' ' << args), ...); }(__VA_ARGS__)); cerr << endl; } while(0)
+#define testv(x) do { cerr << "Line(" << __LINE__ << ") " #x " => ["; int _i=0; for (auto& _e : (x)) cerr << (_i++ ? ", " : "") << _e; cerr << "]" << endl; } while(0)
+#else
+#define test(...) 0
+#define testv(...) 0
+#endif
+#define printv(x) { for (auto i : (x)) cout << i << ' '; cout << endl; }
+#define SQ(x) ((x) * (x))
+#define SZ(x) ((int)x.size())
 #define eb emplace_back
-#define test(x) cerr << "Line(" << __LINE__ << ") " #x << ' ' << x << endl
-#define printv(x) { \
-    for (auto i : x) cout << i << ' '; \
-    cout << endl; \
-}
-#define pii pair<int, int>
-#define pll pair<lli, lli>
-#define ALL(x) x.begin(), x.end()
-#define rALL(x) x.rbegin(), x.rend()
-#define MP(x, y) make_pair((x), (y))
-#define SQ(x) ((x)*(x))
-#define SZ(x) ((int) x.size())
- 
+#define ALL(x) begin(x), end(x)
+#define rALL(x) rbegin(x), rend(x)
+#define fst first
+#define sec second
+
 using namespace std;
-typedef long long int lli;
- 
-inline int lowbit(int k) {
-    return k & -k;
+using lli = long long int;
+
+class Fenwick {
+    private:
+        int N;
+        vector<lli> b;
+    public:
+        Fenwick(int _N) : N(_N), b(N+1, 0) {}
+        int lowbit(int x) {
+                return x & -x;
+        }
+        void modify(int idx, int delta) {
+                for (int pos = idx; pos <= N; pos += lowbit(pos)) {
+                        b[pos] += delta;
+                }
+        }
+        lli query(int idx) {
+                if (idx == 0) return 0;
+                lli res = 0;
+                for (int pos = idx; pos >= 1; pos -= lowbit(pos)) {
+                        res += b[pos];
+                }
+                return res;
+        }
+};
+
+enum types { Modify, Query };
+
+void solution() {
+        int N, Q; cin >> N >> Q;
+        vector<int> ps(N);
+        vector<int> tmp;
+        for (int &p : ps) {
+                cin >> p;
+                tmp.eb(p);
+        }
+        vector<tuple<types, int, int>> qs(Q);
+        for (auto &[type, a, b] : qs) {
+                char c; cin >> c;
+                if (c == '!') {
+                        type = Modify;
+                        cin >> a >> b;
+                        a--;
+                        tmp.eb(b);
+                } else {
+                        type = Query;
+                        cin >> a >> b;
+                        tmp.eb(a); tmp.eb(b);
+                }
+        }
+        sort(ALL(tmp));
+        tmp.erase(unique(ALL(tmp)), tmp.end());
+        const function f = [&](int x) -> int {
+                return lower_bound(ALL(tmp), x) - tmp.begin() + 1;
+        };
+        Fenwick fenwick(SZ(tmp));
+        for (int &p : ps) {
+                p = f(p);
+                fenwick.modify(p, +1);
+        }
+        for (auto &[type, a, b] : qs) {
+                if (type == Modify) {
+                        fenwick.modify(ps[a], -1);
+                        b = f(b);
+                        ps[a] = b;
+                        fenwick.modify(b, +1);
+                } else {
+                        a = f(a);
+                        b = f(b);
+                        cout << fenwick.query(b) - fenwick.query(a - 1) << '\n';
+                }
+        }
 }
- 
-void update(vector<int> &fenwick, int N, int pos, int val) {
-    while (pos <= N) {
-        fenwick[pos] += val;
-//        pos ^= (lowbit(pos) << 1);
-//        pos ^= lowbit(pos);
-		pos += lowbit(pos);
-    }
-}
- 
-int query(vector<int> &fenwick, int pos) {
-	int res = 0;
-    while (pos >= 1) {
-        res += fenwick[pos];
-        pos ^= lowbit(pos);
-    }
-    return res;
-}
- 
-map<int, int> mp;
-vector<int> fenwick(1e6, 0);
-vector<int> nums;
- 
+
 int main() {
-	int N, Q;
-	cin >> N >> Q;
-	vector<int> ps(N + 5);
-	for (int i = 1; i <= N; i++) {
-		cin >> ps[i];
-		nums.eb(ps[i]);
-	}
-	vector<pair<int, int>> qs(Q);
-	vector<int> qt(Q);
-	for (int i = 0; i < Q; i++) {
-		char c; cin >> c;
-		if (c == '?') {
-			qt[i] = 1;
-			int a, b;
-			cin >> a >> b;
-			a--;
-			nums.eb(a);
-			nums.eb(b);
-			qs[i] = MP(a, b);
-		} else {
-			qt[i] = 2;
-			int k, x;
-			cin >> k >> x;
-			nums.eb(x);
-			qs[i] = MP(k, x);
-		}
-	}
- 
-	sort(nums.begin(), nums.end());
-	nums.resize(unique(nums.begin(), nums.end()) -  nums.begin());
-    auto idx = [&](int x) {
-        return (int)(lower_bound(nums.begin(), nums.end(), x) -
-                     nums.begin()) + 1;
-    };
-    
-    int ord = SZ(nums);
- 
-	for (int i = 1; i <= N; i++) {
-		update(fenwick, ord, idx(ps[i]), 1);
-	}
- 
-	for (int i = 0; i < Q; i++) {
-		int a = qs[i].first;
-		int b = qs[i].second;
-		if (qt[i] == 1) {
-			cout << query(fenwick, idx(b)) - query(fenwick, idx(a)) << '\n';
-		} else {
-			update(fenwick, ord, idx(ps[a]), -1);
-			ps[a] = b;
-			update(fenwick, ord, idx(b), 1);
-		}
-	}
- 
-	return 0;
+        cin.tie(nullptr)->sync_with_stdio(false);
+        solution();
+        return 0;
 }

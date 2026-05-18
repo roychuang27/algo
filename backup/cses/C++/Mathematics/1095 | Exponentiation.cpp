@@ -2,7 +2,6 @@
 using namespace std;
 
 const int mod = 1e9 + 7;
-#define int long long
 
 // a ^ b
 long long expo (long long a, long long b) {

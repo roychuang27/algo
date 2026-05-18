@@ -30,15 +30,17 @@ vector<int> manacher(string &s) {
         m[0] = 0;
         int L = 0, R = 0;
         for (int i = 1; i < N; i++) {
-                if (i <= R) {
-                        m[i] = min(m[L + L - i], R - i);
-                }
-                while (m[i] < i and i + m[i] + 1 < N and s[i + m[i] + 1] == s[i - m[i] - 1]) {
-                        m[i]++;
-                }
-                if (i + m[i] > R) {
-                        L = i;
-                        R = i + m[i];
+                if (i <= R and m[L + L - i] < R - i) {
+                        m[i] = m[L + L - i];
+                } else {
+                        m[i] = max(0, R - i);
+                        while (m[i] < i and i + m[i] + 1 < N and s[i + m[i] + 1] == s[i - m[i] - 1]) {
+                                m[i]++;
+                        }
+                        if (i + m[i] > R) {
+                                L = i;
+                                R = i + m[i];
+                        }
                 }
         }
         return m;

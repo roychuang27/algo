@@ -11,6 +11,7 @@
 
 using namespace std;
 typedef long long ll;
+
 struct line {
     long long a, b;
 };

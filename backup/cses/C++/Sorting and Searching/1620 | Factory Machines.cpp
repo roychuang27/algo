@@ -1,29 +1,30 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define int long long
-
-const int arr_size = 2e5;
-int k[arr_size];
-
-signed main () {
-    ios_base::sync_with_stdio(false); cin.tie(0);
-    int n, quantity;
-    cin >> n >> quantity;
-    for (int i = 0; i < n; i++) cin >> k[i];
+ 
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+ 
+    int n, t;
+    cin >> n >> t;
     
-    long long l = 0, r = 1e18;
-    unsigned long long mid, sum;
-    while (l < r) {
-        mid = (l + r) / 2;
-        sum = 0;
-        for (int i = 0; i < n; i++) {
-            sum += mid / k[i];
-            if (sum > quantity) break;
+    vector<int> k(n);
+    for (int i = 0; i < n; i++) cin >> k[i];
+ 
+    long long L = 0, R = 1e18;
+ 
+    while (L < R) {
+        long long M = (L + R) / 2;
+        unsigned long long sum = 0;
+        for (int i : k) {
+            sum += M / i;
+            if (sum >= t) break;
         }
-
-        if (sum >= quantity) r = mid;
-        else l = mid + 1;
+        if (sum >= t) R = M;
+        else L = M + 1;
     }
-    cout << l;
+ 
+    cout << L;
+ 
     return 0;
 }

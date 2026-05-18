@@ -3,12 +3,13 @@
 #include <utility>
 #include <vector>
 #include <algorithm>
-#define AC ios_base::sync_with_stdio(false); std::cin.tie(nullptr); std::cout.tie(nullptr);
+#define AC cin.tie(0)->sync_with_stdio(false);
 #define pb emplace_back
 #define ALL(x) begin(x),end(x)
 #define MP(x, y) make_pair((x), (y))
 #define SQ(x) ((x)*(x))
 #define SZ(x) ((int) x.size())
+
 
 using namespace std;
 typedef long long ll;

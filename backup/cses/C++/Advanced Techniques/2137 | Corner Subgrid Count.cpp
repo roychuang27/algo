@@ -1,15 +1,8 @@
 #pragma GCC optimize("Ofast")
 #pragma GCC target("popcnt")
 #include <iostream>
-#include <utility>
-#include <vector>
-#include <cmath>
 #include <bitset>
 #define AC ios_base::sync_with_stdio(false); std::cin.tie(nullptr); std::cout.tie(nullptr);
-#define ALL(x) begin(x),end(x)
-#define pb emplace_back
-
-int N = 64;
 
 using namespace std;
 typedef long long ll;

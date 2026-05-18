@@ -3,16 +3,9 @@
 #include <vector>
 #include <map>
 #define AC cin.tie(0)->sync_with_stdio(false);
-#define pb emplace_back
-#define ALL(x) begin(x),end(x)
-#define MP(x, y) make_pair((x), (y))
-#define SQ(x) ((x)*(x))
-#define SZ(x) ((int) x.size())
-#define err(x) cerr << #x << ": " << x << endl;
 
 using namespace std;
 typedef long long ll;
-typedef pair<int, int> pii;
 
 void solve () {
     int n, k;

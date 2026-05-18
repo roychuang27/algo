@@ -4,7 +4,7 @@
 using namespace std;
 using lli = long long int;
 
-constexpr lli INF = 1e18;
+constexpr lli INF = 4e18;
 
 struct flow_edge{
         lli cap, flow;
@@ -43,10 +43,9 @@ struct Dinic {
                 if (u == t)
                         return flow;
                 
-                while (ptr[u] < SZ(adj_edges[u])) {
-                        int i = adj_edges[u][ptr[u]];
+                for (int &pt = ptr[u]; pt < SZ(adj_edges[u]); pt++) {
+                        int i = adj_edges[u][pt];
                         flow_edge &e = edges[i];
-                        ptr[u]++;
                         
                         if (dist[e.v] != dist[e.u] + 1)
                                 continue;
@@ -90,10 +89,10 @@ struct Dinic {
         }
         
         void add_edge(int u, int v, lli cap, lli flow) {
-                adj_edges[u].push_back(edges_cnt);
-                edges.push_back(flow_edge(u, v, cap, flow, edges_cnt + 1));
-                adj_edges[v].push_back(edges_cnt + 1);
-                edges.push_back(flow_edge(v, u, 0, -flow, edges_cnt));
+                adj_edges[u].emplace_back(edges_cnt);
+                edges.emplace_back(flow_edge(u, v, cap, flow, edges_cnt + 1));
+                adj_edges[v].emplace_back(edges_cnt + 1);
+                edges.emplace_back(flow_edge(v, u, 0, -flow, edges_cnt));
                 edges_cnt += 2;
         }
         

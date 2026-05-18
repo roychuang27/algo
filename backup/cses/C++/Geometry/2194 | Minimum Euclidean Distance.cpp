@@ -1,69 +1,74 @@
-#pragma GCC optimize("Ofast")
-#include <iostream>
-#include <vector>
 #include <algorithm>
 #include <climits>
 #include <cmath>
-#define AC ios_base::sync_with_stdio(false); std::cin.tie(nullptr); std::cout.tie(nullptr);
-#define pb emplace_back
-#define ALL(x) x.begin(),x.end()
-#define SQ(x) ((x)*(x))
+#include <iostream>
+#include <vector>
+#ifdef LOCAL
+#define test(...) do { std::cerr << "Line(" << __LINE__ << ") [" #__VA_ARGS__ "] =>"; ([](auto&&... args){ ((std::cerr << ' ' << args), ...); }(__VA_ARGS__)); std::cerr << std::endl; } while(0)
+#define testv(x) do { std::cerr << "Line(" << __LINE__ << ") " #x " => ["; int _i=0; for (auto& _e : (x)) std::cerr << (_i++ ? ", " : "") << _e; std::cerr << "]" << std::endl; } while(0)
+#else
+#define test(...) 0
+#define testv(...) 0
+#endif
 #define SZ(x) ((int) x.size())
+#define SQ(x) ((x) * (x))
+#define CORDCOMP(x, fx) std::sort(ALL(x)); x.erase(std::unique(ALL(x)), std::end(x)); const auto fx = [&](int val) -> int { return std::lower_bound(ALL(x), val) - std::begin(x); }
+#define fst first
+#define sec second
 
+using lli = long long int;
 using namespace std;
 
-const long long INF = LLONG_MAX;
-
-struct dot {
-    long long x, y;
+struct Point {
+        lli x, y;
 };
 
-vector<dot> dots(2e5+5);
+lli two_dist_sq(Point &a, Point &b) { return SQ(a.x - b.x) + SQ(a.y - b.y); }
 
-long long get2dis (dot a, dot b) {
-    return SQ(b.x - a.x) + SQ(b.y - a.y);
+constexpr lli INF = 4e18;
+
+void solution() {
+        int N;
+        cin >> N;
+        vector<Point> pts(N);
+        for (int i = 0; i < N; i++) cin >> pts[i].x >> pts[i].y;
+        sort(pts.begin(), pts.end(), [](Point &a, Point &b) {
+                return a.x < b.x;
+        });
+
+        const auto get_min_dist_sq = [&](auto &&self, int start, int end) -> lli {
+                if (end == start) return INF;
+                if (end - start == 1) {
+                        return two_dist_sq(pts[start], pts[end]);
+                }
+                int mid = (start + end) / 2;
+                lli cx = pts[mid].x;
+                lli d = min(self(self, start, mid), self(self, mid+1, end));
+                lli dsqrt = sqrt(d);
+                vector<Point> candidates;
+                for (int i = start; i <= end; i++) {
+                        if (SQ(pts[i].x - cx) >= d) continue;
+                        candidates.emplace_back(pts[i]);
+                }
+                sort(candidates.begin(), candidates.end(), [](auto &a, auto &b) {
+                        return a.y < b.y;
+                });
+                int M = SZ(candidates);
+                for (int i = 0; i < M; i++) {
+                        for (int j = i+1; j < M; j++) {
+                                if (candidates[j].y > candidates[i].y + dsqrt) break;
+                                d = min(d, two_dist_sq(candidates[i], candidates[j]));
+                        }
+                }
+                return d;
+        };
+
+        cout << get_min_dist_sq(get_min_dist_sq, 0, N-1);
 }
 
-long long getDisSq (int start, int end) {
-    if (end == start) return INF;
-    if (end - start == 1) {
-        return get2dis(dots[start], dots[end]);
-    }
-    int mid = (start + end) >> 1;
-    long long centerX = dots[mid].x;
-    long long d = min(getDisSq(start, mid), getDisSq(mid+1, end));
-    long long dsqrt = ceil(sqrt(d));
-    vector<dot> candidate;
-    for (int i = start; i <= end; i++) {
-        if (abs(dots[i].x - centerX) >= dsqrt) continue;
-        candidate.pb(dots[i]);
-    }
-    sort(ALL(candidate), [](dot a, dot b) {
-        return a.y < b.y;
-    });
-    for (int i = 0; i < SZ(candidate); i++) {
-        for (int j = i+1; j < SZ(candidate); j++) {
-            if (candidate[j].y < candidate[i].y) continue;
-            if (candidate[j].y > candidate[i].y + dsqrt) break;
-            d = min(d, get2dis(candidate[i], candidate[j]));
-        }
-    }
-    return d;
-}
-
-void solve () {
-    int N; cin >> N;
-    for (int i = 0; i < N; i++)
-        cin >> dots[i].x >> dots[i].y;
-    sort(dots.begin(), dots.begin()+N, [](dot a, dot b) {
-        return a.x < b.x;
-    });
-    long long d = getDisSq(0, N - 1);
-    cout << d << '\n';
-}
-
-int main () {
-    AC
-    solve();
-    return 0;
+int main() {
+        std::ios_base::sync_with_stdio(false);
+        std::cin.tie(nullptr);
+        solution();
+        return 0;
 }

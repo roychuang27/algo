@@ -1,88 +1,78 @@
-#pragma GCC optimize("Ofast")
 #include <iostream>
-#include <utility>
-#include <cstring>
-#include <deque>
+#include <vector>
 #include <queue>
+#include <utility>
 #include <algorithm>
-#define AC cin.tie(0)->sync_with_stdio(false);
-#define ALL(x) begin(x),end(x)
-#define MP(x, y) make_pair((x), (y))
-#define SQ(x) ((x)*(x))
-#define SZ(x) ((int) x.size())
-#define err(x) cerr << #x << ": " << x << endl;
-
 using namespace std;
-typedef long long ll;
-typedef pair<int, int> pii;
  
-bool visited[1002][1002];
-int rec[1002][1002];
+const int dx[4] = {-1, 1, 0, 0};
+const int dy[4] = {0, 0, -1, 1};
+const string mv = "UDLR";
  
-char directions[] = "UDLR";
-const int dx[] = {0, 0, -1, 1};
-const int dy[] = {-1, 1, 0, 0};
+int main() {
+	int n, m;
+	cin >> n >> m;
+	vector<vector<int>> visited(n + 2, vector<int>(m + 2, -1));
  
-void solve () {
-    int n, m;
-    int ay, ax;
-    cin >> n >> m;
-    deque<pair<int, pii>> nxts;
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= m; j++) {
-            char c;
-            cin >> c;
-            if (c == 'M') {
-                nxts.push_front(MP(0, MP(i, j)));
-            }
-            if (c == 'A') {
-                ay = i;
-                ax = j;
-                nxts.push_back(MP(1, MP(i, j)));
-            }
-            if (c == '.') {
-                visited[i][j] = 0;
-            }
-        }
-    }
-    while (SZ(nxts) >= 1) {
-        auto pos = nxts[0].second;
-        int id = nxts[0].first;
-        nxts.pop_front();
-        if (pos.first == 1 || pos.first == n || pos.second == 1 || pos.second == m) {
-            if (id == 1) {
-                cout << "YES\n";
-                string path;
-                while (pos.first != ay || pos.second != ax) {
-                    int k = rec[pos.first][pos.second];
-                    path += directions[k];
-                    pos.first -= dy[k];
-                    pos.second -= dx[k];
-                }
-                cout << SZ(path) << '\n';
-                reverse(path.begin(), path.end());
-                cout << path << '\n';
-                return;
-            }
-        }
-        for (int k = 0; k < 4; k++) {
-            int ny = pos.first + dy[k];
-            int nx = pos.second + dx[k];
-            if (!visited[ny][nx]) {
-                nxts.push_back(MP(id, MP(ny, nx)));
-                visited[ny][nx] = 1;
-                if (id == 1) {
-                    rec[ny][nx] = k;
-                }
-            }
-        }
-    }
-    cout << "NO\n";
-}
+	queue<pair<int, int>> bfs;
+	pair<int, int> start;
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= m; j++) {
+			char c;
+			cin >> c;
+			if (c != '#') visited[i][j] = 0;
  
-int main () {
-    AC
-    memset(visited, 1, sizeof(visited));
-    solve();
-    return 0;
+			if (c == 'M') {
+				bfs.push(make_pair(i, j));
+				visited[i][j] = 1;
+			} else if (c == 'A') start = make_pair(i, j);
+		}
+	}
+ 
+	while (!bfs.empty()) {
+		auto [x, y] = bfs.front();
+		bfs.pop();
+ 
+		for (int i = 0; i < 4; i++) {
+			int nx = x + dx[i], ny = y + dy[i];
+			if (visited[nx][ny] == 0) {
+				visited[nx][ny] = visited[x][y] + 1;
+				bfs.push(make_pair(nx, ny));
+			}
+		}
+	}
+ 
+	visited[start.first][start.second] = 1;
+	bfs.push(start);
+	vector<vector<int>> pa(n + 2, vector<int>(m + 2));
+	pa[start.first][start.second] = -1;
+	while (!bfs.empty()) {
+		auto [x, y] = bfs.front();
+		bfs.pop();
+ 
+		if (x == 1 || x == n || y == 1 || y == m) {
+			cout << "YES\n";
+			string ans = "";
+			while (pa[x][y] != -1) {
+				ans += mv[pa[x][y]];
+				int nx = x - dx[pa[x][y]];
+				int ny = y - dy[pa[x][y]];
+				x = nx, y = ny;
+			}
+			reverse(ans.begin(), ans.end());
+			cout << ans.length() << '\n' << ans << '\n';
+			return 0;
+		}
+ 
+		for (int i = 0; i < 4; i++) {
+			int nx = x + dx[i], ny = y + dy[i];
+			if (visited[nx][ny] != 0 && visited[nx][ny] <= visited[x][y] + 1) continue;
+ 
+			visited[nx][ny] = visited[x][y] + 1;
+			pa[nx][ny] = i;
+			bfs.push(make_pair(nx, ny));
+		}
+	}
+ 
+	cout << "NO\n";
 }

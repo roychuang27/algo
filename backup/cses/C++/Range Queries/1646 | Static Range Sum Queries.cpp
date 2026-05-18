@@ -47,9 +47,9 @@ int main() {
         int l = qr.l, r = qr.r;
 
         while (R < r) add(++R);
+        while (L > l) add(--L);
         while (R > r) remove(R--);
         while (L < l) remove(L++);
-        while (L > l) add(--L);
 
         ans[qr.id] = cur;
     }

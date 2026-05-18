@@ -10,82 +10,118 @@
 #define err(x) cerr << #x << ": " << x << endl;
 
 using namespace std;
-typedef long long ll;
+typedef long long lli;
 
-struct Cell {
-    ll M, L, R, S;
+const lli inf = 1e18;
+
+struct Node {
+    lli M, L, R, S;
+    
+    void set_value_for_single_node(lli val) {
+        M = max(0LL, val);
+        L = val;
+        R = val;
+        S = val;
+    }
+
+    void set_void_node() {
+        M = -inf;
+        L = -inf;
+        R = -inf;
+        S = 0;
+    }
+    
+    Node operator+ (Node r) {
+        Node ret;
+        ret.M = max({M, r.M, R + r.L});
+        ret.L = max(L, S + r.L);
+        ret.R = max(R + r.S, r.R);
+        ret.S = S + r.S;
+        return ret;
+    }
 };
 
 const int maxN = 2e5;
 int arr[maxN + 5];
-Cell tree[4*maxN + 5];
-int N;
 
-Cell combine (Cell a, Cell b) {
-    Cell ret;
-    ret.M = max(max(a.M, b.M), a.R + b.L);
-    ret.L = max(a.L, a.S + b.L);
-    ret.R = max(a.R + b.S, b.R);
-    ret.S = a.S + b.S;
-    return ret;
-}
+struct ZKW {
+    Node tree[400005];
+    int N = 0;
 
-Cell Val(int x) {
-    return {max(x, 0), x, x, x};
-}
-
-void build(int id, int l, int r) {
-    if (l == r) { // 對應到原陣列特定值
-        tree[id] = Val(arr[l]);
-        return;
+    void printdbg() {
+        int l = N, r = 2 * N - 1;
+        while (l <= r) {
+            for (int i = l; i <= r; i++) cerr << '(' << tree[i].R << ')' << ' ';
+            cerr << endl;
+            if (l % 2 == 1) l++;
+            if (r % 2 == 0) r--;
+            l /= 2;
+            r /= 2;
+        }
     }
-    int mid = (l + r) / 2;
-    build(id * 2, l, mid); // 左子節點
-    build(id * 2 + 1, mid + 1, r); // 右子節點
-    tree[id] = combine(tree[id * 2], tree[id * 2 + 1]); // 合併
-}
-
-// id = 節點編號 / k = 原陣列索引 / x = 值 / [l, r] 為當前處理區間
-void modify(int id, int k, int x, int l, int r) {
-    if (l == r) {
-        tree[id] = Val(x);
-        return;
+    
+    void init(int n) {
+        N = n;
+        // for (int i = 0; i < 2 * N; i++) {
+        //     tree[i].set_value_for_single_node(-inf);
+        // }
     }
-    int mid = (l + r) / 2;
-    // 該點在左子節點區間內
-    if (k <= mid) modify(id * 2, k, x, l, mid);
-    // 在右子節點區間內
-    else modify(id * 2 + 1, k, x, mid + 1, r);
-    // 更新
-    tree[id] = combine(tree[id * 2], tree[id * 2 + 1]);
-}
-
-// id = 節點編號 / [l, r] 當前處理區間 / [L, R] 欲查詢區間
-Cell query(int id, int l, int r, int L, int R) {
-    if (l <= L && R <= r) { // 當前處理區間完全落在欲查詢區間內
-        return tree[id];
+    
+    void build() {
+        for (int i = 0; i < N; i++) {
+            tree[N + i].set_value_for_single_node(arr[i]);
+        }
+        for (int i = N - 1; i > 0; i--) {
+            tree[i] = tree[2 * i] + tree[2 * i + 1];
+        }
     }
-    int mid = (l + r) / 2;
-    Cell ret;
-    // 欲查詢區間在當左子節點區間內
-    if (L <= mid) ret = query(id * 2, l, mid, L, R);
-    // 右子節點
-    if (R > mid) ret = query(id * 2 + 1, mid + 1, r, L, R);
-    return ret;
-}
+    
+    void modify(int idx, int val) {
+        idx += N;
+        tree[idx].set_value_for_single_node(val);
+        idx /= 2;
+        while (idx >= 1) {
+            tree[idx] = tree[2 * idx] + tree[2 * idx + 1];
+            idx /= 2;
+        }
+    }
+    
+    lli query(int l, int r) {
+        l += N;
+        r += N;
+        Node resL, resR;
+        resL.set_void_node();
+        resR.set_void_node();
+        while (l <= r) {
+            if (l % 2 == 1) {
+                resL = resL + tree[l];
+                l++;
+            }
+            if (r % 2 == 0) {
+                resR = tree[r] + resR;
+                r--;
+            }
+            l /= 2;
+            r /= 2;
+        }
+        return (resL + resR).M;
+    }
+} zkw;
 
 void solve () {
-    int q;
-    cin >> N >> q;
-    for (int i = 1; i <= N; i++) {
+    int n, q;
+    cin >> n >> q;
+    zkw.init(n);
+    for (int i = 0; i < n; i++) {
         cin >> arr[i];
     }
-    build(1, 1, N);
+    zkw.build();
     while (q--) {
-        int k, x;
-        cin >> k >> x;
-        modify(1, k, x, 1, N);
-        cout << query(1, 1, N, 1, N).M << '\n';
+        // zkw.printdbg();
+        int a, b;
+        cin >> a >> b;
+        zkw.modify(a-1, b);
+        cout << zkw.query(0, n - 1) << '\n';
     }
 }
 

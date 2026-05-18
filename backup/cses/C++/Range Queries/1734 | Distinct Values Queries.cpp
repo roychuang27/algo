@@ -1,80 +1,81 @@
 #include <algorithm>
-#include <array>
+#include <cmath>
+#include <functional>
 #include <iostream>
 #include <map>
+#include <utility>
 #include <vector>
-#define test(x) cerr << "Line(" << __LINE__ << ") " #x << ' ' << x << endl
-#define printv(x)                          \
-{                                          \
-        for (auto i : x) cout << i << ' '; \
-        cout << endl;                      \
-}
+#ifndef ONLINE_JUDGE
+#define test(...) do { cerr << "Line(" << __LINE__ << ") [" #__VA_ARGS__ "] =>"; ([](auto&&... args){ ((cerr << ' ' << args), ...); }(__VA_ARGS__)); cerr << endl; } while(0)
+#define testv(x) do { cerr << "Line(" << __LINE__ << ") " #x " => ["; int _i=0; for (auto& _e : (x)) cerr << (_i++ ? ", " : "") << _e; cerr << "]" << endl; } while(0)
+#else
+#define test(...) 0
+#define testv(...) 0
+#endif
+#define printv(x) { for (auto i : (x)) cout << i << ' '; cout << endl; }
 #define SQ(x) ((x) * (x))
 #define SZ(x) ((int)x.size())
+#define eb emplace_back
+#define ALL(x) begin(x), end(x)
+#define rALL(x) rbegin(x), rend(x)
+#define fst first
+#define sec second
 
 using namespace std;
 using lli = long long int;
 
-class Fenwick {
-        public:
-        const int capacity = 2e5;
-        vector<lli> b;
-        
-        Fenwick() {
-                b = vector<lli> (capacity + 10, 0);
-        }
-        
-        int lowbit(int x) {
-                return x & -x;
-        }
-        
-        void modify(int idx, int delta) {
-                for (int pos = idx; pos <= capacity; pos += lowbit(pos)) {
-                        b[pos] += delta;
-                }
-        }
-        
-        lli query(int idx) {
-                lli res = 0;
-                for (int pos = idx; pos >= 1; pos -= lowbit(pos)) {
-                        res += b[pos];
-                }
-                return res;
-        }
+struct Qry {
+        int l, r, i;
 };
 
 void solution() {
-        int N, Q;
-        cin >> N >> Q;
-        vector<int> xs(N + 1);
-        for (int i = 1; i <= N; i++) {
-                cin >> xs[i];
-        }
-        vector<array<int, 3>> qs(Q);
-        vector<int> ans(Q);
+        int N, Q; cin >> N >> Q;
+        vector<int> A(N);
+        for (int &x : A) cin >> x;
+        vector<int> v = A;
+        sort(ALL(v));
+        v.erase(unique(ALL(v)), v.end());
+        const function f = [&](int x) {
+                return lower_bound(ALL(v), x) - v.begin();
+        };
+        for (int &x : A) x = f(x);
+        vector<Qry> qs(Q);
         for (int i = 0; i < Q; i++) {
-                int l, r;
-                cin >> l >> r;
-                qs[i] = {l, r, i};
+                cin >> qs[i].l >> qs[i].r;
+                qs[i].l--; qs[i].r--;
+                qs[i].i = i;
         }
-        sort(qs.begin(), qs.end(), [&](auto q1, auto q2) {
-                return q1[1] < q2[1];
+        int K = sqrt(N);
+        sort(ALL(qs), [&](Qry &x, Qry &y) {
+                if(x.l / K != y.l / K) return x.l / K < y.l / K;
+                return ((x.l / K) % 2 == 0)? x.r < y.r : x.r > y.r;
         });
-        map<int, int> mp;
-        Fenwick fenwick;
-        int R = 0;
-        for (const auto &[l, r, i] : qs) {
-                while (R < r) {
-                        R++;
-                        if (mp[xs[R]]) {
-                                fenwick.modify(mp[xs[R]], -1);
-                        }
-                        fenwick.modify(R, +1);
-                        mp[xs[R]] = R;
+        vector<int> ans(Q);
+        vector<int> freq(N, 0);
+        int L = 0, R = -1;
+        int c = 0;
+
+        const function add = [&](int x) {
+                if (freq[x] == 0) {
+                        c++;
                 }
-                ans[i] = fenwick.query(r) - fenwick.query(l-1);
+                freq[x]++;
+        };
+
+        const function del = [&](int x) {
+                freq[x]--;
+                if (freq[x] == 0) c--;
+        };
+
+        for (const auto &[l, r, i] : qs) {
+                while (R < r) add(A[++R]);
+                while (L > l) add(A[--L]);
+                while (R > r) del(A[R--]);
+                while (L < l) del(A[L++]);
+                ans[i] = c;
         }
-        for (const auto &x : ans) cout << x << '\n';
+
+        for (const int &a : ans) cout << a << '\n';
 }
 
 int main() {

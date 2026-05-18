@@ -1,60 +1,5 @@
-#pragma GCC optimize("Ofast")
 #include <algorithm>
-
-#include <unistd.h>
-
-#define BUF_SIZE 20000000
-#define num_length 20
-
-#define fast_get_char (ptr_buf_start == ptr_buf_end && (ptr_buf_end = (ptr_buf_start = buf) + read(0, buf, BUF_SIZE), ptr_buf_start == ptr_buf_end) ? -1 : *ptr_buf_start++)
-#define fast_put_char(x) (vi[ptr_buf_out++] = (x))
-
-static char buf[BUF_SIZE], vi[BUF_SIZE], *ptr_buf_start = buf, *ptr_buf_end = buf;
-static int ptr_buf_out;
-
-int readInt() {
-    int re = 0, neg = 0;
-    char c = fast_get_char;
-    while (c == ' ' || c == '\n') c = fast_get_char;
-
-    if (c == '-') neg = 1, c = fast_get_char;
-
-    while (c >= '0' && c <= '9') {
-        re = (re << 3) + (re << 1) + (c ^ '0'); 
-        c = fast_get_char;
-    }
-    return neg ? -re : re;
-}
-
-unsigned readUInt() {
-    int re = 0;
-    char c = fast_get_char;
-    while (c == ' ' || c == '\n') c = fast_get_char;
-
-    while (c >= '0' && c <= '9') {
-        re = (re << 3) + (re << 1) + (c ^ '0'); 
-        c = fast_get_char;
-    }
-    return re;
-}
-
-void outInt(long long x) {
-    char str[num_length];
-    int p = 0;
-
-    if (x < 0) {
-        fast_put_char('-');
-        x = -x;
-    }
-
-    do {
-        str[p++] = '0' ^ (x % 10);
-        x /= 10;
-    } while (x);
-
-    while (p--) fast_put_char(str[p]);
-    fast_put_char('\n');
-}
+#include <iostream>
 
 using namespace std;
 typedef long long lli;
@@ -141,21 +86,23 @@ struct ZKW {
 } zkw;
 
 void solve () {
-    int n = readUInt(), q = readUInt();
+    int n, q;
+    cin >> n >> q;
     zkw.init(n);
     for (int i = 0; i < n; i++) {
-        arr[i] = readInt();
+            cin >> arr[i];
     }
     zkw.build();
     while (q--) {
         // zkw.printdbg();
-        int a = readUInt(), b = readUInt();
-        outInt(zkw.query(a-1, b-1));
+        int a, b;
+        cin >> a >> b;
+        cout << zkw.query(a-1, b-1) << '\n';
     }
-    write(1, vi, ptr_buf_out);
 }
 
 int main () {
+    cin.tie(0)->sync_with_stdio(0);
     solve();
     return 0;
 }

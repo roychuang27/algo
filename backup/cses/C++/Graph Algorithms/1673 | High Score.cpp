@@ -35,11 +35,14 @@ void solve() {
     int N, M;
     cin >> N >> M;
     vector<tuple<int, int, lli>> edges_list;
+    vector<bool> connected_to_N(N+1, 0);
+    connected_to_N[N] = 1;
     for (int i = 0; i < M; i++) {
         int a, b;
         lli x;
         cin >> a >> b >> x;
         edges_list.eb(a, b, x);
+        if (b == N) connected_to_N[a] = 1;
     }
     // for (int i = 1; i <= N; i++) cerr << connected_to_N[i] << ' ';
     vector<lli> distance(N+1, -INF);
@@ -47,25 +50,26 @@ void solve() {
     reachable[1] = 1;
     distance[1] = 0;
     for (int i = 1; i <= N - 1; i++) {
+        bool relax = 0;
         for (const auto &[a, b, w] : edges_list) {
-            distance[b] = max(distance[b], distance[a] + w);
+            if (distance[b] < distance[a] + w) {
+                relax = 1;
+                distance[b] = distance[a] + w;
+            }
             if (reachable[a]) reachable[b] = 1;
+            if (connected_to_N[b]) connected_to_N[a] = 1;
         }
+        if (!relax) break;
     }
     // check
-    vector<bool> blacklist(N+1, 0);
-    for (int i = 1; i <= N; i++) {
-        for (const auto &[a, b, w] : edges_list) {
-            if (blacklist[a]) blacklist[b] = 1;
-            else if (reachable[a] and distance[b] < distance[a] + w) {
-                distance[b] = distance[a] + w;
-                blacklist[a] = 1;
-                blacklist[b] = 1;
-            }
+    for (const auto &[a, b, w] : edges_list) {
+        if (reachable[a] and distance[b] < distance[a] + w and connected_to_N[b]) {
+            cout << "-1\n";
+            return;
         }
     }
-    if (blacklist[N]) cout << "-1\n";
-    else cout << distance[N] << '\n';
+
+    cout << distance[N] << '\n';
 
 }
 

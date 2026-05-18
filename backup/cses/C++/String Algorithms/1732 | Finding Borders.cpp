@@ -23,28 +23,49 @@
 using namespace std;
 using lli = long long int;
 
+lli fpow(lli a, lli p, lli m) {
+        lli res = 1;
+        while (p) {
+                if (p & 1) res = (res * a) % m;
+                a = (a * a) % m;
+                p >>= 1;
+        }
+        return res;
+}
+
+lli inv(lli a, lli p) {
+        return fpow(a, p-2, p);
+}
+
+const lli hash_mod = 998244353;
+const lli hash_mul = 257;
+
 void solution() {
-        string s; cin >> s;
-        int N = SZ(s);
-        vector<int> pi(N);
-        pi[0] = 0;
-        for (int i = 1; i < N; i++) {
-                int j = pi[i - 1];
-                while (j > 0 and s[i] != s[j]) j = pi[j - 1];
-                if (s[i] == s[j]) j++;
-                pi[i] = j;
+        string S; cin >> S;
+        int N = SZ(S);
+        vector<lli> h(N); // h[i] = hash([0...i])
+        lli pre_mul = 1, last_hash = 0;
+        for (int i = 0; i < N; i++) {
+                h[i] = (last_hash + S[i] * pre_mul) % hash_mod;
+                pre_mul = (pre_mul * hash_mul) % hash_mod;
+                last_hash = h[i];
         }
-        testv(pi);
+        testv(h);
+        const function<lli(int, int)> get_hash = [&](int l, int r) -> lli {
+                if (l == 0) return h[r];
+                lli hash = h[r];
+                if (hash > h[l-1]) hash -= h[l-1];
+                else               hash = hash + hash_mod - h[l-1];
+                lli div_inv = inv(fpow(hash_mul, l, hash_mod), hash_mod);
+                hash = (hash * div_inv) % hash_mod;
+                test(l, r, hash);
+                return hash;
+        };
         vector<int> ans;
-        int j = N-1;
-        int a = pi[j];
-        while (a) {
-                test(a);
-                ans.eb(a);
-                j = a - 1;
-                a = pi[j];
+        for (int len = 1; len < N; len++) {
+                if (get_hash(0, len-1) == get_hash(N-len, N-1)) ans.eb(len);
         }
-        reverse(ALL(ans));
+        testv(ans);
         printv(ans);
 }
 
