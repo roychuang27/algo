@@ -54,12 +54,3 @@ int main() {
         solution();
         return 0;
 }
-et_median() << '\n';
-        }
-}
- 
-int main() {
-    fastio;
-    solve();
-    return 0;
-}

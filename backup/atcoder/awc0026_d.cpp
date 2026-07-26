@@ -54,7 +54,3 @@ int main() {
         solution();
         return 0;
 }
-c_with_stdio(false);
-        solution();
-        return 0;
-}

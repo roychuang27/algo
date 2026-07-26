@@ -61,36 +61,3 @@ int main() {
         solution();
         return 0;
 }
-       int mi = min(a, b);
-                return {a-mi, b-mi};
-        };
-        lli res = 0;
-        for (int i = 0; i < N; i++) {
-                pre[S[i] - 'A']++;
-                f();
-                res += mp2[ff(pre[0], pre[1])];
-                res += mp3[ff(pre[1], pre[2])];
-                res += mp4[ff(pre[0], pre[2])];
-                res -= 2*mp[pre];
-                mp[pre]++;
-                mp2[ff(pre[0], pre[1])]++;
-                mp3[ff(pre[1], pre[2])]++;
-                mp4[ff(pre[0], pre[2])]++;
-        }
-        // cout << res << '\n';
-        cout << (N * (N + 1)) / 2 - res << '\n';
-}
-
-int main() {
-        ios_base::sync_with_stdio(false); cin.tie(nullptr);
-        solution();
-        return 0;
-}
-cout << (N * (N + 1)) / 2 - res << '\n';
-}
-
-int main() {
-        ios_base::sync_with_stdio(false); cin.tie(nullptr);
-        solution();
-        return 0;
-}

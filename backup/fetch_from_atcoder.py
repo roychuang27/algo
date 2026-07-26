@@ -248,7 +248,16 @@ async def fetch_from_atcoder(atcoder_username: str):
     ) as session:
         print(f"[Atcoder] Fetching submissions for {atcoder_username}...")
         solutions = await get_solutions(session, atcoder_username, sem)
-        print(f"[Atcoder] Fetched {len(solutions)} solutions, saving...")
+        print(f"[Atcoder] Fetched {len(solutions)} solutions, deduplicating...")
+
+        best_by_code = {}
+        for sol in solutions:
+            code = sol["problem_code"]
+            if code not in best_by_code or sol["solution_id"] > best_by_code[code]["solution_id"]:
+                best_by_code[code] = sol
+        solutions = sorted(best_by_code.values(), key=lambda s: s["solution_id"], reverse=True)
+
+        print(f"[Atcoder] {len(solutions)} unique problems, saving...")
 
         failed = []
         save_coros = [

@@ -40,17 +40,16 @@ void solution() {
         vector<pair<int, vector<int>>> stk;
 
         for (const auto &[p, a, b] : pab) {
-                while (!mp.empty()) {
+                while (not mp.empty()) {
                         auto it = mp.begin();
-                        int key = it->first;
+                        auto [key, value] = *it;
                         if (key - sum_of_b > p) break;
-                        vector<int> value = std::move(it->second);
                         mp.erase(it);
                         int new_key = max(key - sum_of_b, 0) + sum_of_b + a + b;
-                        stk.eb(new_key, std::move(value));
+                        stk.eb(new_key, value);
                 }
                 while (not stk.empty()) {
-                        auto [key, value] = std::move(stk.back());
+                        auto [key, value] = stk.back();
                         stk.pop_back();
                         auto &vec = mp[key];
                         if (SZ(vec) < SZ(value)) swap(vec, value);
@@ -71,6 +70,4 @@ int main() {
         cin.tie(nullptr)->sync_with_stdio(false);
         solution();
         return 0;
-}
-
 }

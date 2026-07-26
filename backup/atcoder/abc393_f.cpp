@@ -41,18 +41,4 @@ int main () {
     fastio;
     solve();
     return 0;
-}[i]);
-            *replace = A[i];
-        }
-        for (auto [x, idx] : R[i]) {
-            ans[idx] = upper_bound(ALL(dp), x) - dp.begin();
-        }
-    }
-    for (auto k : ans) cout << k << '\n';
-}
-
-int main () {
-    fastio;
-    solve();
-    return 0;
 }
