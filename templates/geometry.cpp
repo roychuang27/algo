@@ -16,7 +16,7 @@ Point operator / (const Point &lhs, const ld &rhs) { return Point(lhs.x / rhs, l
 Point complex_mul(const Point &lhs, const Point &rhs) { return Point(lhs.x * rhs.x - lhs.y * rhs.y, lhs.x * rhs.y + lhs.y * rhs.x); }
 ld dot(const Point &lhs, const Point &rhs) { return lhs.x * rhs.x + lhs.y * rhs.y; }
 ld det(const Point &lhs, const Point &rhs) { return lhs.x * rhs.y - lhs.y * rhs.x; }
-ld abs(const Point &p) { return sqrt(SQ(p.x) + SQ(p.y)); }
+ld abs(const Point &p) { return sqrt(square(p.x) + square(p.y)); }
 bool eq(const Point &p, const Point &q) { return abs(p - q) < EPS; }
 
 struct Circle : Point {
@@ -31,11 +31,11 @@ vector<Point> circle_circle_intersect_points(const Circle &p, const Circle &q)  
         if (d < EPS) return {};
         if (d > p.r + q.r + EPS) return {};
         if (d < abs(p.r - q.r) - EPS) return {};
-        ld rcos = (SQ(d) + SQ(p.r) - SQ(q.r)) / (2.0 * d), rsin;
+        ld rcos = (square(d) + square(p.r) - square(q.r)) / (2.0 * d), rsin;
         if (p.r - abs(rcos) < EPS) {
                 rsin = 0;
         } else {
-                rsin = sqrt(SQ(p.r) - SQ(rcos));
+                rsin = sqrt(square(p.r) - square(rcos));
         }
         Point dir = (q - p) / d;
         Point p1 = p + complex_mul(dir, Point(rcos, rsin));
