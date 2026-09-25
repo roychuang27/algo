@@ -1,25 +1,42 @@
 #include <bits/stdc++.h>
 #include <cassert>
 #ifdef LOCAL
-#define dbg(...)                                                               \
-        do {                                                                   \
-                std::cerr << "Line(" << __LINE__ << ") [" #__VA_ARGS__ "] =>"; \
-                ([](auto &&...args) {                                          \
-                        ((std::cerr << ' ' << args), ...);                     \
-                }(__VA_ARGS__));                                               \
-                std::cerr << std::endl;                                        \
-        } while (0)
-#define dbgv(x)                                                      \
-        do {                                                         \
-                std::cerr << "Line(" << __LINE__ << ") " #x " => ["; \
-                int _i = 0;                                          \
-                for (auto &_e : (x))                                 \
-                        std::cerr << (_i++ ? ", " : "") << _e;       \
-                std::cerr << "]" << std::endl;                       \
+template <class T> concept Iterable = requires(T x) {
+        std::begin(x);
+        std::end(x);
+};
+template <class T> void dbg_print(const T &x) {
+        if constexpr (Iterable<T> &&
+                      !std::is_convertible_v<T, std::string_view>) {
+                std::cerr << '[';
+                bool first = true;
+                for (const auto &e : x) {
+                        if (!first) {
+                                std::cerr << ", ";
+                        }
+                        first = false;
+                        dbg_print(e);
+                }
+                std::cerr << ']';
+        } else {
+                std::cerr << x;
+        }
+}
+#define dbg(...)                                                             \
+        do {                                                                 \
+                std::cerr << "\033[1;31m";                                   \
+                std::cerr << "#" << __LINE__ << '\n';                    \
+                std::cerr << "(" #__VA_ARGS__ ") = (";                       \
+                bool _first = true;                                          \
+                ([&](auto &&...args) {                                       \
+                        ((std::cerr << (_first ? "" : ", "), _first = false, \
+                          dbg_print(args)),                                  \
+                         ...);                                               \
+                }(__VA_ARGS__));                                             \
+                std::cerr << ")\033[0m\n";                                   \
         } while (0)
 #else
 #define dbg(...) 39
-#define dbgv(...) 39
 #endif
 #define ALL(x) std::begin(x), std::end(x)
 #define rALL(x) std::rbegin(x), std::rend(x)
@@ -43,9 +60,11 @@ template <class T> bool chmax(T &a, T b) {
         }
 }
 namespace std {
-template <class T, std::size_t n> auto array_fill(T value) {
+template <class T, std::size_t n> constexpr auto array_fill(T value) {
         std::array<T, n> res;
-        res.fill(value);
+        for (auto &e : res) {
+                e = value;
+        }
         return res;
 }
 }
@@ -70,17 +89,12 @@ std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
 using namespace std;
 using lli = long long int;
 
-void precompute() {
-}
-
 void solve() {
 }
 
 int main() {
-#ifndef LOCAL
         cin.tie(nullptr)->sync_with_stdio(false);
-#endif
-        precompute();
+        cin.exceptions(cin.failbit);
         solve();
         return 0;
 }

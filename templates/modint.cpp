@@ -2,6 +2,9 @@ template <long long M> struct Modint {
         long long x;
         Modint(long long _x = 0)
                 : x(_x % M) {
+                while (x < 0) {
+                        x += M;
+                }
         }
         Modint &operator+=(Modint b) {
                 x += b.x;
@@ -58,4 +61,3 @@ template <long long M> struct Modint {
                 return is;
         }
 };
-

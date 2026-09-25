@@ -1,13 +1,16 @@
 #ifdef LOCAL
 #define dbgm(x)                                                               \
         do {                                                                  \
-                std::cerr << "Line(" << __LINE__ << ") " #x " =>\n";          \
+                std::cerr << "\033[1;31m"                                     \
+                          << "#" << __LINE__ << '\n'                          \
+                          << "" #x " =>\n";                                   \
                 for (size_t _i = 0; _i < (x).s[0]; ++_i) {                    \
                         std::cerr << " [";                                    \
                         for (size_t _j = 0; _j < (x).s[1]; ++_j)              \
                                 std::cerr << (_j ? ", " : "") << (x)[_i, _j]; \
                         std::cerr << "]\n";                                   \
                 }                                                             \
+                std::cerr << "\033[0m";                                       \
         } while (0)
 #else
 #define dbgm(...) 39
@@ -47,4 +50,3 @@ template <class T, size_t D> struct Matrix {
                 return a[pos(i...)];
         }
 };
-
