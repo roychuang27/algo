@@ -1,42 +1,15 @@
 #include <bits/stdc++.h>
 #include <cassert>
-#ifdef LOCAL
-template <class T> concept Iterable = requires(T x) {
-        std::begin(x);
-        std::end(x);
-};
-template <class T> void dbg_print(const T &x) {
-        if constexpr (Iterable<T> &&
-                      !std::is_convertible_v<T, std::string_view>) {
-                std::cerr << '[';
-                bool first = true;
-                for (const auto &e : x) {
-                        if (!first) {
-                                std::cerr << ", ";
-                        }
-                        first = false;
-                        dbg_print(e);
-                }
-                std::cerr << ']';
-        } else {
-                std::cerr << x;
-        }
-}
-#define dbg(...)                                                             \
-        do {                                                                 \
-                std::cerr << "\033[1;31m";                                   \
-                std::cerr << "#" << __LINE__ << '\n';                    \
-                std::cerr << "(" #__VA_ARGS__ ") = (";                       \
-                bool _first = true;                                          \
-                ([&](auto &&...args) {                                       \
-                        ((std::cerr << (_first ? "" : ", "), _first = false, \
-                          dbg_print(args)),                                  \
-                         ...);                                               \
-                }(__VA_ARGS__));                                             \
-                std::cerr << ")\033[0m\n";                                   \
-        } while (0)
+#define RED_BOLD "\033[1;31m"
+#define WHITE_NORMAL "\033[0m"
+#if defined(LOCAL) && __cplusplus >= 202302L
+#define dbg(...)                                                               \
+        std::println(stderr, RED_BOLD "#{}\n({}) = {}" WHITE_NORMAL, __LINE__, \
+                     #__VA_ARGS__, std::forward_as_tuple(__VA_ARGS__))
+#define log(x) std::cerr << RED_BOLD << x << WHITE_NORMAL << '\n'
 #else
 #define dbg(...) 39
+#define log(...) 39
 #endif
 #define ALL(x) std::begin(x), std::end(x)
 #define rALL(x) std::rbegin(x), std::rend(x)

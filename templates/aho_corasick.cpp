@@ -6,7 +6,7 @@ struct Aho_Corasick {
         vector<vector<int>> dfs_adj;
         vector<int> dp;
         int it; // point to the end of the trie
- 
+
         Aho_Corasick(int MAXN) :
                 trie(MAXN, vector<int> (26, -1)),
                 fail(MAXN, 0),
@@ -16,7 +16,7 @@ struct Aho_Corasick {
                 dp(MAXN, 0),
                 it(0)
         {}
- 
+
         void insert(string &t, int str_id) { // build trie
                 int cur = 0;
                 for (const char c : t) {
@@ -29,7 +29,7 @@ struct Aho_Corasick {
                 is_end[cur] = 1;
                 str_to_id[str_id] = cur;
         }
- 
+
         void bfs() {
                 queue<int> qu;
                 for (int j = 0; j < 26; j++) {
@@ -55,14 +55,14 @@ struct Aho_Corasick {
                         }
                 }
         }
- 
+
         void dfs(int cur) {
                 for (const int &nxt : dfs_adj[cur]) {
                         dfs(nxt);
                         dp[cur] += dp[nxt];
                 }
         }
- 
+
         void traverse(string &t) {
                 int cur = 0;
                 for (const char &c : t) {
