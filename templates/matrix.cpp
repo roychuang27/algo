@@ -1,8 +1,8 @@
 #ifdef LOCAL
 #define dbgm(x)                                                       \
         do {                                                          \
-                std::cerr << "\033[1;31m"                             \
-                          << "#" << __LINE__ << ' ' << #x << " =>\n"; \
+                std::cerr << RED_BOLD << "#" << __LINE__ << ' ' << #x \
+                          << " =>\n";                                 \
                 for (size_t _i = 0; _i < (x).s[0]; ++_i) {            \
                         std::cerr << " [";                            \
                         for (size_t _j = 0; _j < (x).s[1]; ++_j) {    \
@@ -12,7 +12,7 @@
                         }                                             \
                         std::cerr << "]\n";                           \
                 }                                                     \
-                std::cerr << "\033[0m";                               \
+                std::cerr << WHITE_NORMAL;                            \
         } while (0)
 #else
 #define dbgm(...) 39

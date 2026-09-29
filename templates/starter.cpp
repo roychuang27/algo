@@ -65,6 +65,7 @@ using namespace std;
 using lli = long long int;
 
 void solve() {
+        ${1}
 }
 
 int main() {

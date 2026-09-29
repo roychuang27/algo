@@ -1,0 +1,94 @@
+#!/bin/bash
+
+export ASAN_OPTIONS=detect_invalid_pointer_pairs=2
+export SHELL=/usr/bin/bash
+
+file="$1"
+exe=$(mktemp)
+
+trap 'rm -f "$exe"' EXIT
+
+args=(
+    -std=c++23
+    -DLOCAL
+    -Wall -Wextra -Wshadow
+    -fmax-errors=1
+    -O0
+    -g
+    -D_GLIBCXX_DEBUG
+    -D_GLIBCXX_ASSERTIONS
+)
+
+inputs=()
+
+for arg in "${@:2}"; do
+    case "$arg" in
+        -std=*)
+            for i in "${!args[@]}"; do
+                [[ "${args[i]}" == -std=* ]] && args[i]="$arg"
+            done
+            ;;
+        -D*)
+            name="${arg#-D}"
+            name="${name%%=*}"
+
+            replaced=false
+            for i in "${!args[@]}"; do
+                if [[ "${args[i]}" == -D"$name" || "${args[i]}" == -D"$name="* ]]; then
+                    args[i]="$arg"
+                    replaced=true
+                    break
+                fi
+            done
+
+            $replaced || args+=("$arg")
+            ;;
+        -*)
+            args+=("$arg")
+            ;;
+        *)
+            inputs+=("$arg")
+            ;;
+    esac
+done
+
+start=${EPOCHREALTIME/./}
+
+g++ "${args[@]}" "$file" -o "$exe" || exit 1
+
+end=${EPOCHREALTIME/./}
+printf 'Compilation took %.6f seconds\n' "$((end - start))e-6"
+
+run_gdb() {
+    local input="$1"
+
+    if [[ -n "$input" ]]; then
+        # Quote the input filename for GDB.
+        local escaped=${input//\\/\\\\}
+        escaped=${escaped//\"/\\\"}
+
+        gdb -q "$exe" \
+            -ex 'set pagination off'        \
+            -ex 'set startup-with-shell on' \
+            -ex 'set confirm off'           \
+            -ex 'catch throw'               \
+            -ex "run < \"$escaped\""
+    else
+        gdb -q "$exe" \
+            -ex 'set pagination off'        \
+            -ex 'set startup-with-shell on' \
+            -ex 'set confirm off'           \
+            -ex 'catch throw'               \
+            -ex 'run'
+    fi
+}
+
+if ((${#inputs[@]} == 0)); then
+    run_gdb
+else
+    for input in "${inputs[@]}"; do
+        printf '\n\033[1;34m===== %s =====\033[0m\n' "$input"
+        run_gdb "$input"
+        echo
+    done
+fi
