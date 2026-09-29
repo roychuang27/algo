@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
-#include <atcoder/segtree.hpp>
 #include <cassert>
+#include <queue>
 #ifdef LOCAL
 template <class T> concept Iterable = requires(T x) {
         std::begin(x);
@@ -90,58 +90,46 @@ std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
 using namespace std;
 using lli = long long int;
 
-int op(int a, int b) {
-        return max(a, b);
-}
-int e() {
-        return -1;
-}
+constexpr lli INF = 1e18;
 
 void solve() {
-        int N, M;
-        cin >> N >> M;
-        vector<multiset<int>> vl(N), vr(N);
-        vector<int> mx(N, -1);
-        for (int _ = 0; _ < M; _++) {
-                int l, r;
-                cin >> l >> r;
-                l--;
-                r--;
-                vl[l].insert(r);
-                vr[r].insert(l);
-                chmax(mx[r], l);
+        int N, Q;
+        cin >> N >> Q;
+        vector<lli> A(N), B(N);
+        cin >> A >> B;
+        vector<vector<pair<int, lli>>> adj(N+1);
+        for (int i = 0; i < N; i++) {
+                adj[i].emplace_back((i+1)%N, A[i]);
+                adj[(i+1)%N].emplace_back(i, A[i]);
+                adj[i].emplace_back(N, B[i]);
+                adj[N].emplace_back(i, B[i]);
         }
-        atcoder::segtree<int, op, e> seg(mx);
-        auto qry = [&](int l, int r) -> bool {
-                auto it = vl[l].upper_bound(r);
-                if (it == vl[l].begin())
-                        return false;
-                it--;
-                if (*it == r) {
-                        if (seg.prod(l, r) >= l or mx[r] > l or vr[r].count(l) > 1) {
-                                return true;
-                        } else {
-                                return false;
-                        }
+        priority_queue<pair<lli, int>> pq;
+        vector<lli> dis(N+1, INF);
+        pq.push({0, N});
+        while (!pq.empty()) {
+                auto [d, cur] = pq.top();
+                pq.pop();
+                if (dis[cur] != INF)
+                        continue;
+                dis[cur] = -d;
+                for (auto [nxt, w] : adj[cur]) if (dis[nxt] == INF) {
+                        pq.push({d-w, nxt});
                 }
-                auto it2 = vr[r].lower_bound(l);
-                if (it2 != vr[r].end() and *it2 <= *it + 1) {
-                        return true;
-                } else {
-                        return false;
-                }
-        };
-        int Q;
-        cin >> Q;
+        }
+        vector<lli> pre(N+1, 0);
+        for (int i = 1; i <= N; i++) {
+                pre[i] = pre[i-1] + A[i-1];
+        }
         for (int _ = 0; _ < Q; _++) {
-                int l, r;
-                cin >> l >> r;
-                l--;
-                r--;
-                if (qry(l, r)) {
-                        cout << "Yes\n";
+                int s, t;
+                cin >> s >> t;
+                s--;
+                t--;
+                if (t == N) {
+                        cout << dis[s] << '\n';
                 } else {
-                        cout << "No\n";
+                        cout << min({pre[t] - pre[s], pre[N] - (pre[t] - pre[s]), dis[s] + dis[t]}) << '\n';
                 }
         }
 }

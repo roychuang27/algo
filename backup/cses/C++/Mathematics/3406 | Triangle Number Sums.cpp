@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <atcoder/segtree.hpp>
 #include <cassert>
 #ifdef LOCAL
 template <class T> concept Iterable = requires(T x) {
@@ -25,9 +24,7 @@ template <class T> void dbg_print(const T &x) {
 }
 #define dbg(...)                                                             \
         do {                                                                 \
-                std::cerr << "\033[1;31m";                                   \
-                std::cerr << "#" << __LINE__ << '\n';                    \
-                std::cerr << "(" #__VA_ARGS__ ") = (";                       \
+                std::cerr << "\033[1;31m(" #__VA_ARGS__ ") = (";             \
                 bool _first = true;                                          \
                 ([&](auto &&...args) {                                       \
                         ((std::cerr << (_first ? "" : ", "), _first = false, \
@@ -90,58 +87,45 @@ std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
 using namespace std;
 using lli = long long int;
 
-int op(int a, int b) {
-        return max(a, b);
+vector<lli> triangle_numbers;
+constexpr int B = 2e6 + 10;
+
+void precompute() {
+        triangle_numbers.reserve(B);
+        lli sum = 0;
+        for (lli i = 1; i <= B; i++) {
+                sum += i;
+                triangle_numbers.emplace_back(sum);
+        }
 }
-int e() {
-        return -1;
+
+bool is_triangle_number(lli x) {
+        // dbg(triangle_numbers);
+        auto it = lower_bound(ALL(triangle_numbers), x);
+        if (it == triangle_numbers.end()) return false;
+        return *it == x;
+}
+
+bool is_sum_of_two_triangle_numbers(lli x) {
+        int l = 0, r = B-1;
+        while (l <= r) {
+                if (triangle_numbers[l] + triangle_numbers[r] == x) return true;
+                else if (triangle_numbers[l] + triangle_numbers[r] < x) l++;
+                else r--;
+        }
+        return false;
 }
 
 void solve() {
-        int N, M;
-        cin >> N >> M;
-        vector<multiset<int>> vl(N), vr(N);
-        vector<int> mx(N, -1);
-        for (int _ = 0; _ < M; _++) {
-                int l, r;
-                cin >> l >> r;
-                l--;
-                r--;
-                vl[l].insert(r);
-                vr[r].insert(l);
-                chmax(mx[r], l);
-        }
-        atcoder::segtree<int, op, e> seg(mx);
-        auto qry = [&](int l, int r) -> bool {
-                auto it = vl[l].upper_bound(r);
-                if (it == vl[l].begin())
-                        return false;
-                it--;
-                if (*it == r) {
-                        if (seg.prod(l, r) >= l or mx[r] > l or vr[r].count(l) > 1) {
-                                return true;
-                        } else {
-                                return false;
-                        }
-                }
-                auto it2 = vr[r].lower_bound(l);
-                if (it2 != vr[r].end() and *it2 <= *it + 1) {
-                        return true;
+        lli N;
+        cin >> N;
+        if (is_triangle_number(N)) {
+                cout << 1 << '\n';
+        } else {
+                if (is_sum_of_two_triangle_numbers(N)) {
+                        cout << 2 << '\n';
                 } else {
-                        return false;
-                }
-        };
-        int Q;
-        cin >> Q;
-        for (int _ = 0; _ < Q; _++) {
-                int l, r;
-                cin >> l >> r;
-                l--;
-                r--;
-                if (qry(l, r)) {
-                        cout << "Yes\n";
-                } else {
-                        cout << "No\n";
+                        cout << 3 << '\n';
                 }
         }
 }
@@ -149,6 +133,11 @@ void solve() {
 int main() {
         cin.tie(nullptr)->sync_with_stdio(false);
         cin.exceptions(cin.failbit);
-        solve();
+        precompute();
+        int T;
+        cin >> T;
+        while (T--)
+                solve();
         return 0;
 }
+

@@ -1,4 +1,3 @@
-
 #include <bits/stdc++.h>
 #include <cassert>
 #ifdef LOCAL
@@ -215,14 +214,19 @@ void precompute() {
 void solve() {
         lli N;
         cin >> N;
-        if (N == 0) {
-                cout << 0 << '\n';
+        mat m(6, 6, 0);
+        for (int i = 1; i < 6; i++) m[i-1, i] = 1;
+        for (int i = 0; i < 6; i++) m[5, i] = 1;
+        mat s(6, 1, 0);
+        s.a = {1, 2, 4, 8, 16, 32};
+        if (N < 7) {
+                cout << s[N-1, 0] << '\n';
                 return;
         }
-        mat m(2, 2, 0);
-        m.a = {1, 1, 1, 0};
-        m = fpow(m, N-1);
-        cout << m[0, 0] << '\n';
+        m = fpow(m, N-6);
+        s = m * s;
+        dbgm(s);
+        cout << s[5, 0] << '\n';
 }
 
 int main() {

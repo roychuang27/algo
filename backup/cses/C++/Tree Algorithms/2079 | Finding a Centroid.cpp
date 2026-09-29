@@ -1,46 +1,136 @@
-#pragma GCC optimize("Ofast")
 #include <bits/stdc++.h>
-#define AC ios_base::sync_with_stdio(false); std::cin.tie(nullptr); std::cout.tie(nullptr);
-#define ALL(x) begin(x),end(x)
-#define pb emplace_back
-
+#include <cassert>
+#ifdef LOCAL
+template <class T> concept Iterable = requires(T x) {
+        std::begin(x);
+        std::end(x);
+};
+template <class T> void dbg_print(const T &x) {
+        if constexpr (Iterable<T> &&
+                      !std::is_convertible_v<T, std::string_view>) {
+                std::cerr << '[';
+                bool first = true;
+                for (const auto &e : x) {
+                        if (!first) {
+                                std::cerr << ", ";
+                        }
+                        first = false;
+                        dbg_print(e);
+                }
+                std::cerr << ']';
+        } else {
+                std::cerr << x;
+        }
+}
+#define dbg(...)                                                             \
+        do {                                                                 \
+                std::cerr << "\033[1;31m";                                   \
+                std::cerr << "#" << __LINE__ << '\n';                    \
+                std::cerr << "(" #__VA_ARGS__ ") = (";                       \
+                bool _first = true;                                          \
+                ([&](auto &&...args) {                                       \
+                        ((std::cerr << (_first ? "" : ", "), _first = false, \
+                          dbg_print(args)),                                  \
+                         ...);                                               \
+                }(__VA_ARGS__));                                             \
+                std::cerr << ")\033[0m\n";                                   \
+        } while (0)
+#else
+#define dbg(...) 39
+#endif
+#define ALL(x) std::begin(x), std::end(x)
+#define rALL(x) std::rbegin(x), std::rend(x)
+template <class T> T square(T a) {
+        return a * a;
+}
+template <class T> bool chmin(T &a, T b) {
+        if (b < a) {
+                a = b;
+                return 1;
+        } else {
+                return 0;
+        }
+}
+template <class T> bool chmax(T &a, T b) {
+        if (a < b) {
+                a = b;
+                return 1;
+        } else {
+                return 0;
+        }
+}
+namespace std {
+template <class T, std::size_t n> constexpr auto array_fill(T value) {
+        std::array<T, n> res;
+        for (auto &e : res) {
+                e = value;
+        }
+        return res;
+}
+}
+template <class T, size_t N>
+std::istream &operator>>(std::istream &is, std::array<T, N> &a) {
+        for (auto &x : a) {
+                is >> x;
+        }
+        return is;
+}
+template <class T>
+std::istream &operator>>(std::istream &is, std::vector<T> &a) {
+        for (auto &x : a) {
+                is >> x;
+        }
+        return is;
+}
+template <class A, class B>
+std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
+        return is >> p.first >> p.second;
+}
 using namespace std;
-typedef long long ll;
-typedef pair<int, int> pii;
+using lli = long long int;
 
-int ans;
-int min_value;
-
-int dfs(vector<vector<int>> &adj, int &N, int cur, int parent) {
-    int b = 0;
-    int subTreeSize = 1;
-    for (auto c : adj[cur]) {
-        if (c == parent) continue;
-        int size = dfs(adj, N, c, cur);
-        b = max(size, b);
-        subTreeSize += size;
-    }
-    b = max(b, N - subTreeSize);
-    if (b < min_value || (b == min_value && cur < ans)) {
-        ans = cur;
-        min_value = b;
-    }
-    return subTreeSize;
+int find_centroid(vector<vector<int>> &adj) {
+        int n = adj.size();
+        int mn_val = 1e9, vert = -1;
+        auto dfs = [&](auto &&self, int cur, int parent) -> int {
+                int mx_subtr_sz = 0, sz = 1;
+                for (int &nxt : adj[cur]) {
+                        if (nxt == parent)
+                                continue;
+                        int tmp = self(self, nxt, cur);
+                        chmax(mx_subtr_sz, tmp);
+                        sz += tmp;
+                }
+                chmax(mx_subtr_sz, n - sz);
+                if (mx_subtr_sz < mn_val) {
+                        vert = cur;
+                        mn_val = mx_subtr_sz;
+                }
+                return sz;
+        };
+        dfs(dfs, 0, -1);
+        assert(vert != -1);
+        return vert;
 }
 
-int main () {
-    AC
-    int N; cin >> N;
-    vector<vector<int>> adj(N+10);
-    int a, b;
-    for (int i = 0; i < N-1; i++) {
-        cin >> a >> b;
-        adj[a].pb(b);
-        adj[b].pb(a);
-    }
-    min_value = 1e9;
-    ans = 1e9;
-    dfs(adj, N, 1, -1);
-    cout << ans << '\n';
-    return 0;
+void solve() {
+        int N;
+        cin >> N;
+        vector<vector<int>> adj(N);
+        for (int _ = 1; _ < N; _++) {
+                int u, v;
+                cin >> u >> v;
+                u--;
+                v--;
+                adj[u].emplace_back(v);
+                adj[v].emplace_back(u);
+        }
+        cout << find_centroid(adj) + 1 << '\n';
+}
+
+int main() {
+        cin.tie(nullptr)->sync_with_stdio(false);
+        cin.exceptions(cin.failbit);
+        solve();
+        return 0;
 }

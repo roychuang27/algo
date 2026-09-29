@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 #include <cassert>
+#include <cfenv>
 #ifdef LOCAL
 template <class T> concept Iterable = requires(T x) {
         std::begin(x);
@@ -91,14 +92,14 @@ using lli = long long int;
 #define dbgm(x)                                                               \
         do {                                                                  \
                 std::cerr << "\033[1;31m"                                     \
-                          << "Line(" << __LINE__ << ") " #x " =>\n";          \
+                          << "" #x " =>\n";         \
                 for (size_t _i = 0; _i < (x).s[0]; ++_i) {                    \
                         std::cerr << " [";                                    \
                         for (size_t _j = 0; _j < (x).s[1]; ++_j)              \
                                 std::cerr << (_j ? ", " : "") << (x)[_i, _j]; \
                         std::cerr << "]\n";                                   \
                 }                                                             \
-                std::cerr << "\033[0m";                                       \
+                std::cerr << "\033[0m";                                      \
         } while (0)
 #else
 #define dbgm(...) 39
@@ -140,34 +141,34 @@ template <class T, size_t D> struct Matrix {
 };
 
 void solve() {
-        int N, Q;
-        cin >> N >> Q;
-        Matrix<int, 2> jump(N + 1, 32, 0);
-        for (int i = 1; i <= N; i++) {
-                cin >> jump[i, 0];
-        }
-        for (int k = 1; k <= 31; k++) {
-                for (int i = 1; i <= N; i++) {
-                        jump[i, k] = jump[jump[i, k - 1], k - 1];
-                }
-        }
-        while (Q--) {
-                int k, x;
-                cin >> x >> k;
-                int i = 0;
-                while ((1 << i) <= k) {
-                        if (k & (1 << i)) {
-                                x = jump[x, i];
+        int N;
+        cin >> N;
+        Matrix<long double, 2> dp(N, 6*N+1, 0);
+        long double sixth = (long double) 1 / (long double) 6;
+        dbg(sixth);
+        for (int i = 1; i <= 6; i++) dp[0, i] = sixth;
+        for (int i = 1; i < N; i++) {
+                for (int j = 0; j <= 6*N; j++) {
+                        for (int k = 1; k <= 6; k++) {
+                                if (j + k <= 6*N) {
+                                        dp[i, j+k] += sixth * dp[i-1, j];
+                                }
                         }
-                        i++;
                 }
-                cout << x << '\n';
         }
+        long double res = 0;
+        int a, b;
+        cin >> a >> b;
+        for (int i = a; i <= b; i++) res += dp[N-1, i];
+        cout << res << '\n';
+        // dbgm(dp);
 }
 
 int main() {
         cin.tie(nullptr)->sync_with_stdio(false);
         cin.exceptions(cin.failbit);
+        fesetround(FE_TONEAREST);
+        cout << fixed << setprecision(6);
         solve();
         return 0;
 }

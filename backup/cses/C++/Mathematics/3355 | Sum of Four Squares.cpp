@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <atcoder/segtree.hpp>
 #include <cassert>
 #ifdef LOCAL
 template <class T> concept Iterable = requires(T x) {
@@ -25,9 +24,7 @@ template <class T> void dbg_print(const T &x) {
 }
 #define dbg(...)                                                             \
         do {                                                                 \
-                std::cerr << "\033[1;31m";                                   \
-                std::cerr << "#" << __LINE__ << '\n';                    \
-                std::cerr << "(" #__VA_ARGS__ ") = (";                       \
+                std::cerr << "\033[1;31m(" #__VA_ARGS__ ") = (";             \
                 bool _first = true;                                          \
                 ([&](auto &&...args) {                                       \
                         ((std::cerr << (_first ? "" : ", "), _first = false, \
@@ -61,7 +58,7 @@ template <class T> bool chmax(T &a, T b) {
         }
 }
 namespace std {
-template <class T, std::size_t n> constexpr auto array_fill(T value) {
+template <class T, std::size_t n> auto array_fill(T value) {
         std::array<T, n> res;
         for (auto &e : res) {
                 e = value;
@@ -90,65 +87,34 @@ std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
 using namespace std;
 using lli = long long int;
 
-int op(int a, int b) {
-        return max(a, b);
-}
-int e() {
-        return -1;
+constexpr int MAXVAL = 1e7;
+pair<int, int> p[MAXVAL+1];
+
+void preprocess() {
+        memset(p, -1, sizeof(p));
+        for (int i = 0; square(i) * 2 <= MAXVAL; i++) {
+                for (int j = i; square(i) + square(j) <= MAXVAL; j++) {
+                        p[square(i) + square(j)] = {i, j};
+                }
+        }
 }
 
 void solve() {
-        int N, M;
-        cin >> N >> M;
-        vector<multiset<int>> vl(N), vr(N);
-        vector<int> mx(N, -1);
-        for (int _ = 0; _ < M; _++) {
-                int l, r;
-                cin >> l >> r;
-                l--;
-                r--;
-                vl[l].insert(r);
-                vr[r].insert(l);
-                chmax(mx[r], l);
-        }
-        atcoder::segtree<int, op, e> seg(mx);
-        auto qry = [&](int l, int r) -> bool {
-                auto it = vl[l].upper_bound(r);
-                if (it == vl[l].begin())
-                        return false;
-                it--;
-                if (*it == r) {
-                        if (seg.prod(l, r) >= l or mx[r] > l or vr[r].count(l) > 1) {
-                                return true;
-                        } else {
-                                return false;
-                        }
-                }
-                auto it2 = vr[r].lower_bound(l);
-                if (it2 != vr[r].end() and *it2 <= *it + 1) {
-                        return true;
-                } else {
-                        return false;
-                }
-        };
-        int Q;
-        cin >> Q;
-        for (int _ = 0; _ < Q; _++) {
-                int l, r;
-                cin >> l >> r;
-                l--;
-                r--;
-                if (qry(l, r)) {
-                        cout << "Yes\n";
-                } else {
-                        cout << "No\n";
-                }
+        int N;
+        cin >> N;
+        for (int i = 0; 2*i <= N; i++) if (p[i] != pair<int, int>{-1, -1} and p[N-i] != pair<int, int>{-1, -1}) {
+               cout << p[i].first << ' ' << p[i].second << ' ' << p[N-i].first << ' ' << p[N-i].second << '\n';
+               return;
         }
 }
 
 int main() {
         cin.tie(nullptr)->sync_with_stdio(false);
         cin.exceptions(cin.failbit);
-        solve();
+        preprocess();
+        int T;
+        cin >> T;
+        while (T--)
+                solve();
         return 0;
 }

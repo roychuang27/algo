@@ -1,24 +1,21 @@
-
 #include <bits/stdc++.h>
 #include <cassert>
 #ifdef LOCAL
 #define dbg(...)                                                               \
         do {                                                                   \
-                std::cerr << "\033[1;31m"                                      \
-                          << "Line(" << __LINE__ << ") [" #__VA_ARGS__ "] =>"; \
+                std::cerr << "Line(" << __LINE__ << ") [" #__VA_ARGS__ "] =>"; \
                 ([](auto &&...args) {                                          \
                         ((std::cerr << ' ' << args), ...);                     \
                 }(__VA_ARGS__));                                               \
-                std::cerr << "\033[0m\n";                                      \
+                std::cerr << std::endl;                                        \
         } while (0)
 #define dbgv(x)                                                      \
         do {                                                         \
-                std::cerr << "\033[1;31m"                            \
-                          << "Line(" << __LINE__ << ") " #x " => ["; \
+                std::cerr << "Line(" << __LINE__ << ") " #x " => ["; \
                 int _i = 0;                                          \
-                for (auto &_e : (x))                                \
+                for (auto &_e : (x))                                 \
                         std::cerr << (_i++ ? ", " : "") << _e;       \
-                std::cerr << "]\033[0m\n";                           \
+                std::cerr << "]" << std::endl;                       \
         } while (0)
 #else
 #define dbg(...) 39
@@ -70,60 +67,9 @@ template <class A, class B>
 std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
         return is >> p.first >> p.second;
 }
+
 using namespace std;
 using lli = long long int;
-
-#ifdef LOCAL
-#define dbgm(x)                                                               \
-        do {                                                                  \
-                std::cerr << "\033[1;31m"                                     \
-                          << "Line(" << __LINE__ << ") " #x " =>\n";         \
-                for (size_t _i = 0; _i < (x).s[0]; ++_i) {                    \
-                        std::cerr << " [";                                    \
-                        for (size_t _j = 0; _j < (x).s[1]; ++_j)              \
-                                std::cerr << (_j ? ", " : "") << (x)[_i, _j]; \
-                        std::cerr << "]\n";                                   \
-                }                                                             \
-                std::cerr << "\033[0m";                                      \
-        } while (0)
-#else
-#define dbgm(...) 39
-#endif
-template <class T, size_t D> struct Matrix {
-        static_assert(D);
-        std::array<size_t, D> s{};
-        std::vector<T> a;
-        template <class... A>
-        requires(sizeof...(A) == D || sizeof...(A) == D + 1) Matrix(A... x) {
-                if constexpr (sizeof...(A) == D) {
-                        init<0>(1, x..., T{});
-                } else {
-                        init<0>(1, x...);
-                }
-        }
-        template <size_t d, class X, class... R>
-        void init(size_t n, X x, R... r) {
-                if constexpr (d < D) {
-                        s[d] = x, init<d + 1>(n * s[d], r...);
-                } else {
-                        a.assign(n, x);
-                }
-        }
-        template <class... I> size_t pos(I... i) const {
-                static_assert(sizeof...(I) == D);
-                size_t p = 0, d = 0;
-                (((assert(i >= 0 && size_t(i) < s[d]),
-                   p = p * s[d++] + size_t(i))),
-                 ...);
-                return p;
-        }
-        template <class... I> T &operator[](I... i) {
-                return a[pos(i...)];
-        }
-        template <class... I> const T &operator[](I... i) const {
-                return a[pos(i...)];
-        }
-};
 
 template <long long M> struct Modint {
         long long x;
@@ -187,42 +133,26 @@ template <long long M> struct Modint {
 };
 
 using mint = Modint<1000000007>;
-using mat = Matrix<mint, 2>;
-
-mat operator*(mat a, mat b) {
-        assert(a.s[1] == b.s[0]);
-        mat res(a.s[0], b.s[1], 0);
-        for (int i = 0; i < a.s[0]; i++) for (int j = 0; j < a.s[1]; j++) for (int k = 0; k < b.s[1]; k++) res[i, k] += a[i, j] * b[j, k];
-        return res;
-}
-
-mat fpow(mat a, lli b) {
-        assert(a.s[0] == a.s[1]);
-        auto res = a;
-        if (b <= 0) return a;
-        for (int i = 0; i < a.s[0]; i++) for (int j = 0; j < a.s[0]; j++) res[i, j] = (i == j);
-        while (b) {
-                if (b & 1) res = res * a;
-                a = a * a;
-                b >>= 1;
-        }
-        return res;
-}
+constexpr int MAXVAL = 2e6;
+mint fact[MAXVAL + 1];
 
 void precompute() {
+        fact[0] = 1;
+        for (int i = 1; i <= MAXVAL; i++) fact[i] = fact[i-1] * i;
+}
+
+mint Catalan(int n) {
+        return fact[2*n] / (fact[n+1] * fact[n]);
 }
 
 void solve() {
-        lli N;
+        int N;
         cin >> N;
-        if (N == 0) {
+        if (N & 1) {
                 cout << 0 << '\n';
-                return;
+        } else {
+                cout << Catalan(N/2) << '\n';
         }
-        mat m(2, 2, 0);
-        m.a = {1, 1, 1, 0};
-        m = fpow(m, N-1);
-        cout << m[0, 0] << '\n';
 }
 
 int main() {

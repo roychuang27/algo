@@ -3,21 +3,19 @@
 #ifdef LOCAL
 #define dbg(...)                                                               \
         do {                                                                   \
-                std::cerr << "\033[1;31m"                                      \
-                          << "Line(" << __LINE__ << ") [" #__VA_ARGS__ "] =>"; \
+                std::cerr << "Line(" << __LINE__ << ") [" #__VA_ARGS__ "] =>"; \
                 ([](auto &&...args) {                                          \
                         ((std::cerr << ' ' << args), ...);                     \
                 }(__VA_ARGS__));                                               \
-                std::cerr << "\033[0m\n";                                      \
+                std::cerr << std::endl;                                        \
         } while (0)
 #define dbgv(x)                                                      \
         do {                                                         \
-                std::cerr << "\033[1;31m"                            \
-                          << "Line(" << __LINE__ << ") " #x " => ["; \
+                std::cerr << "Line(" << __LINE__ << ") " #x " => ["; \
                 int _i = 0;                                          \
-                for (auto &_e : (x))                                \
+                for (auto &_e : (x))                                 \
                         std::cerr << (_i++ ? ", " : "") << _e;       \
-                std::cerr << "]\033[0m\n";                           \
+                std::cerr << "]" << std::endl;                       \
         } while (0)
 #else
 #define dbg(...) 39
@@ -45,9 +43,9 @@ template <class T> bool chmax(T &a, T b) {
         }
 }
 namespace std {
-template <class T, std::size_t n> constexpr auto array_fill(T value) {
+template <class T, std::size_t n> auto array_fill(T value) {
         std::array<T, n> res;
-        for (auto &e : res) e = value;
+        res.fill(value);
         return res;
 }
 }
@@ -72,43 +70,30 @@ std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
 using namespace std;
 using lli = long long int;
 
+void precompute() {
+}
+
 void solve() {
-        int N, W;
-        cin >> N >> W;
-        vector<int> H(N), S(N), K(N);
-        cin >> H >> S >> K;
-        vector<lli> dp(W + 1, 0);
-        for (int i = 0; i < N; i++) {
-                dbgv(dp);
-                vector<lli> nxt(W+1, 0);
-                auto w = H[i], v = S[i], cnt = K[i];
-                for (int r = 0; r < w and r <= W; r++) {
-                        deque<int> dq;
-                        auto f = [&](int q) -> lli {
-                                return dp[r + q * w] - q * v;
-                        };
-                        for (int t = 0; r + t * w <= W; t++) {
-                                while (!dq.empty() and t - dq.front() > cnt) {
-                                        dq.pop_front();
-                                }
-                                while (!dq.empty() and f(dq.back()) <= f(t)) {
-                                        dq.pop_back();
-                                }
-                                dq.push_back(t);
-                                int q = dq.front();
-                                nxt[r + t * w] = dp[r + q * w] + (t - q) * v;
-                        }
-                }
-                dp = nxt;
+        map<int, int> mp;
+        int N;
+        cin >> N;
+        vector<int> v(N);
+        cin >> v;
+        for (int i = N-1; i >= 0; i--) {
+                chmax(mp[v[i]], mp[v[i]+1]+1);
         }
-        dbgv(dp);
-        cout << dp[W] << '\n';
+        int ans = 0;
+        for (auto &[v, c] : mp) {
+                chmax(ans, c);
+        }
+        cout << ans << '\n';
 }
 
 int main() {
 #ifndef LOCAL
         cin.tie(nullptr)->sync_with_stdio(false);
 #endif
+        precompute();
         solve();
         return 0;
 }

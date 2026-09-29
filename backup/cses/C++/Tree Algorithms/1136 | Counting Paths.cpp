@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <atcoder/segtree.hpp>
 #include <cassert>
 #ifdef LOCAL
 template <class T> concept Iterable = requires(T x) {
@@ -25,9 +24,7 @@ template <class T> void dbg_print(const T &x) {
 }
 #define dbg(...)                                                             \
         do {                                                                 \
-                std::cerr << "\033[1;31m";                                   \
-                std::cerr << "#" << __LINE__ << '\n';                    \
-                std::cerr << "(" #__VA_ARGS__ ") = (";                       \
+                std::cerr << "\033[1;31m(" #__VA_ARGS__ ") = (";             \
                 bool _first = true;                                          \
                 ([&](auto &&...args) {                                       \
                         ((std::cerr << (_first ? "" : ", "), _first = false, \
@@ -90,60 +87,75 @@ std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
 using namespace std;
 using lli = long long int;
 
-int op(int a, int b) {
-        return max(a, b);
-}
-int e() {
-        return -1;
-}
+const int B = 31;
 
 void solve() {
         int N, M;
         cin >> N >> M;
-        vector<multiset<int>> vl(N), vr(N);
-        vector<int> mx(N, -1);
-        for (int _ = 0; _ < M; _++) {
-                int l, r;
-                cin >> l >> r;
-                l--;
-                r--;
-                vl[l].insert(r);
-                vr[r].insert(l);
-                chmax(mx[r], l);
+        vector<vector<int>> adj(N);
+        for (int _ = 1; _ < N; _++) {
+                int u, v;
+                cin >> u >> v;
+                u--;
+                v--;
+                adj[u].emplace_back(v);
+                adj[v].emplace_back(u);
         }
-        atcoder::segtree<int, op, e> seg(mx);
-        auto qry = [&](int l, int r) -> bool {
-                auto it = vl[l].upper_bound(r);
-                if (it == vl[l].begin())
-                        return false;
-                it--;
-                if (*it == r) {
-                        if (seg.prod(l, r) >= l or mx[r] > l or vr[r].count(l) > 1) {
-                                return true;
-                        } else {
-                                return false;
-                        }
+
+        vector table(N, array_fill<int, B>(0));
+        vector<int> tin(N), tout(N);
+        int timer = 1;
+        auto dfs_build = [&](auto &&self, int cur, int par) -> void {
+                tin[cur] = timer++;
+                table[cur][0] = par;
+                for (int &nxt : adj[cur]) if (nxt != par) {
+                        self(self, nxt, cur);
                 }
-                auto it2 = vr[r].lower_bound(l);
-                if (it2 != vr[r].end() and *it2 <= *it + 1) {
-                        return true;
-                } else {
-                        return false;
+                tout[cur] = timer++;
+        };
+        dfs_build(dfs_build, 0, 0);
+        for (int b = 1; b < B; b++) {
+                for (int i = 0; i < N; i++) {
+                        table[i][b] = table[table[i][b-1]][b-1];
+                }
+        }
+        auto anc = [&](int f, int s) -> bool {
+                return tin[f] <= tin[s] and tout[s] <= tout[f];
+        };
+        auto lca = [&](int a, int b) -> int {
+                if (anc(a, b)) return a;
+                if (anc(b, a)) return b;
+                for (int j = B-1; j >= 0; j--) {
+                        if (!anc(table[a][j], b)) a = table[a][j];
+                }
+                return table[a][0];
+        };
+
+        vector<int> dp(N, 0);
+        for (int _ = 0; _ < M; _++) {
+                int u, v;
+                cin >> u >> v;
+                u--;
+                v--;
+                int l = lca(u, v);
+                dp[l]--;
+                if (l != 0) {
+                        dp[table[l][0]]--;
+                }
+                dp[u]++;
+                dp[v]++;
+        }
+
+        auto dfs_dp = [&](auto &&self, int cur, int par) -> void {
+                for (int &nxt : adj[cur]) if (nxt != par) {
+                        self(self, nxt, cur);
+                        dp[cur] += dp[nxt];
                 }
         };
-        int Q;
-        cin >> Q;
-        for (int _ = 0; _ < Q; _++) {
-                int l, r;
-                cin >> l >> r;
-                l--;
-                r--;
-                if (qry(l, r)) {
-                        cout << "Yes\n";
-                } else {
-                        cout << "No\n";
-                }
-        }
+        dfs_dp(dfs_dp, 0, 0);
+
+        for (auto v : dp) cout << v << ' ';
+        cout << '\n';
 }
 
 int main() {

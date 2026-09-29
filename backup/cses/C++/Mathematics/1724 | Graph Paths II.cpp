@@ -91,14 +91,14 @@ using lli = long long int;
 #define dbgm(x)                                                               \
         do {                                                                  \
                 std::cerr << "\033[1;31m"                                     \
-                          << "Line(" << __LINE__ << ") " #x " =>\n";          \
+                          << "" #x " =>\n";         \
                 for (size_t _i = 0; _i < (x).s[0]; ++_i) {                    \
                         std::cerr << " [";                                    \
                         for (size_t _j = 0; _j < (x).s[1]; ++_j)              \
                                 std::cerr << (_j ? ", " : "") << (x)[_i, _j]; \
                         std::cerr << "]\n";                                   \
                 }                                                             \
-                std::cerr << "\033[0m";                                       \
+                std::cerr << "\033[0m";                                      \
         } while (0)
 #else
 #define dbgm(...) 39
@@ -139,29 +139,58 @@ template <class T, size_t D> struct Matrix {
         }
 };
 
-void solve() {
-        int N, Q;
-        cin >> N >> Q;
-        Matrix<int, 2> jump(N + 1, 32, 0);
-        for (int i = 1; i <= N; i++) {
-                cin >> jump[i, 0];
-        }
-        for (int k = 1; k <= 31; k++) {
-                for (int i = 1; i <= N; i++) {
-                        jump[i, k] = jump[jump[i, k - 1], k - 1];
-                }
-        }
-        while (Q--) {
-                int k, x;
-                cin >> x >> k;
-                int i = 0;
-                while ((1 << i) <= k) {
-                        if (k & (1 << i)) {
-                                x = jump[x, i];
+constexpr lli INF = 1'000'000'000'000'000'000 + 7'7'777;
+using mat = Matrix<lli, 2>;
+
+mat mul(mat a, mat b) {
+        mat res(a.s[0], b.s[1], INF);
+        for (int i = 0; i < a.s[0]; i++) {
+                for (int j = 0; j < a.s[1]; j++) {
+                        for (int k = 0; k < b.s[1]; k++) {
+                                chmin(res[i, k], a[i, j] + b[j, k]);
                         }
-                        i++;
                 }
-                cout << x << '\n';
+        }
+        return res;
+}
+
+mat pow(mat a, lli b) {
+        assert(b > 0);
+        mat res(a.s[0], a.s[0], INF);
+        bool f = 0;
+        while (b) {
+                if (b & 1) {
+                        if (f) {
+                                res = mul(res, a);
+                        } else {
+                                res = a;
+                                f = 1;
+                        }
+                }
+                a = mul(a, a);
+                b >>= 1;
+        }
+        return res;
+}
+
+void solve() {
+        int N, M, K;
+        cin >> N >> M >> K;
+        mat adj_mat(N, N, INF);
+        for (int _ = 0; _ < M; _++) {
+                int u, v;
+                lli c;
+                cin >> u >> v >> c;
+                u--;
+                v--;
+                chmin(adj_mat[u, v], c);
+        }
+        adj_mat = pow(adj_mat, K);
+        dbgm(adj_mat);
+        if (adj_mat[0, N-1] == INF) {
+                cout << -1 << '\n';
+        } else {
+                cout << adj_mat[0, N-1] << '\n';
         }
 }
 

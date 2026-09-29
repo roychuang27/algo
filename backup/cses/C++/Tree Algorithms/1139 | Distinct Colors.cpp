@@ -72,37 +72,68 @@ std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
 using namespace std;
 using lli = long long int;
 
-void solve() {
-        int N, W;
-        cin >> N >> W;
-        vector<int> H(N), S(N), K(N);
-        cin >> H >> S >> K;
-        vector<lli> dp(W + 1, 0);
-        for (int i = 0; i < N; i++) {
-                dbgv(dp);
-                vector<lli> nxt(W+1, 0);
-                auto w = H[i], v = S[i], cnt = K[i];
-                for (int r = 0; r < w and r <= W; r++) {
-                        deque<int> dq;
-                        auto f = [&](int q) -> lli {
-                                return dp[r + q * w] - q * v;
-                        };
-                        for (int t = 0; r + t * w <= W; t++) {
-                                while (!dq.empty() and t - dq.front() > cnt) {
-                                        dq.pop_front();
-                                }
-                                while (!dq.empty() and f(dq.back()) <= f(t)) {
-                                        dq.pop_back();
-                                }
-                                dq.push_back(t);
-                                int q = dq.front();
-                                nxt[r + t * w] = dp[r + q * w] + (t - q) * v;
-                        }
+struct Fenwick {
+        int N;
+        vector<int> b;
+        Fenwick(int n) : N(n), b(n + 1, 0) {}
+        void add(int idx, int delta) {
+                for (; idx <= N; idx += (idx & -idx)) {
+                        b[idx] += delta;
                 }
-                dp = nxt;
         }
-        dbgv(dp);
-        cout << dp[W] << '\n';
+        int qry(int idx) {
+                int res = 0;
+                for (; idx >= 1; idx -= (idx & -idx)) {
+                        res += b[idx];
+                }
+                return res;
+        }
+        int sum(int l, int r) {
+                return qry(r) - qry(l - 1);
+        }
+};
+
+void solve() {
+        int N;
+        cin >> N;
+        vector<int> c(N);
+        cin >> c;
+        vector<int> tmp = c;
+        sort(ALL(tmp));
+        tmp.erase(unique(ALL(tmp)), tmp.end());
+        for (auto &i : c) i = lower_bound(ALL(tmp), i) - tmp.begin();
+        vector<int> colors_cnt(N, 0);
+        Fenwick bit(2*N);
+        vector<vector<int>> adj(N);
+        for (int _ = 1; _ < N; _++) {
+                int a, b;
+                cin >> a >> b;
+                a--;
+                b--;
+                adj[a].emplace_back(b);
+                adj[b].emplace_back(a);
+        }
+        int timer = 1;
+        map<int, int> mn_idx;
+        function<void(int, int)> dfs = [&](int cur, int par) -> void {
+                int time_in = timer++;
+                if (mn_idx[c[cur]]) {
+                        bit.add(mn_idx[c[cur]], -1);
+                }
+                mn_idx[c[cur]] = time_in;
+                bit.add(time_in, +1);
+                for (auto &nxt : adj[cur]) if (nxt != par) {
+                        dfs(nxt, cur);
+                }
+                int time_out = timer++;
+                // dbg(cur);
+                // for (int i = 1; i <= 2*N; i++) cerr << bit.sum(i, i) << ' ';
+                // cerr << endl;
+                colors_cnt[cur] = bit.sum(time_in, time_out);
+        };
+        dfs(0, -1);
+        for (auto &i : colors_cnt) cout << i << ' ';
+        cout << '\n';
 }
 
 int main() {

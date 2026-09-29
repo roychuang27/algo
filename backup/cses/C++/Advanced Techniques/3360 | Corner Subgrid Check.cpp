@@ -1,3 +1,4 @@
+#pragma GCC optimize("Ofast")
 #include <bits/stdc++.h>
 #include <cassert>
 #ifdef LOCAL
@@ -24,7 +25,9 @@ template <class T> void dbg_print(const T &x) {
 }
 #define dbg(...)                                                             \
         do {                                                                 \
-                std::cerr << "\033[1;31m(" #__VA_ARGS__ ") = (";             \
+                std::cerr << "\033[1;31m";                                   \
+                std::cerr << "#" << __LINE__ << '\n';                    \
+                std::cerr << "(" #__VA_ARGS__ ") = (";                       \
                 bool _first = true;                                          \
                 ([&](auto &&...args) {                                       \
                         ((std::cerr << (_first ? "" : ", "), _first = false, \
@@ -91,7 +94,8 @@ using lli = long long int;
 #define dbgm(x)                                                               \
         do {                                                                  \
                 std::cerr << "\033[1;31m"                                     \
-                          << "Line(" << __LINE__ << ") " #x " =>\n";          \
+                          << "#" << __LINE__ << '\n'                          \
+                          << "" #x " =>\n";                                   \
                 for (size_t _i = 0; _i < (x).s[0]; ++_i) {                    \
                         std::cerr << " [";                                    \
                         for (size_t _j = 0; _j < (x).s[1]; ++_j)              \
@@ -140,28 +144,38 @@ template <class T, size_t D> struct Matrix {
 };
 
 void solve() {
-        int N, Q;
-        cin >> N >> Q;
-        Matrix<int, 2> jump(N + 1, 32, 0);
-        for (int i = 1; i <= N; i++) {
-                cin >> jump[i, 0];
-        }
-        for (int k = 1; k <= 31; k++) {
-                for (int i = 1; i <= N; i++) {
-                        jump[i, k] = jump[jump[i, k - 1], k - 1];
+        int N, K;
+        cin >> N >> K;
+        Matrix<vector<int>, 2> g(K, N);
+        for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                        char c;
+                        cin >> c;
+                        g[c - 'A', i].emplace_back(j);
                 }
         }
-        while (Q--) {
-                int k, x;
-                cin >> x >> k;
-                int i = 0;
-                while ((1 << i) <= k) {
-                        if (k & (1 << i)) {
-                                x = jump[x, i];
+        auto check = [&](int a) -> bool {
+                Matrix<unsigned char, 2> vis(N, N, 0);
+                for (int i = 0; i < N; i++) {
+                        int n = g[a, i].size();
+                        for (int j = 0; j < n; j++) {
+                                for (int k = j + 1; k < n; k++) {
+                                        int u = g[a, i][j], v = g[a, i][k];
+                                        if (vis[u, v]) {
+                                                return true;
+                                        }
+                                        vis[u, v] = 1;
+                                }
                         }
-                        i++;
                 }
-                cout << x << '\n';
+                return false;
+        };
+        for (int i = 0; i < K; i++) {
+                if (check(i)) {
+                        cout << "YES\n";
+                } else {
+                        cout << "NO\n";
+                }
         }
 }
 

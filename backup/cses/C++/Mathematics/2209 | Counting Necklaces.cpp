@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
-#include <atcoder/segtree.hpp>
 #include <cassert>
+#include <numeric>
 #ifdef LOCAL
 template <class T> concept Iterable = requires(T x) {
         std::begin(x);
@@ -25,9 +25,7 @@ template <class T> void dbg_print(const T &x) {
 }
 #define dbg(...)                                                             \
         do {                                                                 \
-                std::cerr << "\033[1;31m";                                   \
-                std::cerr << "#" << __LINE__ << '\n';                    \
-                std::cerr << "(" #__VA_ARGS__ ") = (";                       \
+                std::cerr << "\033[1;31m(" #__VA_ARGS__ ") = (";             \
                 bool _first = true;                                          \
                 ([&](auto &&...args) {                                       \
                         ((std::cerr << (_first ? "" : ", "), _first = false, \
@@ -90,60 +88,95 @@ std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
 using namespace std;
 using lli = long long int;
 
-int op(int a, int b) {
-        return max(a, b);
+template <long long M> struct Modint {
+        long long x;
+        Modint(long long _x = 0)
+                : x(_x % M) {
+        }
+        Modint &operator+=(Modint b) {
+                x += b.x;
+                if (x >= M) {
+                        x -= M;
+                }
+                return *this;
+        }
+        Modint &operator-=(Modint b) {
+                x -= b.x;
+                if (x < 0) {
+                        x += M;
+                }
+                return *this;
+        }
+        Modint &operator*=(Modint b) {
+                x = 1LL * x * b.x % M;
+                return *this;
+        }
+        Modint pow(long long n) const {
+                Modint r = 1, a = *this;
+                for (; n; n >>= 1, a *= a) {
+                        if (n & 1) {
+                                r *= a;
+                        }
+                }
+                return r;
+        }
+        Modint inv() const {
+                return pow(M - 2);
+        }
+        Modint &operator/=(Modint b) {
+                return *this *= b.inv();
+        }
+        friend Modint operator+(Modint a, Modint b) {
+                return a += b;
+        }
+        friend Modint operator-(Modint a, Modint b) {
+                return a -= b;
+        }
+        friend Modint operator*(Modint a, Modint b) {
+                return a *= b;
+        }
+        friend Modint operator/(Modint a, Modint b) {
+                return a /= b;
+        }
+        friend std::ostream &operator<<(std::ostream &os, Modint a) {
+                return os << a.x;
+        }
+        friend std::istream &operator>>(std::istream &is, Modint &a) {
+                long long x;
+                is >> x;
+                a = x;
+                return is;
+        }
+};
+
+using mint = Modint<1'000'000'007>;
+constexpr int MAXVAL = 1e6;
+mint fact[MAXVAL + 1];
+
+void precompute() {
+        fact[0] = 1;
+        for (int i = 1; i <= MAXVAL; i++) {
+                fact[i] = fact[i-1] * i;
+        }
 }
-int e() {
-        return -1;
+
+mint Combination(int n, int m) {
+        assert(n >= m);
+        return fact[n] / (fact[m] * fact[n-m]);
 }
 
 void solve() {
-        int N, M;
+        int N;
+        mint M;
         cin >> N >> M;
-        vector<multiset<int>> vl(N), vr(N);
-        vector<int> mx(N, -1);
-        for (int _ = 0; _ < M; _++) {
-                int l, r;
-                cin >> l >> r;
-                l--;
-                r--;
-                vl[l].insert(r);
-                vr[r].insert(l);
-                chmax(mx[r], l);
+        dbg(N, M);
+        mint res = 0;
+        for (int k = 0; k < N; k++) {
+                res += M.pow(gcd(N, k));
+                dbg(res);
         }
-        atcoder::segtree<int, op, e> seg(mx);
-        auto qry = [&](int l, int r) -> bool {
-                auto it = vl[l].upper_bound(r);
-                if (it == vl[l].begin())
-                        return false;
-                it--;
-                if (*it == r) {
-                        if (seg.prod(l, r) >= l or mx[r] > l or vr[r].count(l) > 1) {
-                                return true;
-                        } else {
-                                return false;
-                        }
-                }
-                auto it2 = vr[r].lower_bound(l);
-                if (it2 != vr[r].end() and *it2 <= *it + 1) {
-                        return true;
-                } else {
-                        return false;
-                }
-        };
-        int Q;
-        cin >> Q;
-        for (int _ = 0; _ < Q; _++) {
-                int l, r;
-                cin >> l >> r;
-                l--;
-                r--;
-                if (qry(l, r)) {
-                        cout << "Yes\n";
-                } else {
-                        cout << "No\n";
-                }
-        }
+        res /= N;
+        cout << res << '\n';
 }
 
 int main() {

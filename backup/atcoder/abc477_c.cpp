@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
-#include <atcoder/segtree.hpp>
 #include <cassert>
+#include <atcoder/segtree.hpp>
 #ifdef LOCAL
 template <class T> concept Iterable = requires(T x) {
         std::begin(x);
@@ -90,55 +90,44 @@ std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
 using namespace std;
 using lli = long long int;
 
-int op(int a, int b) {
-        return max(a, b);
-}
-int e() {
-        return -1;
-}
-
-void solve() {
-        int N, M;
-        cin >> N >> M;
-        vector<multiset<int>> vl(N), vr(N);
-        vector<int> mx(N, -1);
-        for (int _ = 0; _ < M; _++) {
-                int l, r;
-                cin >> l >> r;
-                l--;
-                r--;
-                vl[l].insert(r);
-                vr[r].insert(l);
-                chmax(mx[r], l);
-        }
-        atcoder::segtree<int, op, e> seg(mx);
-        auto qry = [&](int l, int r) -> bool {
-                auto it = vl[l].upper_bound(r);
-                if (it == vl[l].begin())
-                        return false;
-                it--;
-                if (*it == r) {
-                        if (seg.prod(l, r) >= l or mx[r] > l or vr[r].count(l) > 1) {
-                                return true;
-                        } else {
-                                return false;
+vector<int> z_function(string s) {
+        int N = s.size();
+        vector<int> z(N);
+        z[0] = 0;
+        int L = 0, R = 0;
+        for (int i = 1; i < N; i++) {
+                if (i <= R and z[i - L] < R - i + 1) {
+                        z[i] = z[i - L];
+                } else {
+                        z[i] = max(0, R - i + 1);
+                        while (i + z[i] < N and s[ z[i] ] == s[ i + z[i] ]) {
+                                z[i]++;
+                        }
+                        if (i + z[i] - 1 > R) {
+                                L = i;
+                                R = i + z[i] - 1;
                         }
                 }
-                auto it2 = vr[r].lower_bound(l);
-                if (it2 != vr[r].end() and *it2 <= *it + 1) {
-                        return true;
-                } else {
-                        return false;
-                }
-        };
+        }
+        return z;
+}
+
+int op(int a, int b) { return max(a, b); }
+int e() { return -1; }
+
+void solve() {
         int Q;
-        cin >> Q;
+        string S, T;
+        cin >> Q >> S >> T;
+        string pattern = T + "#" + S;
+        auto z = z_function(pattern);
+        dbg(pattern, z);
+        atcoder::segtree<int, op, e> seg(z);
+        int n = T.size();
         for (int _ = 0; _ < Q; _++) {
                 int l, r;
                 cin >> l >> r;
-                l--;
-                r--;
-                if (qry(l, r)) {
+                if (r+2 > l+n and seg.prod(l+n, r+2) == n) {
                         cout << "Yes\n";
                 } else {
                         cout << "No\n";
