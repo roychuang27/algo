@@ -6,8 +6,9 @@
 #define dbg(...)                                                               \
         std::println(stderr, RED_BOLD "#{}, ({}) = {}" WHITE_NORMAL, __LINE__, \
                      #__VA_ARGS__, std::forward_as_tuple(__VA_ARGS__))
-#define log(msg) \
-        std::cerr << RED_BOLD << __LINE << #msg << WHITE_NORMAL << std::endl;
+#define log(msg)                                                 \
+        std::cerr << RED_BOLD << '#' << __LINE__ << ", " << #msg \
+                  << WHITE_NORMAL << std::endl;
 #else
 #define dbg(...) 39
 #define log(...) 39
