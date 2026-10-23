@@ -7,7 +7,7 @@ Matrix<T, 2> operator*(const Matrix<T, 2> &a, const Matrix<T, 2> &b) {
         for (size_t i = 0; i < a.s[0]; ++i)
                 for (size_t k = 0; k < a.s[1]; ++k)
                         for (size_t j = 0; j < b.s[1]; ++j)
-                                c[i, j] += a[i, k] * b[k, j];
+                                c.at(i, j) += a.at(i, k) * b.at(k, j);
 
         return c;
 }
@@ -23,7 +23,7 @@ Matrix<T, 2> mat_pow(Matrix<T, 2> a, uint64_t n) {
 
         Matrix<T, 2> res(a.s[0], a.s[1], T{});
         for (size_t i = 0; i < a.s[0]; ++i)
-                res[i, i] = T{1};
+                res.at(i, i) = T{1};
 
         while (n) {
                 if (n & 1)

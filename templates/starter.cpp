@@ -4,15 +4,29 @@
 #define WHITE_NORMAL "\033[0m"
 #if defined(LOCAL) && __cplusplus >= 202302L
 #define dbg(...)                                                               \
-        std::println(stderr, RED_BOLD "#{}\n({}) = {}" WHITE_NORMAL, __LINE__, \
+        std::println(stderr, RED_BOLD "#{}, ({}) = {}" WHITE_NORMAL, __LINE__, \
                      #__VA_ARGS__, std::forward_as_tuple(__VA_ARGS__))
-#define log(msg)                                                      \
-        std::println(stderr,                                          \
-                "{}#{}\n{}{}", RED_BOLD, __LINE__, #msg, WHITE_NORMAL)
+#define log(msg) \
+        std::cerr << RED_BOLD << __LINE << #msg << WHITE_NORMAL << std::endl;
 #else
 #define dbg(...) 39
 #define log(...) 39
 #endif
+#ifdef __cpp_lib_format
+#define _FMT_ADD_TYPE_PRINT(T, E)                                    \
+        template <> struct std::formatter<T> : std::formatter<int> { \
+                auto format(const T &x, auto &c) const {             \
+                        return std::format_to(c.out(), "{}", E);     \
+                }                                                    \
+        };
+#else
+#define _FMT_ADD_TYPE_PRINT(T, E)
+#endif
+#define ADD_TYPE_PRINT(T, E)                                    \
+        _FMT_ADD_TYPE_PRINT(T, E)                               \
+        std::ostream &operator<<(std::ostream &o, const T &x) { \
+                return o << (E);                                \
+        }
 #define ALL(x) std::begin(x), std::end(x)
 #define rALL(x) std::rbegin(x), std::rend(x)
 template <class T> T square(T a) {
@@ -35,7 +49,7 @@ template <class T> bool chmax(T &a, T b) {
         }
 }
 namespace std {
-template <class T, std::size_t n> constexpr auto array_fill(T value) {
+template <class T, std::size_t n> auto array_fill(T value) {
         std::array<T, n> res;
         for (auto &e : res) {
                 e = value;

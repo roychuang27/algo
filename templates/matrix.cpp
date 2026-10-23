@@ -40,15 +40,16 @@ template <class T, size_t D> struct Matrix {
         template <class... I> size_t pos(I... i) const {
                 static_assert(sizeof...(I) == D);
                 size_t p = 0, d = 0;
-                (((assert(i >= 0 && size_t(i) < s[d]),
+                (((assert(std::in_range<size_t>(i) && size_t(i) < s[d]),
                    p = p * s[d++] + size_t(i))),
                  ...);
                 return p;
         }
-        template <class... I> T &operator[](I... i) {
+        template <class... I> T &at(I... i) {
                 return a[pos(i...)];
         }
-        template <class... I> const T &operator[](I... i) const {
+        template <class... I> const T &at(I... i) const {
                 return a[pos(i...)];
         }
 };
+
