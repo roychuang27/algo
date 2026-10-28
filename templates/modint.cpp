@@ -1,63 +1,85 @@
-template <long long M> struct Modint {
-        long long x;
-        Modint(long long _x = 0)
-                : x(_x % M) {
-                while (x < 0) {
-                        x += M;
+template <long long MOD> struct static_modint {
+        static_assert(MOD > 0);
+        long long v = 0;
+        using mint = static_modint;
+        constexpr static_modint() = default;
+        template <class T> static_modint(T x) {
+                v = static_cast<long long>(x % MOD);
+                if (v < 0) {
+                        v += MOD;
                 }
         }
-        Modint &operator+=(Modint b) {
-                x += b.x;
-                if (x >= M) {
-                        x -= M;
+        long long val() const {
+                return v;
+        }
+        mint &operator+=(const mint &rhs) {
+                if (v >= MOD - rhs.v) {
+                        v -= MOD - rhs.v;
+                } else {
+                        v += rhs.v;
                 }
                 return *this;
         }
-        Modint &operator-=(Modint b) {
-                x -= b.x;
-                if (x < 0) {
-                        x += M;
+        mint &operator-=(const mint &rhs) {
+                v -= rhs.v;
+                if (v < 0) {
+                        v += MOD;
                 }
                 return *this;
         }
-        Modint &operator*=(Modint b) {
-                x = 1LL * x * b.x % M;
+        mint &operator*=(const mint &rhs) {
+                v = v * rhs.v % MOD;
                 return *this;
         }
-        Modint pow(long long n) const {
-                Modint r = 1, a = *this;
-                for (; n; n >>= 1, a *= a) {
+        mint pow(long long n) const {
+                assert(n >= 0);
+                mint a = *this, res = 1;
+                while (n > 0) {
                         if (n & 1) {
-                                r *= a;
+                                res *= a;
                         }
+                        a *= a;
+                        n >>= 1;
                 }
-                return r;
+                return res;
         }
-        Modint inv() const {
-                return pow(M - 2);
+        mint inv() const {
+                assert(v != 0);
+                return pow(MOD - 2);
         }
-        Modint &operator/=(Modint b) {
-                return *this *= b.inv();
+        mint operator-() const {
+                return mint(v == 0 ? 0 : MOD - v);
         }
-        friend Modint operator+(Modint a, Modint b) {
-                return a += b;
+        friend mint operator+(mint lhs, const mint &rhs) {
+                return lhs += rhs;
         }
-        friend Modint operator-(Modint a, Modint b) {
-                return a -= b;
+        friend mint operator-(mint lhs, const mint &rhs) {
+                return lhs -= rhs;
         }
-        friend Modint operator*(Modint a, Modint b) {
-                return a *= b;
+        friend mint operator*(mint lhs, const mint &rhs) {
+                return lhs *= rhs;
         }
-        friend Modint operator/(Modint a, Modint b) {
-                return a /= b;
+        friend bool operator==(const mint &lhs, const mint &rhs) {
+                return lhs.v == rhs.v;
         }
-        friend std::ostream &operator<<(std::ostream &os, Modint a) {
-                return os << a.x;
+        friend bool operator!=(const mint &lhs, const mint &rhs) {
+                return lhs.v != rhs.v;
         }
-        friend std::istream &operator>>(std::istream &is, Modint &a) {
+        friend std::ostream &operator<<(std::ostream &os, mint a) {
+                return os << a.val();
+        }
+        friend std::istream &operator>>(std::istream &is, mint &a) {
                 long long x;
                 is >> x;
                 a = x;
                 return is;
         }
 };
+#ifdef __cpp_lib_format
+template <long long MOD>
+struct std::formatter<static_modint<MOD> > : std::formatter<long long> {
+        auto format(const static_modint<MOD> &x, auto &ctx) const {
+                return std::formatter<long long>::format(x.val(), ctx);
+        }
+};
+#endif

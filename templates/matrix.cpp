@@ -1,22 +1,3 @@
-#ifdef LOCAL
-#define dbgm(x)                                                       \
-        do {                                                          \
-                std::cerr << RED_BOLD << "#" << __LINE__ << ' ' << #x \
-                          << " =>\n";                                 \
-                for (size_t _i = 0; _i < (x).s[0]; ++_i) {            \
-                        std::cerr << " [";                            \
-                        for (size_t _j = 0; _j < (x).s[1]; ++_j) {    \
-                                if (_j)                               \
-                                        std::cerr << ", ";            \
-                                dbg_print((x)[_i, _j]);               \
-                        }                                             \
-                        std::cerr << "]\n";                           \
-                }                                                     \
-                std::cerr << WHITE_NORMAL;                            \
-        } while (0)
-#else
-#define dbgm(...) 39
-#endif
 template <class T, size_t D> struct Matrix {
         static_assert(D);
         std::array<size_t, D> s{};
@@ -51,5 +32,28 @@ template <class T, size_t D> struct Matrix {
         template <class... I> const T &at(I... i) const {
                 return a[pos(i...)];
         }
+        std::string format_to_string() const {
+                std::ostringstream oss;
+                auto print_impl = [&](auto &self, size_t dim,
+                                      size_t offset) -> void {
+                        if (dim == D) {
+                                oss << a[offset];
+                                return;
+                        }
+                        oss << "[";
+                        size_t stride = 1;
+                        for (size_t i = dim + 1; i < D; ++i) {
+                                stride *= s[i];
+                        }
+                        for (size_t i = 0; i < s[dim]; ++i) {
+                                self(self, dim + 1, offset + i * stride);
+                                if (i + 1 < s[dim]) {
+                                        oss << ", ";
+                                }
+                        }
+                        oss << "]";
+                };
+                print_impl(print_impl, 0, 0);
+                return oss.str();
+        }
 };
-

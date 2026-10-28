@@ -8,7 +8,7 @@
                      #__VA_ARGS__, std::forward_as_tuple(__VA_ARGS__))
 #define log(msg)                                                 \
         std::cerr << RED_BOLD << '#' << __LINE__ << ", " << #msg \
-                  << WHITE_NORMAL << std::endl;
+                  << WHITE_NORMAL << '\n'
 #else
 #define dbg(...) 39
 #define log(...) 39
@@ -77,7 +77,6 @@ std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
         return is >> p.first >> p.second;
 }
 using namespace std;
-using lli = long long int;
 
 void solve() {
         ${1}
@@ -86,6 +85,11 @@ void solve() {
 int main() {
         cin.tie(nullptr)->sync_with_stdio(false);
         cin.exceptions(cin.failbit);
-        solve();
+        int t = 1;
+        // cin >> t;
+        for (int i = 0; i < t; i++) {
+                solve();
+                cout << '\n';
+        }
         return 0;
 }
