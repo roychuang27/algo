@@ -1,0 +1,123 @@
+#include <bits/stdc++.h>
+#include <cassert>
+#define RED_BOLD "\033[1;31m"
+#define WHITE_NORMAL "\033[0m"
+#if defined(LOCAL) && __cplusplus >= 202302L
+#define dbg(...)                                                               \
+        std::println(stderr, RED_BOLD "#{}, ({}) = {}" WHITE_NORMAL, __LINE__, \
+                     #__VA_ARGS__, std::forward_as_tuple(__VA_ARGS__))
+#define log(msg) \
+        std::cerr << RED_BOLD << '#' <<  __LINE__ << ", " << #msg << WHITE_NORMAL << std::endl;
+#else
+#define dbg(...) 39
+#define log(...) 39
+#endif
+#ifdef __cpp_lib_format
+#define _FMT_ADD_TYPE_PRINT(T, E)                                    \
+        template <> struct std::formatter<T> : std::formatter<int> { \
+                auto format(const T &x, auto &c) const {             \
+                        return std::format_to(c.out(), "{}", E);     \
+                }                                                    \
+        };
+#else
+#define _FMT_ADD_TYPE_PRINT(T, E)
+#endif
+#define ADD_TYPE_PRINT(T, E)                                    \
+        _FMT_ADD_TYPE_PRINT(T, E)                               \
+        std::ostream &operator<<(std::ostream &o, const T &x) { \
+                return o << (E);                                \
+        }
+#define ALL(x) std::begin(x), std::end(x)
+#define rALL(x) std::rbegin(x), std::rend(x)
+template <class T> T square(T a) {
+        return a * a;
+}
+template <class T> bool chmin(T &a, T b) {
+        if (b < a) {
+                a = b;
+                return 1;
+        } else {
+                return 0;
+        }
+}
+template <class T> bool chmax(T &a, T b) {
+        if (a < b) {
+                a = b;
+                return 1;
+        } else {
+                return 0;
+        }
+}
+namespace std {
+template <class T, std::size_t n> constexpr auto array_fill(T value) {
+        std::array<T, n> res;
+        for (auto &e : res) {
+                e = value;
+        }
+        return res;
+}
+}
+template <class T, size_t N>
+std::istream &operator>>(std::istream &is, std::array<T, N> &a) {
+        for (auto &x : a) {
+                is >> x;
+        }
+        return is;
+}
+template <class T>
+std::istream &operator>>(std::istream &is, std::vector<T> &a) {
+        for (auto &x : a) {
+                is >> x;
+        }
+        return is;
+}
+template <class A, class B>
+std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
+        return is >> p.first >> p.second;
+}
+using namespace std;
+using lli = long long int;
+
+void solve() {
+        int N, Q;
+        cin >> N >> Q;
+        vector<vector<pair<int, int>>> ranges(Q);
+        vector<int> s(N + 1);
+        for (int _ = 0; _ < Q; _++) {
+                int l, r, x;
+                cin >> l >> r >> x;
+                l--;
+                r--;
+                x--;
+                ranges[x].emplace_back(l, r);
+        }
+        for (int x = 0; x < Q; x++) {
+                int prev_end = -1;
+                sort(ALL(ranges[x]));
+                for (size_t i = 0; i < ranges[x].size(); i++) {
+                        auto [fst, sec] = ranges[x][i];
+                        if (fst > prev_end) {
+                                s[fst]++;
+                                s[sec+1]--;
+                        } else if (sec > prev_end) {
+                                s[prev_end+1]++;
+                                s[sec+1]--;
+                        }
+                        chmax(prev_end, sec);
+                }
+        }
+        for (int i = 1; i < N; i++) {
+                s[i] += s[i-1];
+        }
+        for (int i = 0; i < N; i++) {
+                cout << s[i] << ' ';
+        }
+        cout << '\n';
+}
+
+int main() {
+        cin.tie(nullptr)->sync_with_stdio(false);
+        cin.exceptions(cin.failbit);
+        solve();
+        return 0;
+}
