@@ -1,9 +1,11 @@
-template <long long MOD> struct static_modint {
+template <long long MOD>
+struct StaticModint {
         static_assert(MOD > 0);
         long long v = 0;
-        using mint = static_modint;
-        constexpr static_modint() = default;
-        template <class T> static_modint(T x) {
+        using mint = StaticModint;
+        constexpr StaticModint() = default;
+        template <class T>
+        StaticModint(T x) {
                 v = static_cast<long long>(x % MOD);
                 if (v < 0) {
                         v += MOD;
@@ -31,6 +33,9 @@ template <long long MOD> struct static_modint {
                 v = v * rhs.v % MOD;
                 return *this;
         }
+        mint &operator/=(const mint &rhs) {
+                return *this *= rhs.inv();
+        }
         mint pow(long long n) const {
                 assert(n >= 0);
                 mint a = *this, res = 1;
@@ -47,6 +52,9 @@ template <long long MOD> struct static_modint {
                 assert(v != 0);
                 return pow(MOD - 2);
         }
+        mint operator+() const {
+                return *this;
+        }
         mint operator-() const {
                 return mint(v == 0 ? 0 : MOD - v);
         }
@@ -58,6 +66,9 @@ template <long long MOD> struct static_modint {
         }
         friend mint operator*(mint lhs, const mint &rhs) {
                 return lhs *= rhs;
+        }
+        friend mint operator/(mint lhs, const mint &rhs) {
+                return lhs /= rhs;
         }
         friend bool operator==(const mint &lhs, const mint &rhs) {
                 return lhs.v == rhs.v;
@@ -83,3 +94,6 @@ struct std::formatter<static_modint<MOD> > : std::formatter<long long> {
         }
 };
 #endif
+
+// using mint = StaticModint<1'000'000'007>;
+// using mint = StaticModint<998244353>;

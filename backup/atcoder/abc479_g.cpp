@@ -8,7 +8,7 @@
                      #__VA_ARGS__, std::forward_as_tuple(__VA_ARGS__))
 #define log(msg)                                                 \
         std::cerr << RED_BOLD << '#' << __LINE__ << ", " << #msg \
-                  << WHITE_NORMAL << '\n'
+                  << WHITE_NORMAL << '\n';
 #else
 #define dbg(...) 39
 #define log(...) 39

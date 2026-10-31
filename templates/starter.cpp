@@ -3,22 +3,21 @@
 #define RED_BOLD "\033[1;31m"
 #define WHITE_NORMAL "\033[0m"
 #if defined(LOCAL) && __cplusplus >= 202302L
-#define dbg(...)                                                               \
-        std::println(stderr, RED_BOLD "#{}, ({}) = {}" WHITE_NORMAL, __LINE__, \
-                     #__VA_ARGS__, std::forward_as_tuple(__VA_ARGS__))
-#define log(msg)                                                 \
-        std::cerr << RED_BOLD << '#' << __LINE__ << ", " << #msg \
-                  << WHITE_NORMAL << '\n'
+#define line(...) std::println(stderr, RED_BOLD "#{} passed" WHITE_NORMAL, __LINE__)
+#define dbg(...)                                                                             \
+        std::println(stderr, RED_BOLD "#{}, ({}) = {}" WHITE_NORMAL, __LINE__, #__VA_ARGS__, \
+                     std::forward_as_tuple(__VA_ARGS__))
 #else
+#define line(...) 39
 #define dbg(...) 39
-#define log(...) 39
 #endif
 #ifdef __cpp_lib_format
-#define _FMT_ADD_TYPE_PRINT(T, E)                                    \
-        template <> struct std::formatter<T> : std::formatter<int> { \
-                auto format(const T &x, auto &c) const {             \
-                        return std::format_to(c.out(), "{}", E);     \
-                }                                                    \
+#define _FMT_ADD_TYPE_PRINT(T, E)                                     \
+        template <>                                                   \
+        struct std::formatter<T> : std::formatter<std::string_view> { \
+                auto format(const T &x, auto &c) const {              \
+                        return std::format_to(c.out(), "{}", E);      \
+                }                                                     \
         };
 #else
 #define _FMT_ADD_TYPE_PRINT(T, E)
@@ -30,27 +29,43 @@
         }
 #define ALL(x) std::begin(x), std::end(x)
 #define rALL(x) std::rbegin(x), std::rend(x)
-template <class T> T square(T a) {
+template <class T>
+T square(T a) {
         return a * a;
 }
-template <class T> bool chmin(T &a, T b) {
-        if (b < a) {
-                a = b;
-                return 1;
+template <bool strict = true, class T>
+bool chmin(T &a, T b) {
+        if constexpr (strict) {
+                if (b < a) {
+                        a = b;
+                        return true;
+                }
         } else {
-                return 0;
+                if (b <= a) {
+                        a = b;
+                        return true;
+                }
         }
+        return false;
 }
-template <class T> bool chmax(T &a, T b) {
-        if (a < b) {
-                a = b;
-                return 1;
+template <bool strict = true, class T>
+bool chmax(T &a, T b) {
+        if constexpr (strict) {
+                if (a < b) {
+                        a = b;
+                        return true;
+                }
         } else {
-                return 0;
+                if (a <= b) {
+                        a = b;
+                        return true;
+                }
         }
+        return false;
 }
 namespace std {
-template <class T, std::size_t n> auto array_fill(T value) {
+template <class T, std::size_t n>
+auto array_fill(T value) {
         std::array<T, n> res;
         for (auto &e : res) {
                 e = value;
@@ -78,7 +93,7 @@ std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
 }
 using namespace std;
 
-void solve() {
+void single_testcase() {
         ${1}
 }
 
@@ -88,7 +103,7 @@ int main() {
         int t = 1;
         // cin >> t;
         for (int i = 0; i < t; i++) {
-                solve();
+                single_testcase();
                 cout << '\n';
         }
         return 0;

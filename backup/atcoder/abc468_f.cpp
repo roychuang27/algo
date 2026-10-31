@@ -100,18 +100,17 @@ void solve() {
 
         vector<int> tmp;
         tmp.reserve(n);
-        int ans = 0;
+        int cnt = 0;
         int mx = 0;
         for (int p : ps) {
-                if (p >= mx) {
-                        mx = p;
-                        ans++;
+                if (chmax(mx, p)) {
+                        cnt++;
                 } else {
                         tmp.emplace_back(p);
                 }
         }
 
-        cout << ans + find_lis_length(tmp) << '\n';
+        cout << cnt + find_lis_length(tmp) << '\n';
 }
 
 int main() {
