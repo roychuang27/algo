@@ -1,55 +1,134 @@
-struct ZKW {
-    vector<lli> t = vector<lli> (nodes_cnt_max * 2);
-    int N;
-
-    void init(int arr_size) {
-        N = arr_size;
-        for (int i = 0; i <= 2 * N + 1; i++) t[i] = 0;
-    }
-
-    void printdbg() {
-        cerr << "You are trying to print something" << endl;
-        int l = N, r = 2 * N - 1;
-        while (l <= r) {
-            for (int i = l; i <= r; i++) cerr << t[i] << ' ';
-            cerr << endl;
-            if (l % 2 == 1) l++;
-            if (r % 2 == 0) r--;
-            l /= 2;
-            r /= 2;
+template <class S, auto op, auto e>
+struct segtree {
+    public:
+        segtree(): segtree(0) {
         }
-    }
+        explicit segtree(int n): segtree(std::vector<S>(n, e())) {
+        }
+        explicit segtree(const std::vector<S> &v): _n(int(v.size())) {
+                size = 1;
+                log = 0;
+                while (size < _n) {
+                        size <<= 1;
+                        log++;
+                }
+                d = std::vector<S>(2 * size, e());
+                for (int i = 0; i < _n; i++) {
+                        d[size + i] = v[i];
+                }
+                for (int i = size - 1; i >= 1; i--) {
+                        update(i);
+                }
+        }
 
-    void build() {
-        for (int i = N; i < 2 * N; i++) {
-            t[i] = zkw_over_arr[i - N];
+        void set(int p, S x) {
+                assert(0 <= p && p < _n);
+                p += size;
+                d[p] = x;
+                for (int i = 1; i <= log; i++) {
+                        update(p >> i);
+                }
         }
-        for (int i = N - 1; i >= 1; i--) {
-            t[i] = max(t[i * 2], t[i * 2 + 1]);
-        }
-    }
 
-    void modify(int idx, lli val) {
-        zkw_over_arr[idx] = val;
-        idx += N;
-        t[idx] = val;
-        idx /= 2;
-        while (idx >= 1) {
-            t[idx] = max(t[2 * idx], t[2 * idx + 1]);
-            idx /= 2;
+        S get(int p) const {
+                assert(0 <= p && p < _n);
+                return d[p + size];
         }
-    }
 
-    lli query(int l, int r) {
-        l += N;
-        r += N;
-        lli res = -1;
-        while (l <= r) {
-            if (l % 2 == 1) res = max(t[l++], res);
-            if (r % 2 == 0) res = max(t[r--], res);
-            l /= 2;
-            r /= 2;
+        S prod(int l, int r) const {
+                assert(0 <= l && l <= r && r <= _n);
+                S sml = e(), smr = e();
+                l += size;
+                r += size;
+
+                while (l < r) {
+                        if (l & 1) {
+                                sml = op(sml, d[l++]);
+                        }
+                        if (r & 1) {
+                                smr = op(d[--r], smr);
+                        }
+                        l >>= 1;
+                        r >>= 1;
+                }
+                return op(sml, smr);
         }
-        return res;
-    }
-} zkw;
+
+        S all_prod() const {
+                return d[1];
+        }
+
+        template <bool (*f)(S)>
+        int max_right(int l) const {
+                return max_right(l, [](S x) { return f(x); });
+        }
+        template <class F>
+        int max_right(int l, F f) const {
+                assert(0 <= l && l <= _n);
+                assert(f(e()));
+                if (l == _n) {
+                        return _n;
+                }
+                l += size;
+                S sm = e();
+                do {
+                        while (l % 2 == 0) {
+                                l >>= 1;
+                        }
+                        if (!f(op(sm, d[l]))) {
+                                while (l < size) {
+                                        l = (2 * l);
+                                        if (f(op(sm, d[l]))) {
+                                                sm = op(sm, d[l]);
+                                                l++;
+                                        }
+                                }
+                                return l - size;
+                        }
+                        sm = op(sm, d[l]);
+                        l++;
+                } while ((l & -l) != l);
+                return _n;
+        }
+
+        template <bool (*f)(S)>
+        int min_left(int r) const {
+                return min_left(r, [](S x) { return f(x); });
+        }
+        template <class F>
+        int min_left(int r, F f) const {
+                assert(0 <= r && r <= _n);
+                assert(f(e()));
+                if (r == 0) {
+                        return 0;
+                }
+                r += size;
+                S sm = e();
+                do {
+                        r--;
+                        while (r > 1 && (r % 2)) {
+                                r >>= 1;
+                        }
+                        if (!f(op(d[r], sm))) {
+                                while (r < size) {
+                                        r = (2 * r + 1);
+                                        if (f(op(d[r], sm))) {
+                                                sm = op(d[r], sm);
+                                                r--;
+                                        }
+                                }
+                                return r + 1 - size;
+                        }
+                        sm = op(d[r], sm);
+                } while ((r & -r) != r);
+                return 0;
+        }
+
+    private:
+        int _n, size, log;
+        std::vector<S> d;
+
+        void update(int k) {
+                d[k] = op(d[2 * k], d[2 * k + 1]);
+        }
+};

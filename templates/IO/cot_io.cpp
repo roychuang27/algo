@@ -1,4 +1,4 @@
-// credit to: cot orz
+// credit to: cot7302 orz
 #include <unistd.h>
 struct fastIO {
     static constexpr unsigned Ibuf_size = 1 << 16, Obuf_size = 1 << 16;
@@ -89,7 +89,7 @@ struct fastIO {
         for (; __i < 32; ) Obuf[Or++] = num_buf[__i++];
         return *this;
     }
- 
+
     fastIO& operator<<(string_view sv) {
         if (Or + size(sv) >= Obuf_size) {
             flush();
