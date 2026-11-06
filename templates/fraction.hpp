@@ -2,11 +2,15 @@ template <typename T = long long>
 struct Fraction {
         T n, d;
 
-        Fraction(T _n = 0, T _d = 1): n(_n), d(_d) {
+        Fraction(T _n = 0, T _d = 1):
+                n(_n),
+                d(_d) {
         }
 
         template <typename U>
-        Fraction(const Fraction<U> &other): n(static_cast<T>(other.n)), d(static_cast<T>(other.d)) {
+        Fraction(const Fraction<U> &other):
+                n(static_cast<T>(other.n)),
+                d(static_cast<T>(other.d)) {
         }
 
         static T abs_val(T x) {
@@ -105,7 +109,8 @@ struct Fraction {
                 return lhs.n * rhs.d == rhs.n * lhs.d;
         }
 
-        friend std::strong_ordering operator<=>(const Fraction &lhs, const Fraction &rhs) {
+        friend std::strong_ordering operator<=>(const Fraction &lhs,
+                                                const Fraction &rhs) {
                 T ln = lhs.d < 0 ? -lhs.n : lhs.n;
                 T ld = lhs.d < 0 ? -lhs.d : lhs.d;
                 T rn = rhs.d < 0 ? -rhs.n : rhs.n;

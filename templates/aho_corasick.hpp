@@ -7,15 +7,15 @@ struct Aho_Corasick {
         vector<int> dp;
         int it; // point to the end of the trie
 
-        Aho_Corasick(int MAXN) :
-                trie(MAXN, vector<int> (26, -1)),
+        Aho_Corasick(int MAXN):
+                trie(MAXN, vector<int>(26, -1)),
                 fail(MAXN, 0),
                 is_end(MAXN, 0),
                 str_to_id(MAXN),
                 dfs_adj(MAXN),
                 dp(MAXN, 0),
-                it(0)
-        {}
+                it(0) {
+        }
 
         void insert(string &t, int str_id) { // build trie
                 int cur = 0;
@@ -41,7 +41,8 @@ struct Aho_Corasick {
                         }
                 }
                 while (not qu.empty()) {
-                        int cur = qu.front(); qu.pop();
+                        int cur = qu.front();
+                        qu.pop();
                         for (int j = 0; j < 26; j++) {
                                 int &nxt = trie[cur][j];
                                 if (nxt != -1) {
@@ -66,7 +67,7 @@ struct Aho_Corasick {
         void traverse(string &t) {
                 int cur = 0;
                 for (const char &c : t) {
-                        cur = trie[cur][c-'a'];
+                        cur = trie[cur][c - 'a'];
                         dp[cur]++;
                 }
         }

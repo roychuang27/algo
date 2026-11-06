@@ -1,12 +1,14 @@
-template <class S, auto op, auto e, class F, auto mapping, auto composition,
-          auto id>
-struct lazy_segtree {
+template <class S, auto op, auto e, class F, auto mapping, auto composition, auto id>
+struct LazySegtree {
     public:
-        lazy_segtree(): lazy_segtree(0) {
+        LazySegtree():
+                LazySegtree(0) {
         }
-        explicit lazy_segtree(int n): lazy_segtree(std::vector<S>(n, e())) {
+        explicit LazySegtree(int n):
+                lazy_segtree(std::vector<S>(n, e())) {
         }
-        explicit lazy_segtree(const std::vector<S> &v): _n(int(v.size())) {
+        explicit LazySegtree(const std::vector<S> &v):
+                _n(int(v.size())) {
                 size = 1;
                 log = 0;
                 while (size < _n) {

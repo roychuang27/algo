@@ -88,8 +88,8 @@ struct StaticModint {
 };
 #ifdef __cpp_lib_format
 template <long long MOD>
-struct std::formatter<static_modint<MOD> > : std::formatter<long long> {
-        auto format(const static_modint<MOD> &x, auto &ctx) const {
+struct std::formatter<StaticModint<MOD>> : std::formatter<long long> {
+        auto format(const StaticModint<MOD> &x, auto &ctx) const {
                 return std::formatter<long long>::format(x.val(), ctx);
         }
 };

@@ -3,7 +3,10 @@ class Fenwick {
         int N;
         vector<lli> b;
 
-        Fenwick(int _n) : N(_n), b(N + 1, 0) {}
+        Fenwick(int _n):
+                N(_n),
+                b(N + 1, 0) {
+        }
 
         int lowbit(int x) {
                 return x & -x;

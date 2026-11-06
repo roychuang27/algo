@@ -1,11 +1,14 @@
 template <class S, auto op, auto e>
-struct segtree {
+struct Segtree {
     public:
-        segtree(): segtree(0) {
+        Segtree():
+                Segtree(0) {
         }
-        explicit segtree(int n): segtree(std::vector<S>(n, e())) {
+        explicit Segtree(int n):
+                segtree(std::vector<S>(n, e())) {
         }
-        explicit segtree(const std::vector<S> &v): _n(int(v.size())) {
+        explicit Segtree(const std::vector<S> &v):
+                _n(int(v.size())) {
                 size = 1;
                 log = 0;
                 while (size < _n) {

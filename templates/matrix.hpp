@@ -1,9 +1,11 @@
-template <class T, size_t D> struct Matrix {
+template <class T, size_t D>
+struct Matrix {
         static_assert(D);
         std::array<size_t, D> s{};
         std::vector<T> a;
         template <class... A>
-        requires(sizeof...(A) == D || sizeof...(A) == D + 1) Matrix(A... x) {
+                requires(sizeof...(A) == D || sizeof...(A) == D + 1)
+        Matrix(A... x) {
                 if constexpr (sizeof...(A) == D) {
                         init<0>(1, x..., T{});
                 } else {
@@ -18,7 +20,8 @@ template <class T, size_t D> struct Matrix {
                         a.assign(n, x);
                 }
         }
-        template <class... I> size_t pos(I... i) const {
+        template <class... I>
+        size_t pos(I... i) const {
                 static_assert(sizeof...(I) == D);
                 size_t p = 0, d = 0;
                 (((assert(std::in_range<size_t>(i) && size_t(i) < s[d]),
@@ -26,16 +29,17 @@ template <class T, size_t D> struct Matrix {
                  ...);
                 return p;
         }
-        template <class... I> T &at(I... i) {
+        template <class... I>
+        T &at(I... i) {
                 return a[pos(i...)];
         }
-        template <class... I> const T &at(I... i) const {
+        template <class... I>
+        const T &at(I... i) const {
                 return a[pos(i...)];
         }
         std::string format_to_string() const {
                 std::ostringstream oss;
-                auto print_impl = [&](auto &self, size_t dim,
-                                      size_t offset) -> void {
+                auto print_impl = [&](auto &self, size_t dim, size_t offset) -> void {
                         if (dim == D) {
                                 oss << a[offset];
                                 return;
