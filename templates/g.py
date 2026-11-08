@@ -9,6 +9,18 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 SOURCE = SCRIPT_DIR / "starter.cpp"
 
+# Header files synced alongside the default snippet.
+HEADERS = [
+    SCRIPT_DIR / "arith.hpp",
+    SCRIPT_DIR / "modint.hpp",
+    SCRIPT_DIR / "fraction.hpp",
+    SCRIPT_DIR / "matrix.hpp",
+    SCRIPT_DIR / "matrix_mul.hpp",
+    SCRIPT_DIR / "policies.hpp",
+    SCRIPT_DIR / "zkw.hpp",
+    SCRIPT_DIR / "zkw_lazy.hpp",
+]
+
 CONFIG_HOME = Path(
     os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")
 )
@@ -20,9 +32,9 @@ def main():
     if not OUTPUT.is_file():
         raise FileNotFoundError(f"Not found: {OUTPUT}")
 
-    # No arguments: update the default "cp" snippet.
+    # No arguments: update the default "cp" snippet and every configured header.
     if len(sys.argv) == 1:
-        files = [(SOURCE, "cp")]
+        files = [(SOURCE, "cp")] + [(header, header.stem) for header in HEADERS]
     else:
         # Arguments: each file becomes a snippet named after its stem.
         files = [

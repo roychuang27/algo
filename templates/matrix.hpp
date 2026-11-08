@@ -30,34 +30,31 @@ struct Matrix {
                 return p;
         }
         template <class... I>
-        T &at(I... i) {
+        decltype(auto) at(I... i) {
                 return a[pos(i...)];
         }
         template <class... I>
-        const T &at(I... i) const {
+        decltype(auto) at(I... i) const {
                 return a[pos(i...)];
         }
-        std::string format_to_string() const {
-                std::ostringstream oss;
-                auto print_impl = [&](auto &self, size_t dim, size_t offset) -> void {
-                        if (dim == D) {
-                                oss << a[offset];
-                                return;
-                        }
-                        oss << "[";
-                        size_t stride = 1;
-                        for (size_t i = dim + 1; i < D; ++i) {
-                                stride *= s[i];
-                        }
-                        for (size_t i = 0; i < s[dim]; ++i) {
-                                self(self, dim + 1, offset + i * stride);
-                                if (i + 1 < s[dim]) {
-                                        oss << ", ";
-                                }
-                        }
-                        oss << "]";
-                };
-                print_impl(print_impl, 0, 0);
-                return oss.str();
+        template <class... I>
+        decltype(auto) operator[](I... i) {
+                return a[pos(i...)];
+        }
+        template <class... I>
+        decltype(auto) operator[](I... i) const {
+                return a[pos(i...)];
         }
 };
+
+#ifdef __cpp_lib_format
+template <class T, size_t D, class CharT>
+struct std::formatter<Matrix<T, D>, CharT>
+        : std::formatter<std::basic_string_view<CharT>, CharT> {
+        template <class FormatContext>
+        auto format(const Matrix<T, D> &mat, FormatContext &ctx) const {
+                return std::formatter<std::basic_string_view<CharT>, CharT>::format(
+                        mat.format_to_string(), ctx);
+        }
+};
+#endif

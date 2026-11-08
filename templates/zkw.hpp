@@ -1,3 +1,4 @@
+// Reference : atcoder library
 template <class S, auto op, auto e>
 struct Segtree {
     public:

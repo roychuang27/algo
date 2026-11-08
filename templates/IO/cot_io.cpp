@@ -1,4 +1,4 @@
-// credit to: cot7302 orz
+// Reference : cot7302 orz
 #include <unistd.h>
 struct fastIO {
         static constexpr unsigned Ibuf_size = 1 << 16, Obuf_size = 1 << 16;

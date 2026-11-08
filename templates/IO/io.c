@@ -1,3 +1,4 @@
+// Reference : maybe becaido
 #pragma GCC optimize("Ofast")
 #pragma GCC target("sse,sse2,sse3,ssse3,abm,avx")
 #include <unistd.h>

@@ -1,3 +1,4 @@
+// Reference : atcoder library
 template <long long MOD>
 struct StaticModint {
         static_assert(MOD > 0);

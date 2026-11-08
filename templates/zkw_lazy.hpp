@@ -1,3 +1,4 @@
+// Reference : atccoder library
 template <class S, auto op, auto e, class F, auto mapping, auto composition, auto id>
 struct LazySegtree {
     public:

@@ -4,7 +4,7 @@
 #define WHITE_NORMAL "\033[0m"
 // I'll give them a shelter like you've done for me
 #if defined(SHELTER) && defined(__cpp_lib_print)
-#define line(...)                                            \
+#define line(...) \
         std::println(stderr, RED_BOLD "#{} passed" WHITE_NORMAL, __LINE__)
 #define dbg(...)                                             \
         std::println(stderr,                                 \
@@ -128,49 +128,57 @@ struct ITER {
 using namespace std;
 
 long long solve(long long x) {
-        if (x == -1) {
-                return 0;
+        if (x < 0) return 0;
+        if (x == 0) return 1;
+        string s = to_string(x);
+        vector<long long> dp(10);
+
+        bool tight_still_valid = 1;
+        int last = -1;
+
+        for (int i = 0; i < s.size(); i++) {
+                vector<long long> ndp(10);
+
+                if (i > 0) {
+                        for (int k = 1; k < 10; k++) {
+                                ndp[k]++;
+                        }
+                }
+
+                for (int k = 0; k < 10; k++) {
+                        for (int d = 0; d < 10; d++) {
+                                if (k != d) {
+                                        ndp[k] += dp[d];
+                                }
+                        }
+                }
+
+                if (tight_still_valid) {
+                        for (int c = (i == 0 ? 1 : 0); c < s[i] - '0'; c++) {
+                                if (c != last) {
+                                        ndp[c]++;
+                                }
+                        }
+                }
+
+                if (s[i] - '0' == last) {
+                        tight_still_valid = false;
+                }
+
+                last = s[i] - '0';
+                swap(ndp, dp);
         }
 
-        string s = to_string(x);
-        vector dp(2, vector(2, vector(10, vector<long long>(s.size(), -1))));
+        if (tight_still_valid) {
+                dp[last]++;
+        }
 
-        function<long long(int, int, bool, bool)> recursive = [&](int prev_digit, int i, bool leading_zero, bool tight) -> long long {
-                if (i == s.size()) {
-                        return 1;
-                }
-
-                if (dp[leading_zero][tight][prev_digit][i] != -1) {
-                        return dp[leading_zero][tight][prev_digit][i];
-                }
-
-                long long res = 0;
-                int limit = 9;
-                if (tight) {
-                        limit = s[i] - '0';
-                }
-
-                for (int nxt_digit = 0; nxt_digit <= limit; nxt_digit++) {
-                        if (nxt_digit == prev_digit and nxt_digit != 0) {
-                                continue;
-                        }
-                        if (nxt_digit == 0 and nxt_digit == prev_digit and !leading_zero) {
-                                continue;
-                        }
-
-                        res += recursive(nxt_digit, i + 1, leading_zero & (nxt_digit == 0), tight & (nxt_digit == limit));
-                }
-
-                return dp[leading_zero][tight][prev_digit][i] = res;
-        };
-
-        return recursive(0, 0, 1, 1);
+        return reduce(ALL(dp)) + 1; // +1 for 0
 }
 
 void single_testcase() {
         long long a, b;
         cin >> a >> b;
-
         cout << solve(b) - solve(a - 1);
 }
 

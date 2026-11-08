@@ -78,6 +78,14 @@ auto array_fill(T value) {
         return res;
 }
 } // namespace std
+template <class A, class B>
+std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
+        return is >> p.first >> p.second;
+}
+template <class T, class U>
+std::ostream &operator<<(std::ostream &os, const std::pair<T, U> &p) {
+        return os << p.first << ' ' << p.second;
+}
 template <class T, size_t N>
 std::istream &operator>>(std::istream &is, std::array<T, N> &a) {
         for (auto &x : a) {
@@ -91,14 +99,6 @@ std::istream &operator>>(std::istream &is, std::vector<T> &a) {
                 is >> x;
         }
         return is;
-}
-template <class A, class B>
-std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
-        return is >> p.first >> p.second;
-}
-template <class T, class U>
-std::ostream &operator<<(std::ostream &os, const std::pair<T, U> &p) {
-        return os << p.first << ' ' << p.second;
 }
 template <class T>
 struct ITER {
