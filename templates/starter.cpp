@@ -1,146 +1,99 @@
 #include <bits/stdc++.h>
 #include <cassert>
-#define RED_BOLD "\033[1;31m"
-#define WHITE_NORMAL "\033[0m"
-// I'll give them a shelter like you've done for me
+using namespace std;
+using ll = long long;
+using ull = unsigned long long;
+#define fir(x, a, b) for (int x = (a); x < (b); x++)
+#define all(x) begin(x), end(x)
+#define rall(x) rbegin(x), rend(x)
+// I'll give them a shelter like you've done for me~
 #if defined(SHELTER) && defined(__cpp_lib_print)
-#define line(...) \
-        std::println(stderr, RED_BOLD "#{} passed" WHITE_NORMAL, __LINE__)
-#define dbg(...)                                             \
-        std::println(stderr,                                 \
-                     RED_BOLD "#{}, ({}) = {}" WHITE_NORMAL, \
-                     __LINE__,                               \
-                     #__VA_ARGS__,                           \
-                     std::forward_as_tuple(__VA_ARGS__))
+#define line(...) println(stderr, "\033[1;31m#{} passed\033[0m", __LINE__)
+#define dbg(...)                                   \
+        println(stderr,                            \
+                "\033[1;31m#{}, ({}) = {}\033[0m", \
+                __LINE__,                          \
+                #__VA_ARGS__,                      \
+                forward_as_tuple(__VA_ARGS__))
 #else
 #define line(...) 39
 #define dbg(...) 39
 #endif
-#ifdef __cpp_lib_format
-#define _FMT_ADD_TYPE_PRINT(T, E)                                     \
-        template <>                                                   \
-        struct std::formatter<T> : std::formatter<std::string_view> { \
-                auto format(const T &x, auto &c) const {              \
-                        return std::format_to(c.out(), "{}", E);      \
-                }                                                     \
-        };
-#else
-#define _FMT_ADD_TYPE_PRINT(T, E)
-#endif
-#define ADD_TYPE_PRINT(T, E)                                    \
-        _FMT_ADD_TYPE_PRINT(T, E)                               \
-        std::ostream &operator<<(std::ostream &o, const T &x) { \
-                return o << (E);                                \
-        }
-#define ALL(x) std::begin(x), std::end(x)
-#define rALL(x) std::rbegin(x), std::rend(x)
 template <class T>
-T square(T a) {
-        return a * a;
+T pow(T a, ull n) {
+        T r = T(1);
+        for (; n; n >>= 1, a = a * a) {
+                if (n & 1) {
+                        r = r * a;
+                }
+        }
+        return r;
 }
-template <bool strict = true, class T>
+template <bool s = 1, class T>
 bool chmin(T &a, T b) {
-        if constexpr (strict) {
-                if (b < a) {
-                        a = b;
-                        return true;
-                }
-        } else {
-                if (b <= a) {
-                        a = b;
-                        return true;
-                }
-        }
-        return false;
+        return (s ? b < a : b <= a) && (a = b, 1);
 }
-template <bool strict = true, class T>
+template <bool s = 1, class T>
 bool chmax(T &a, T b) {
-        if constexpr (strict) {
-                if (a < b) {
-                        a = b;
-                        return true;
-                }
-        } else {
-                if (a <= b) {
-                        a = b;
-                        return true;
-                }
-        }
-        return false;
+        return (s ? a < b : a <= b) && (a = b, 1);
 }
-namespace std {
-template <class T, std::size_t n>
-auto array_fill(T value) {
-        std::array<T, n> res;
-        for (auto &e : res) {
-                e = value;
-        }
-        return res;
+template <class T, size_t n>
+auto array_fill(T v) {
+        array<T, n> r;
+        r.fill(v);
+        return r;
 }
-} // namespace std
 template <class A, class B>
-std::istream &operator>>(std::istream &is, std::pair<A, B> &p) {
-        return is >> p.first >> p.second;
-}
-template <class T, class U>
-std::ostream &operator<<(std::ostream &os, const std::pair<T, U> &p) {
-        return os << p.first << ' ' << p.second;
+istream &operator>>(istream &i, pair<A, B> &p) {
+        return i >> p.first >> p.second;
 }
 template <class T, size_t N>
-std::istream &operator>>(std::istream &is, std::array<T, N> &a) {
+istream &operator>>(istream &i, array<T, N> &a) {
         for (auto &x : a) {
-                is >> x;
+                i >> x;
         }
-        return is;
+        return i;
 }
 template <class T>
-std::istream &operator>>(std::istream &is, std::vector<T> &a) {
+istream &operator>>(istream &i, vector<T> &a) {
         for (auto &x : a) {
-                is >> x;
+                i >> x;
         }
-        return is;
+        return i;
 }
 template <class T>
 struct ITER {
-        const T &_v;
-        std::string _sep = " ";
-        ITER(const T &v, std::string sep = " "):
-                _v(v),
-                _sep(sep) {
+        const T &v;
+        string_view s = " ";
+        ITER(T &_v):
+                v(_v),
+                s(" ") {
         }
-        ITER(const T &v, char sep = ' '):
-                _v(v),
-                _sep(sep, 1) {
+        ITER(T &_v, string_view _s):
+                v(_v),
+                s(_s) {
         }
-        friend std::ostream &operator<<(std::ostream &os, const ITER &o) {
-                bool first = true;
-                for (const auto &x : o._v) {
-                        if (!first) {
-                                os << o._sep;
-                        }
-                        first = false;
-                        os << x;
+        friend ostream &operator<<(ostream &o, const ITER<T> &it) {
+                string_view p;
+                for (const auto &e : it.v) {
+                        o << p << e;
+                        p = it.s;
                 }
-                return os;
+                return o;
         }
 };
-
-using namespace std;
 
 void single_testcase() {
         ${1}
 }
 
 int main() {
-        std::cin.tie(nullptr)->sync_with_stdio(false);
-        std::cin.exceptions(std::cin.failbit);
+        cin.tie(0)->sync_with_stdio(0);
+        cin.exceptions(cin.failbit);
         int t = 1;
-        // std::cin >> t;
-        for (int i = 0; i < t; i++) {
-                if (i) {
-                        std::cout << '\n';
-                }
+        // cin >> t;
+        fir(i, 0, t) {
+                cout << (i ? "\n" : "");
                 single_testcase();
         }
-        return 0;
 }

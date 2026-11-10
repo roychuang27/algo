@@ -109,8 +109,8 @@ struct Fraction {
                 return lhs.n * rhs.d == rhs.n * lhs.d;
         }
 
-        friend std::strong_ordering operator<=>(const Fraction &lhs,
-                                                const Fraction &rhs) {
+        friend strong_ordering operator<=>(const Fraction &lhs,
+                                            const Fraction &rhs) {
                 T ln = lhs.d < 0 ? -lhs.n : lhs.n;
                 T ld = lhs.d < 0 ? -lhs.d : lhs.d;
                 T rn = rhs.d < 0 ? -rhs.n : rhs.n;
@@ -118,20 +118,13 @@ struct Fraction {
                 return (ln * rd) <=> (rn * ld);
         }
 
-        friend std::istream &operator>>(std::istream &is, Fraction &f) {
+        friend istream &operator>>(istream &is, Fraction &f) {
                 return is >> f.n >> f.d;
         }
-};
 
-#ifdef __cpp_lib_format
-template <typename T>
-struct std::formatter<Fraction<T>> {
-        constexpr auto parse(std::format_parse_context &ctx) {
-                return ctx.begin();
-        }
-
-        auto format(const Fraction<T> &f, std::format_context &ctx) const {
-                return std::format_to(ctx.out(), "{}/{}", f.n, f.d);
+        string str() const {
+                ostringstream o;
+                o << n << '/' << d;
+                return o.str();
         }
 };
-#endif

@@ -15,6 +15,9 @@ struct StaticModint {
         long long val() const {
                 return v;
         }
+        string str() const {
+                return to_string(v);
+        }
         mint &operator+=(const mint &rhs) {
                 if (v >= MOD - rhs.v) {
                         v -= MOD - rhs.v;
@@ -77,24 +80,13 @@ struct StaticModint {
         friend bool operator!=(const mint &lhs, const mint &rhs) {
                 return lhs.v != rhs.v;
         }
-        friend std::ostream &operator<<(std::ostream &os, mint a) {
-                return os << a.val();
-        }
-        friend std::istream &operator>>(std::istream &is, mint &a) {
+        friend istream &operator>>(istream &is, mint &a) {
                 long long x;
                 is >> x;
                 a = x;
                 return is;
         }
 };
-#ifdef __cpp_lib_format
-template <long long MOD>
-struct std::formatter<StaticModint<MOD>> : std::formatter<long long> {
-        auto format(const StaticModint<MOD> &x, auto &ctx) const {
-                return std::formatter<long long>::format(x.val(), ctx);
-        }
-};
-#endif
 
 // using mint = StaticModint<1'000'000'007>;
 // using mint = StaticModint<998244353>;

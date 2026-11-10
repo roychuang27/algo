@@ -1,7 +1,7 @@
 class Fenwick {
     public:
         int N;
-        vector<lli> b;
+        vector<long long> b;
 
         Fenwick(int _n):
                 N(_n),
@@ -19,9 +19,9 @@ class Fenwick {
                 }
         }
 
-        lli query(int idx) {
+        long long query(int idx) {
                 idx++;
-                lli res = 0;
+                long long res = 0;
                 for (int pos = idx; pos >= 1; pos -= lowbit(pos)) {
                         res += b[pos];
                 }

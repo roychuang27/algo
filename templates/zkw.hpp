@@ -6,9 +6,9 @@ struct Segtree {
                 Segtree(0) {
         }
         explicit Segtree(int n):
-                segtree(std::vector<S>(n, e())) {
+                Segtree(vector<S>(n, e())) {
         }
-        explicit Segtree(const std::vector<S> &v):
+        explicit Segtree(const vector<S> &v):
                 _n(int(v.size())) {
                 size = 1;
                 log = 0;
@@ -16,7 +16,7 @@ struct Segtree {
                         size <<= 1;
                         log++;
                 }
-                d = std::vector<S>(2 * size, e());
+                d = vector<S>(2 * size, e());
                 for (int i = 0; i < _n; i++) {
                         d[size + i] = v[i];
                 }
@@ -130,7 +130,7 @@ struct Segtree {
 
     private:
         int _n, size, log;
-        std::vector<S> d;
+        vector<S> d;
 
         void update(int k) {
                 d[k] = op(d[2 * k], d[2 * k + 1]);

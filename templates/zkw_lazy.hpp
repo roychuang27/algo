@@ -6,9 +6,9 @@ struct LazySegtree {
                 LazySegtree(0) {
         }
         explicit LazySegtree(int n):
-                lazy_segtree(std::vector<S>(n, e())) {
+                LazySegtree(vector<S>(n, e())) {
         }
-        explicit LazySegtree(const std::vector<S> &v):
+        explicit LazySegtree(const vector<S> &v):
                 _n(int(v.size())) {
                 size = 1;
                 log = 0;
@@ -16,8 +16,8 @@ struct LazySegtree {
                         size <<= 1;
                         log++;
                 }
-                d = std::vector<S>(2 * size, e());
-                lz = std::vector<F>(size, id());
+                d = vector<S>(2 * size, e());
+                lz = vector<F>(size, id());
                 for (int i = 0; i < _n; i++) {
                         d[size + i] = v[i];
                 }
@@ -216,8 +216,8 @@ struct LazySegtree {
 
     private:
         int _n, size, log;
-        std::vector<S> d;
-        std::vector<F> lz;
+        vector<S> d;
+        vector<F> lz;
 
         void update(int k) {
                 d[k] = op(d[2 * k], d[2 * k + 1]);

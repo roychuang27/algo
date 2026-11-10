@@ -1,10 +1,10 @@
-constexpr lli INF = 1e18;
+constexpr long long INF = 1e18;
 
 struct flow_edge {
-        lli cap, flow;
+        long long cap, flow;
         int u, v, rev_id;
 
-        flow_edge(int _u, int _v, lli _c, lli _f, int _r):
+        flow_edge(int _u, int _v, long long _c, long long _f, int _r):
                 cap(_c),
                 flow(_f),
                 u(_u),
@@ -31,7 +31,7 @@ struct Dinic {
                 adj_edges(N + 10) {
         }
 
-        lli dfs_push(int u, lli flow) {
+        long long dfs_push(int u, long long flow) {
                 if (flow == 0) {
                         return 0;
                 }
@@ -39,7 +39,7 @@ struct Dinic {
                         return flow;
                 }
 
-                for (int &pt = ptr[u]; pt < SZ(adj_edges[u]); pt++) {
+                for (int &pt = ptr[u]; pt < ssize(adj_edges[u]); pt++) {
                         int i = adj_edges[u][pt];
                         flow_edge &e = edges[i];
 
@@ -51,7 +51,7 @@ struct Dinic {
                                 continue;
                         }
 
-                        lli p = dfs_push(e.v, min(flow, e.cap - e.flow));
+                        long long p = dfs_push(e.v, min(flow, e.cap - e.flow));
                         if (p > 0) {
                                 e.flow += p;
                                 edges[e.rev_id].flow -= p;
@@ -88,7 +88,7 @@ struct Dinic {
                 return dist[t] != -1;
         }
 
-        void add_edge(int u, int v, lli cap, lli flow) {
+        void add_edge(int u, int v, long long cap, long long flow) {
                 adj_edges[u].emplace_back(edges_cnt);
                 edges.emplace_back(flow_edge(u, v, cap, flow, edges_cnt + 1));
                 adj_edges[v].emplace_back(edges_cnt + 1);
@@ -96,8 +96,8 @@ struct Dinic {
                 edges_cnt += 2;
         }
 
-        lli flow() {
-                lli f = 0;
+        long long flow() {
+                long long f = 0;
 
                 while (true) {
                         if (bfs_get_dist() == false) {
@@ -105,7 +105,7 @@ struct Dinic {
                         }
 
                         fill(ptr.begin(), ptr.end(), 0);
-                        while (lli p = dfs_push(s, INF)) {
+                        while (long long p = dfs_push(s, INF)) {
                                 f += p;
                         }
                 }
