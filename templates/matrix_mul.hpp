@@ -1,8 +1,9 @@
-template <class T>
-Matrix<T, 2> operator*(const Matrix<T, 2> &a, const Matrix<T, 2> &b) {
-        assert(a.s[1] == b.s[0]);
+template <class T, size_t D>
+        requires(D == 0 || D == 2)
+Matrix<T, D> operator*(const Matrix<T, D> &a, const Matrix<T, D> &b) {
+        assert(a.s.size() == 2 && b.s.size() == 2 && a.s[1] == b.s[0]);
 
-        Matrix<T, 2> c(a.s[0], b.s[1], T{});
+        Matrix<T, D> c(a.s[0], b.s[1], {});
 
         for (size_t i = 0; i < a.s[0]; ++i) {
                 for (size_t k = 0; k < a.s[1]; ++k) {
@@ -15,16 +16,18 @@ Matrix<T, 2> operator*(const Matrix<T, 2> &a, const Matrix<T, 2> &b) {
         return c;
 }
 
-template <class T>
-Matrix<T, 2> &operator*=(Matrix<T, 2> &a, const Matrix<T, 2> &b) {
+template <class T, size_t D>
+        requires(D == 0 || D == 2)
+Matrix<T, D> &operator*=(Matrix<T, D> &a, const Matrix<T, D> &b) {
         return a = a * b;
 }
 
-template <class T>
-Matrix<T, 2> mat_pow(Matrix<T, 2> a, uint64_t n) {
-        assert(a.s[0] == a.s[1]);
+template <class T, size_t D>
+        requires(D == 0 || D == 2)
+Matrix<T, D> mat_pow(Matrix<T, D> a, uint64_t n) {
+        assert(a.s.size() == 2 && a.s[0] == a.s[1]);
 
-        Matrix<T, 2> res(a.s[0], a.s[1], T{});
+        Matrix<T, D> res(a.s[0], a.s[1], {});
         for (size_t i = 0; i < a.s[0]; ++i) {
                 res[i, i] = T{1};
         }

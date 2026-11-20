@@ -12,13 +12,13 @@ SOURCE = SCRIPT_DIR / "starter.cpp"
 # Header files synced alongside the default snippet.
 HEADERS = [
     SCRIPT_DIR / "modint.hpp",
-    SCRIPT_DIR / "dynamic_modint.hpp",
+    SCRIPT_DIR / "modctx.hpp",
     SCRIPT_DIR / "fraction.hpp",
     SCRIPT_DIR / "matrix.hpp",
     SCRIPT_DIR / "matrix_mul.hpp",
     SCRIPT_DIR / "zkw.hpp",
     SCRIPT_DIR / "zkw_lazy.hpp",
-    SCRIPT_DIR / "set_and_map.hpp",
+    SCRIPT_DIR / "sthash.hpp",
 ]
 
 CONFIG_HOME = Path(

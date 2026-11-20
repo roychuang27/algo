@@ -3,7 +3,15 @@
 using namespace std;
 using ll = long long;
 using ull = unsigned long long;
-// I'll give them a shelter like you've done for me~
+using vi = vector<int>;
+using vl = vector<ll>;
+using vvi = vector<vector<int>>;
+using pii = pair<int, int>;
+using pll = pair<ll, ll>;
+#define eb emplace_back
+#define all(x) begin(x), end(x)
+#define rall(x) rbegin(x), rend(x)
+#define fir(x, a, b) for (int x = a; x < b; x++)
 #if defined(SHELTER) && defined(__cpp_lib_print)
 #define PASSED() \
         println(stderr, "\033[1;31m#{} passed\033[0m", __LINE__);
@@ -12,7 +20,7 @@ using ull = unsigned long long;
                 "\033[1;31m#{}, ({}) = {}\033[0m", \
                 __LINE__,                          \
                 #__VA_ARGS__,                      \
-                forward_as_tuple(__VA_ARGS__))
+                forward_as_tuple(__VA_ARGS__));
 #else
 #define PASSED()
 #define DBG(...)
@@ -41,6 +49,24 @@ auto array_fill(T v) {
         r.fill(v);
         return r;
 }
+template <class T, size_t N>
+istream &operator>>(istream &is, array<T, N> &a) {
+        for (auto &x : a) {
+                is >> x;
+        }
+        return is;
+}
+template <class T>
+istream &operator>>(istream &is, vector<T> &a) {
+        for (auto &x : a) {
+                is >> x;
+        }
+        return is;
+}
+template <class A, class B>
+istream &operator>>(istream &is, pair<A, B> &p) {
+        return is >> p.first >> p.second;
+}
 
 void single_testcase() {
         ${1}
@@ -52,7 +78,6 @@ int main() {
         int t = 1;
         // cin >> t;
         for (int i = 0; i < t; i++) {
-                cout << (i ? "\n" : "");
                 single_testcase();
         }
 }

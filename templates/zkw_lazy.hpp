@@ -1,15 +1,58 @@
-// Reference : atccoder library
-template <class S, auto op, auto e, class F, auto mapping, auto composition, auto id>
+// Reference : atcoder library
+template <class S,
+          class Op,
+          class E,
+          class F,
+          class Mapping,
+          class Composition,
+          class Id>
 struct LazySegtree {
     public:
-        LazySegtree():
-                LazySegtree(0) {
+        LazySegtree()
+                requires default_initializable<Op> && default_initializable<E> &&
+                         default_initializable<Mapping> &&
+                         default_initializable<Composition> &&
+                         default_initializable<Id>:
+                LazySegtree(0, Op{}, E{}, Mapping{}, Composition{}, Id{}) {
         }
-        explicit LazySegtree(int n):
-                LazySegtree(vector<S>(n, e())) {
+        explicit LazySegtree(int n)
+                requires default_initializable<Op> && default_initializable<E> &&
+                         default_initializable<Mapping> &&
+                         default_initializable<Composition> &&
+                         default_initializable<Id>:
+                LazySegtree(n, Op{}, E{}, Mapping{}, Composition{}, Id{}) {
         }
-        explicit LazySegtree(const vector<S> &v):
-                _n(int(v.size())) {
+        explicit LazySegtree(const vector<S> &v)
+                requires default_initializable<Op> && default_initializable<E> &&
+                         default_initializable<Mapping> &&
+                         default_initializable<Composition> &&
+                         default_initializable<Id>:
+                LazySegtree(v, Op{}, E{}, Mapping{}, Composition{}, Id{}) {
+        }
+        LazySegtree(Op op_,
+                    E e_,
+                    Mapping mapping_,
+                    Composition composition_,
+                    Id id_):
+                LazySegtree(0,
+                            move(op_),
+                            move(e_),
+                            move(mapping_),
+                            move(composition_),
+                            move(id_)) {
+        }
+        LazySegtree(int n,
+                    Op op_,
+                    E e_,
+                    Mapping mapping_,
+                    Composition composition_,
+                    Id id_):
+                _n(n),
+                op(move(op_)),
+                e(move(e_)),
+                mapping(move(mapping_)),
+                composition(move(composition_)),
+                id(move(id_)) {
                 size = 1;
                 log = 0;
                 while (size < _n) {
@@ -18,6 +61,19 @@ struct LazySegtree {
                 }
                 d = vector<S>(2 * size, e());
                 lz = vector<F>(size, id());
+        }
+        LazySegtree(const vector<S> &v,
+                    Op op_,
+                    E e_,
+                    Mapping mapping_,
+                    Composition composition_,
+                    Id id_):
+                LazySegtree(int(v.size()),
+                            move(op_),
+                            move(e_),
+                            move(mapping_),
+                            move(composition_),
+                            move(id_)) {
                 for (int i = 0; i < _n; i++) {
                         d[size + i] = v[i];
                 }
@@ -140,9 +196,9 @@ struct LazySegtree {
                 }
         }
 
-        template <bool (*g)(S)>
+        template <auto g>
         int max_right(int l) {
-                return max_right(l, [](S x) { return g(x); });
+                return max_right(l, [](const S &x) { return g(x); });
         }
         template <class G>
         int max_right(int l, G g) {
@@ -177,9 +233,9 @@ struct LazySegtree {
                 return _n;
         }
 
-        template <bool (*g)(S)>
+        template <auto g>
         int min_left(int r) {
-                return min_left(r, [](S x) { return g(x); });
+                return min_left(r, [](const S &x) { return g(x); });
         }
         template <class G>
         int min_left(int r, G g) {
@@ -218,6 +274,11 @@ struct LazySegtree {
         int _n, size, log;
         vector<S> d;
         vector<F> lz;
+        [[no_unique_address]] Op op;
+        [[no_unique_address]] E e;
+        [[no_unique_address]] Mapping mapping;
+        [[no_unique_address]] Composition composition;
+        [[no_unique_address]] Id id;
 
         void update(int k) {
                 d[k] = op(d[2 * k], d[2 * k + 1]);
@@ -234,3 +295,31 @@ struct LazySegtree {
                 lz[k] = id();
         }
 };
+
+template <class Op, class E, class Mapping, class Composition, class Id>
+LazySegtree(Op, E, Mapping, Composition, Id)
+        -> LazySegtree<remove_cvref_t<invoke_result_t<E &>>,
+                       Op,
+                       E,
+                       remove_cvref_t<invoke_result_t<Id &>>,
+                       Mapping,
+                       Composition,
+                       Id>;
+template <class Op, class E, class Mapping, class Composition, class Id>
+LazySegtree(int, Op, E, Mapping, Composition, Id)
+        -> LazySegtree<remove_cvref_t<invoke_result_t<E &>>,
+                       Op,
+                       E,
+                       remove_cvref_t<invoke_result_t<Id &>>,
+                       Mapping,
+                       Composition,
+                       Id>;
+template <class S, class Op, class E, class Mapping, class Composition, class Id>
+LazySegtree(const vector<S> &, Op, E, Mapping, Composition, Id)
+        -> LazySegtree<S,
+                       Op,
+                       E,
+                       remove_cvref_t<invoke_result_t<Id &>>,
+                       Mapping,
+                       Composition,
+                       Id>;

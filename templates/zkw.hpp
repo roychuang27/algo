@@ -1,15 +1,23 @@
 // Reference : atcoder library
-template <class S, auto op, auto e>
+template <class S, class Op, class E>
 struct Segtree {
     public:
-        Segtree():
-                Segtree(0) {
+        Segtree() requires default_initializable<Op> && default_initializable<E>:
+                Segtree(0, Op{}, E{}) {
         }
-        explicit Segtree(int n):
-                Segtree(vector<S>(n, e())) {
+        explicit Segtree(int n)
+                requires default_initializable<Op> && default_initializable<E>:
+                Segtree(n, Op{}, E{}) {
         }
-        explicit Segtree(const vector<S> &v):
-                _n(int(v.size())) {
+        explicit Segtree(const vector<S> &v)
+                requires default_initializable<Op> && default_initializable<E>:
+                Segtree(v, Op{}, E{}) {
+        }
+        Segtree(Op op_, E e_):
+                Segtree(0, move(op_), move(e_)) {
+        }
+        Segtree(int n, Op op_, E e_):
+                _n(n), op(move(op_)), e(move(e_)) {
                 size = 1;
                 log = 0;
                 while (size < _n) {
@@ -17,6 +25,9 @@ struct Segtree {
                         log++;
                 }
                 d = vector<S>(2 * size, e());
+        }
+        Segtree(const vector<S> &v, Op op_, E e_):
+                Segtree(int(v.size()), move(op_), move(e_)) {
                 for (int i = 0; i < _n; i++) {
                         d[size + i] = v[i];
                 }
@@ -62,9 +73,9 @@ struct Segtree {
                 return d[1];
         }
 
-        template <bool (*f)(S)>
+        template <auto f>
         int max_right(int l) const {
-                return max_right(l, [](S x) { return f(x); });
+                return max_right(l, [](const S &x) { return f(x); });
         }
         template <class F>
         int max_right(int l, F f) const {
@@ -95,9 +106,9 @@ struct Segtree {
                 return _n;
         }
 
-        template <bool (*f)(S)>
+        template <auto f>
         int min_left(int r) const {
-                return min_left(r, [](S x) { return f(x); });
+                return min_left(r, [](const S &x) { return f(x); });
         }
         template <class F>
         int min_left(int r, F f) const {
@@ -131,8 +142,17 @@ struct Segtree {
     private:
         int _n, size, log;
         vector<S> d;
+        [[no_unique_address]] Op op;
+        [[no_unique_address]] E e;
 
         void update(int k) {
                 d[k] = op(d[2 * k], d[2 * k + 1]);
         }
 };
+
+template <class Op, class E>
+Segtree(Op, E) -> Segtree<remove_cvref_t<invoke_result_t<E &>>, Op, E>;
+template <class Op, class E>
+Segtree(int, Op, E) -> Segtree<remove_cvref_t<invoke_result_t<E &>>, Op, E>;
+template <class S, class Op, class E>
+Segtree(const vector<S> &, Op, E) -> Segtree<S, Op, E>;

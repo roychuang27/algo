@@ -9,9 +9,10 @@ Helix snippets. Everything below is about keeping that paste flow working.
 
 | Path | What it is |
 | --- | --- |
-| `starter.cpp` | The snippet body: includes, `using namespace std`, `ll`/`ull`, `fir`/`all`/`rall`, `line`/`dbg`, `pow`, `chmin`/`chmax`, `array_fill`, `>>` overloads, `I`/`O`, `ITER`, and `single_testcase()` containing the `${1}` placeholder |
-| `*.hpp` | Template fragments appended to `starter.cpp`, in the user's own 8-space style: `modint.hpp`, `fraction.hpp`, `matrix.hpp`, `matrix_mul.hpp`, `zkw.hpp`, `zkw_lazy.hpp`, `geometry.hpp`, `set_and_map.hpp`, `fenwick.hpp`, `dsu.hpp`, `dinic.hpp`, `aho_corasick.hpp` |
-| `g.py` | Publishes `starter.cpp` as snippet `cp` and `modint`/`fraction`/`matrix`/`matrix_mul`/`zkw`/`zkw_lazy` as snippets named after their stem, into `$XDG_CONFIG_HOME/helix/snippets/cpp.json` |
+| `starter.cpp` | The snippet body: includes, `using namespace std`, `ll`/`ull`/`vi`/`vl`/`vvi`/`pii`/`pll`, `eb`/`all`/`rall`/`fir`, `PASSED`/`DBG`, `pow`, `chmin`/`chmax`, `array_fill`, `>>` overloads (`array`/`vector`/`pair`), and `single_testcase()` containing the `${1}` placeholder |
+| `*.hpp` | Template fragments appended to `starter.cpp`, in the user's own 8-space style: `modint.hpp`, `modctx.hpp`, `fraction.hpp`, `matrix.hpp`, `matrix_mul.hpp`, `zkw.hpp`, `zkw_lazy.hpp`, `sthash.hpp`, `geometry.hpp`, `fenwick.hpp`, `dsu.hpp`, `dinic.hpp`, `aho_corasick.hpp` |
+| `docs/` | Repo notes (`AGENTS.md`) and per-template usage docs (`matrix.md`, `zkw.md`) |
+| `g.py` | Publishes `starter.cpp` as snippet `cp` and `modint`/`modctx`/`fraction`/`matrix`/`matrix_mul`/`zkw`/`zkw_lazy`/`sthash` as snippets named after their stem, into `$XDG_CONFIG_HOME/helix/snippets/cpp.json` |
 | `tests/` | `run.py` plus `cases/*.cpp`; see below |
 | `IO/` | Vendored fast-IO libraries, independent of the snippets |
 | `sudoku.py` | Unrelated scratch script |
@@ -39,27 +40,21 @@ editor snippet parser expands it into the code cursor position.
 
 ## Conventions in this codebase
 
-- 8-space indentation, no tabs, about 80 columns. `zkw.hpp` and
-  `zkw_lazy.hpp` still carry ACL's 4-space layout from upstream — leave the
-  existing bodies alone unless you are editing those lines anyway.
-- Types that need to be printed define `string str() const` built on
-  `ostringstream`: `Matrix`, `Fraction`, `StaticModint`, `Point`, `Circle`.
-  The formatter specializations and `operator<<` overrides that used to exist
-  were deliberately removed; do not re-add `std::formatter` or per-type
-  stream operators without being asked.
-- Input still uses stream operators (`pair`, `array`, `vector`, `StaticModint`,
-  `Fraction`) because `str()` gives no replacement for reading.
-- `I(a, b, ...)` reads every argument (`cin >> ... >> a`), `O(a, b, ...)`
-  prints them space separated and ends the line. Both are variadic function
-  templates, not macros, so argument lists containing commas are fine.
-- `ITER<T>` wraps a container to print it space separated via `cout << ITER{v}`.
-  It is the one deliberate exception to the `str()` rule: it exists as an
-  ostream helper only and has no `str()`.
+- 8-space indentation, no tabs, about 80 columns.
+- `Matrix`, `Fraction`, `Point`, and `Circle` define `string str() const` built
+  on `ostringstream` (no `std::formatter` or `operator<<`). Modular integer
+  types (`MontgomeryModint` in `modint.hpp`, `ModContext::mint` in
+  `modctx.hpp`) provide `operator<<` and `operator>>`.
+- Input uses stream operators (`pair`, `array`, `vector`, `MontgomeryModint`,
+  `ModContext::mint`, `Fraction`).
 - Fragments spell out `long long`; the old `lli` alias does not exist.
-- `line(...)` and `dbg(...)` are debugging aids, active only with
-  `-DSHELTER` on a C++23 library with `<print>`; otherwise they expand to
-  `39`. `dbg` formats through `println`/`forward_as_tuple`, so it accepts
-  built-in types only — custom types have no formatter.
+- `PASSED()` and `DBG(...)` are debugging aids, active only with `-DSHELTER`
+  on a C++23 library with `<print>`; otherwise they expand to empty. `DBG`
+  formats through `println`/`forward_as_tuple`, so it accepts formattable
+  types only.
+- Update the matching file under `docs/` (e.g., `docs/matrix.md`,
+  `docs/zkw.md`) when changing a template's API or behavior.
+- Agents are allowed to stage their own changes (`git add`) automatically.
 
 ## Tests
 
